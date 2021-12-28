@@ -1,16 +1,5 @@
-/*=========================================================================================
-  File Name: sidebarItems.js
-  Description: Sidebar Items list. Add / Remove menu items from here.
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
 import * as permissions from '@/utils/permissions'
 import * as roles from '@/utils/roles'
-
-const { USER_ADD, USER_VIEW } = permissions
 
 const { ADMIN } = roles
 
@@ -20,7 +9,7 @@ const ALLROLES = [...Object.values(roles)]
 export default [
   // dashboard
   {
-    url: '/dashboard',
+    url: '/',
     name: 'Dashboard',
     slug: 'Dashboard',
     icon: 'HomeIcon',
@@ -50,15 +39,6 @@ export default [
         permissions: [ALLPERMISSIONS]
       }
     ]
-  },
-
-  // Documents
-  {
-    url: '/Documents/list',
-    name: 'Documents',
-    slug: 'Documents',
-    icon: 'BookIcon',
-    permissions: [ALLPERMISSIONS]
   },
 
   // Cutsomers
@@ -95,100 +75,4 @@ export default [
     ]
   },
 
-  // Location
-  {
-    url: '/location/list',
-    name: 'Item Locations',
-    slug: 'LocationList',
-    icon: 'MapPinIcon',
-
-    permissions: [ALLPERMISSIONS]
-  },
-
-  // item
-  {
-    url: null,
-    name: 'Item',
-    slug: 'Item',
-    icon: 'TagIcon',
-    permissions: [ALLPERMISSIONS],
-    submenu: [
-      {
-        url: '/items/create',
-        name: 'Add Item',
-        slug: 'AddItem',
-        icon: 'PocketIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/items/list',
-        name: 'Item List',
-        slug: 'ItemList',
-        icon: 'ListIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/items/import',
-        name: 'Import',
-        slug: 'ImportItem',
-        icon: 'ListIcon',
-        tag: 'new',
-        tagColor: 'success',
-        permissions: [ALLPERMISSIONS]
-      }
-    ]
-  },
-
-  // Invoices
-  {
-    url: null,
-    name: 'Invoices',
-    slug: 'Invoices',
-    icon: 'FileTextIcon',
-    permissions: [ALLPERMISSIONS]
-  },
-
-  // Orders
-  {
-    url: null,
-    name: 'Orders',
-    slug: 'Orders',
-    icon: 'SlidersIcon',
-    permissions: [ALLPERMISSIONS]
-  },
-
-  // Delivery Person
-  {
-    url: null,
-    name: 'Delivery Person',
-    slug: 'Delivery Person',
-    icon: 'UserIcon',
-    permissions: [ALLPERMISSIONS]
-  },
-  // Delivery Receipt
-  {
-    url: null,
-    name: 'Delivery Receipt',
-    slug: 'Delivery Receipt',
-    icon: 'FileIcon',
-    permissions: [ALLPERMISSIONS]
-  },
-
-  // Order Pickup
-  {
-    url: null,
-    name: 'Order Pickup',
-    slug: 'Order Pickup',
-    icon: 'TruckIcon',
-    permissions: [ALLPERMISSIONS]
-  },
-
-  // Purchases
-  {
-    url: null,
-    name: 'Purchases',
-    slug: 'Purchases',
-    icon: 'ShoppingBagIcon',
-    permissions: [ALLPERMISSIONS]
-  }
 ]
