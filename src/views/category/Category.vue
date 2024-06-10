@@ -67,11 +67,11 @@
 </template>
 
 <script>
-import AddCategoryModal from '@/views/Documents/AddCategoryModal'
-import EditCategoryModal from '@/views/Documents/EditCategoryModal'
+import AddCategoryModal from '@/views/category/AddCategoryModal'
+import EditCategoryModal from '@/views/category/EditCategoryModal'
 
 export default {
-  name: 'DocumentsCategoryList',
+  name: 'CategoryList',
 
   components: {
     AddCategoryModal,

@@ -21,7 +21,7 @@ export default [
     url: null,
     name: 'Users',
     slug: 'Users',
-    icon: 'BriefcaseIcon',
+    icon: 'UsersIcon',
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
@@ -44,22 +44,15 @@ export default [
   // Cutsomers
   {
     url: null,
-    name: 'Cutsomers',
-    slug: 'Cutsomers',
-    icon: 'ActivityIcon',
+    name: 'Category',
+    slug: 'Category',
+    icon: 'SlidersIcon',
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
-        url: '/customers/create',
-        name: 'Customer',
-        slug: 'AddCustomer',
-        icon: 'PlusIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/customers/list',
-        name: 'History',
-        slug: 'customersList',
+        url: '/category/list',
+        name: 'List',
+        slug: 'categoryList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }
@@ -75,4 +68,71 @@ export default [
     ]
   },
 
+  /** Products Routes */
+  {
+    url: null,
+    name: 'Products',
+    slug: 'Products',
+    icon: 'LayersIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
+        name: 'Add Product',
+        slug: 'ImportCsv',
+        icon: 'PlusIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
+        name: 'Add Variant',
+        slug: 'ImportCsv',
+        icon: 'BarChartIcon',
+        tag: 'new',
+        tagColor: 'success',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+
+  /** Admin Setting */
+  {
+    url: null,
+    name: 'Products',
+    slug: 'Products',
+    icon: 'LayersIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
+        name: 'Add Product',
+        slug: 'ImportCsv',
+        icon: 'PlusIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
+        name: 'Add Variant',
+        slug: 'ImportCsv',
+        icon: 'BarChartIcon',
+        tag: 'new',
+        tagColor: 'success',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  }
 ]

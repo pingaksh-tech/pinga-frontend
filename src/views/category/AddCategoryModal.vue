@@ -10,13 +10,6 @@
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.CategoryName" label="Category Name" name="Category Name" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span> -->
             </div>
-
-            <!-- location type -->
-            <div class="vx-row mb-2">
-              <label>Has Sub-Folders </label>
-              <vs-checkbox class="py-2" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Location Type')">{{ errors.first('Location Type') }}</span> -->
-            </div>
           </div>
         </div>
 
@@ -24,8 +17,8 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="add-user-button" type="relief">Edit Category</vs-button>
-              <vs-button color="danger" type="relief" class="text-left" @click="isActive = false">Cancel</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="add-user-button">Add Category</vs-button>
+              <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
         </div>

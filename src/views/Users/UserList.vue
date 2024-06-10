@@ -89,7 +89,7 @@
           <vs-th>Action</vs-th>
         </template>
 
-        <template slot-scope="{ data }" ref="tableBody">
+        <template slot-scope="{ data }">
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
               {{ page * length - (length - i - 1) }}

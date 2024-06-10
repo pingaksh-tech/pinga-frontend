@@ -10,7 +10,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import UserRoute from '@/views/Users/routes'
-import DocumentsRoute from '@/views/Documents/routes'
+import CategoryRoute from '@/views/category/routes'
+/** Product Module */
+import ProductRoute from '@/views/products/routes'
 
 Vue.use(Router)
 
@@ -34,8 +36,10 @@ const router = new Router({
         },
         // client routes
         ...UserRoute,
-        // documents route
-        ...DocumentsRoute
+        // Category route
+        ...CategoryRoute,
+        // Product route
+        ...ProductRoute
       ]
     },
 

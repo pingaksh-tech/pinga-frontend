@@ -76,7 +76,7 @@ import Select2 from '@/components/custom/form-elements/Select2.vue'
 import Datepicker from 'vuejs-datepicker'
 
 export default {
-  name: 'Add-User',
+  name: 'Add-Product',
 
   components: {
     Select2,
