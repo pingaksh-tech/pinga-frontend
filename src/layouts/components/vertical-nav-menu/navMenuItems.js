@@ -55,16 +55,16 @@ export default [
         slug: 'categoryList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/customers/import',
+        name: 'Sub Category',
+        slug: 'sub-category',
+        icon: 'ListIcon',
+        tag: 'sub',
+        tagColor: 'success',
+        permissions: [ALLPERMISSIONS]
       }
-      // {
-      //   url: '/customers/import',
-      //   name: 'Import',
-      //   slug: 'ImportCsv',
-      //   icon: 'ListIcon',
-      //   tag: 'new',
-      //   tagColor: 'success',
-      //   permissions: [ALLPERMISSIONS]
-      // }
     ]
   },
 
@@ -92,22 +92,38 @@ export default [
       },
       {
         url: '/products/add',
+        name: 'Collection',
+        slug: 'collection',
+        icon: 'ShoppingBagIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
         name: 'Add Variant',
         slug: 'ImportCsv',
         icon: 'BarChartIcon',
-        tag: 'new',
+        tag: 'variant',
         tagColor: 'success',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/products/add',
+        name: 'Tags Mgmt',
+        slug: 'ImportCsv',
+        icon: 'BarChartIcon',
+        tag: 'Tag',
+        tagColor: 'warning',
         permissions: [ALLPERMISSIONS]
       }
     ]
   },
 
-  /** Admin Setting */
+  /** Admin Size Setting */
   {
     url: null,
-    name: 'Products',
-    slug: 'Products',
-    icon: 'LayersIcon',
+    name: 'Size',
+    slug: 'Size',
+    icon: 'PocketIcon',
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
@@ -116,21 +132,74 @@ export default [
         slug: 'productsList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
-      },
+      }
+    ]
+  },
+
+  /** Admin Color Setting */
+  {
+    url: null,
+    name: 'Colors',
+    slug: 'colors',
+    icon: 'LifeBuoyIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
       {
-        url: '/products/add',
-        name: 'Add Product',
-        slug: 'ImportCsv',
-        icon: 'PlusIcon',
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
-      },
+      }
+    ]
+  },
+  /** Admin Daimond Setting */
+  {
+    url: null,
+    name: 'Diamond',
+    slug: 'diamond',
+    icon: 'CpuIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
       {
-        url: '/products/add',
-        name: 'Add Variant',
-        slug: 'ImportCsv',
-        icon: 'BarChartIcon',
-        tag: 'new',
-        tagColor: 'success',
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+  /** Admin Metal Setting */
+  {
+    url: null,
+    name: 'Metal',
+    slug: 'metal',
+    icon: 'ServerIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+  /** Admin Inventory Setting */
+  {
+    url: null,
+    name: 'Inventory',
+    slug: 'inventory',
+    icon: 'DatabaseIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/products/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }
     ]

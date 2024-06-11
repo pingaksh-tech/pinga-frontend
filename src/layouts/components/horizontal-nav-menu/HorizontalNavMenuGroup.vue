@@ -89,7 +89,7 @@ export default {
   computed: {
     iconClasses () {
       let classes = 'mr-3 '
-      classes += this.groupIndex % 1 !== 0 ? 'w-3 h-3' : 'w-5 h-5'
+      classes += this.groupIndex % 1 !== 0 ? 'w-5 h-5' : 'w-5 h-5'
       return classes
     },
     styleItems () {

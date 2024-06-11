@@ -3,8 +3,8 @@
   Description: main vue(js) file
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
+  Author: Pingaksh
+  Author URL: http://www.themeforest.net/user/Pingaksh
 ==========================================================================================*/
 
 
@@ -47,12 +47,16 @@ import router from './router'
 
 
 // Vuex Store
-import store from './store/store'
+import store from './store'
 
 
 // Vuejs - Vue wrapper for hammerjs
 import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
+
+// VeeValidate
+import VeeValidate from "vee-validate";
+Vue.use(VeeValidate);
 
 
 // PrismJS
@@ -70,6 +74,8 @@ require('./assets/css/iconfont.css')
 
 
 Vue.config.productionTip = false
+
+store.$http = axios;
 
 new Vue({
   router,

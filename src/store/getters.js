@@ -3,8 +3,8 @@
   Description: Vuex Store - getters
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
+  Author: Pingaksh
+  Author URL: http://www.themeforest.net/user/Pingaksh
 ==========================================================================================*/
 
 // added so later we can keep breakpoint in sync automatically using this config file

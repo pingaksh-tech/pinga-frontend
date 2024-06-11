@@ -4,8 +4,8 @@
   Component Name: VerticalNavMenuGroup
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
+  Author: Pingaksh
+  Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
 
@@ -27,7 +27,7 @@
         <feather-icon
           v-if="group.icon || this.groupIndex > Math.floor(this.groupIndex)"
           :icon="group.icon || 'CircleIcon'"
-          :svgClasses="{ 'w-3 h-3': this.groupIndex % 1 != 0 }"
+          :svgClasses="{ 'w-5 h-5': this.groupIndex % 1 != 0 }"
         />
 
         <!-- Group Name -->

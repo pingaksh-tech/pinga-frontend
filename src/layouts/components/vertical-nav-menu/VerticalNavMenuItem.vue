@@ -4,8 +4,8 @@
     Component Name: VerticalNavMenuItem
     ----------------------------------------------------------------------------------------
     Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
+      Author: Pingaksh
+    Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
 <template>
@@ -24,13 +24,13 @@
         :to="to"
         :target="target" >
           <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-          <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+          <feather-icon v-else :class="{'w-5 h-5': iconSmall}" :icon="icon" />
           <slot />
       </router-link>
 
       <a v-else :target="target" :href="href" tabindex="-1">
         <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-        <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+        <feather-icon v-else :class="{'w-5 h-5': iconSmall}" :icon="icon" />
         <slot />
       </a>
   </div>

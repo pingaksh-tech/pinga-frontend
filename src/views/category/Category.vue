@@ -15,7 +15,7 @@
         pagination
         :max-items="length"
         search
-        :data="[]"
+        :data="[CategoryRecords]"
       >
         <template slot="header">
           <!-- add category modal -->
@@ -39,8 +39,18 @@
             <vs-td>
               {{ page * length - (length - i - 1) }}
             </vs-td>
-            <vs-td>{{ 1234 }} </vs-td>
+            <vs-td class="text-left">1 </vs-td>
             <vs-td>
+              <div class="inline-flex">
+                <vx-tooltip text="Edit Category">
+                  <feather-icon icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                </vx-tooltip>
+                <vx-tooltip text="Delete Category">
+                  <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                </vx-tooltip>
+              </div>
+            </vs-td>
+            <!-- <vs-td>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <div class="p-4 border border-solid d-theme-border-grey-light cursor-pointer flex items-center justify-between font-medium">
                   Actions
@@ -52,7 +62,7 @@
                 </vs-dropdown-menu>
               </vs-dropdown>
               <div>-</div>
-            </vs-td>
+            </vs-td> -->
           </vs-tr>
         </template>
       </vs-table>
@@ -67,19 +77,23 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex'
 import AddCategoryModal from '@/views/category/AddCategoryModal'
 import EditCategoryModal from '@/views/category/EditCategoryModal'
 
 export default {
   name: 'CategoryList',
 
+  /** Components */
   components: {
     AddCategoryModal,
     EditCategoryModal
   },
 
+  /** Data */
   data: () => ({
     order: [],
+    records: [1, 2, 3],
     length: 10,
     page: 1,
     search: '',
@@ -93,9 +107,20 @@ export default {
     isEditCategoryModalShow: false
   }),
 
-  mounted() {},
+  computed: {
+    ...mapState('category', [
+      'CategoryRecords',
+      'total',
+      'FilteredCount'
+    ]),
+  },
 
+  /** Functions */
   methods: {
+    ...mapActions('category', {
+      getCategoryList: 'getCategoryList',
+    }),
+    
     handleChangeLength(length) {
       this.page = 1
       this.length = length
@@ -114,6 +139,16 @@ export default {
     updateSearchQuery(val) {
       this.page = 1
       this.search = val
+    },
+
+    /** Category List API */
+    getData() {
+      this.getCategoryList({
+        order: this.order,
+        limit: this.length,
+        page: this.page,
+        search: this.search
+      })
     },
 
     // toggle category modal
@@ -162,6 +197,7 @@ export default {
     }
   },
 
+  /** Watchers */
   watch: {
     loading() {
       if (this.loading) {
@@ -197,6 +233,11 @@ export default {
         }
       }
     }
+  },
+
+  /** On Rendering */
+  mounted() {
+    this.getData()
   }
 }
 </script>

@@ -36,5 +36,16 @@ export default [
         { title: 'Add User', active: true }
       ]
     }
-  }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    // @ts-ignore
+    component: () => import('@/views/Users/Profile.vue'),
+    meta: {
+      allowAnonymous: false,
+      pageTitle: 'Profile',
+      breadcrumb: [{ title: 'Dashboard', url: '/' }]
+    }
+  },
 ]
