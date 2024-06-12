@@ -5,7 +5,7 @@ export default [
     component: () => import('@/views/category/Category.vue'),
     meta: {
       allowAnonymous: false,
-      pageTitle: 'Categorys List',
+      pageTitle: 'Categories List',
       breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Category' }, { title: 'Category List', active: true }]
     }
   },

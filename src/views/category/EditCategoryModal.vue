@@ -1,14 +1,16 @@
 <template>
   <div>
-    <!-- add location popup -->
-    <vs-popup id="add_category_modal" class="vs-con-loading__container" title="Add Category" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <!-- Update Category popup -->
+    <vs-popup id="update_category_modal" class="vs-con-loading__container" title="Update Category" button-accept="false" button-cancel="false" :active.sync="isActive">
+      <!-- Form -->
       <form method="POST" @submit.prevent="save_changes">
+        <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- strain name -->
+            <!-- Category name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.CategoryName" label="Category Name" name="Category Name" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span> -->
+              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
             </div>
           </div>
         </div>
@@ -17,45 +19,58 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="add-user-button">Edit Category</vs-button>
-              <vs-button color="danger" type="relief" class="text-left" @click="isActive = false">Cancel</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" @click="save_changes()" id="add-user-button" :disabled="!validateForm">Update</vs-button>
+              <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
         </div>
+        <!-- End Form Content -->
       </form>
+      <!-- End Form -->
     </vs-popup>
   </div>
 </template>
 
 <script>
 import Select2 from '@/components/custom/form-elements/Select2.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'AddCategory',
 
+  /** Components */
   components: {
     Select2
   },
 
+  /** Props */
   props: {
-    showModal: Boolean
+    showModal: Boolean,
+    data: Object,
   },
 
+  /** Init Data */
   data() {
     return {
       loading: false,
       form: {
-        CategoryName: '',
-        type: null
+        name: this.data.name,
       },
       zIndex: 0
     }
   },
 
-  mounted() {},
+  /** Page Render */
+  mounted() {
+    console.log(this.data._id);
+  },
 
-  // computed
+  /** Computed */
   computed: {
+    /** Form Validation Manage */
+    validateForm() {
+      return !this.errors.any()
+    },
     isActive: {
       get() {
         return this.showModal
@@ -66,8 +81,11 @@ export default {
     }
   },
 
-  // methods
+  /** methods */
   methods: {
+    ...mapActions("category", {
+      updateCategoryRecord: "updateCategoryRecord",
+    }),
     // reset form data
     resetForm() {
       this.form = {
@@ -79,19 +97,53 @@ export default {
         this.errors.clear()
         this.$validator.reset()
       })
-    }
+    },
+
+    /** Update Category */
+    async save_changes() {
+      if (!(await this.$validator.validate())) {
+        return false
+      }
+      try {
+        const { message } = await this.updateCategoryRecord({
+          categoryId: this.data._id,
+          data : this.form
+        } );
+        this.$emit('update-data', true);
+        this.$vs.notify({
+          title: "Success",
+          text: message,
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          position: "top-center",
+          time: 5000,
+          color: "success",
+        });
+        this.isActive = false
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: "Error",
+          text: message,
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          position: "top-center",
+          time: 5000,
+          color: "primary",
+        });
+      }
+    },
   },
 
-  // watch
+  /** watch Loading Manage */
   watch: {
     loading() {
       if (this.loading) {
         this.$vs.loading({
-          container: '#add_category_modal .vs-popup .vs-popup--content',
+          container: '#update_category_modal .vs-popup .vs-popup--content',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#add_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
+        this.$vs.loading.close('#update_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
       }
     }
   }
@@ -99,7 +151,7 @@ export default {
 </script>
 
 <style lang="scss">
-#add_category_modal {
+#update_category_modal {
   .vs-popup {
     width: calc(100% - 80%) !important;
     position: relative;

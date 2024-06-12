@@ -15,7 +15,7 @@ export default {
         data: false,
       });
 
-      axios.defaults.headers.common["Authorization"] = `${res.data.data.tokens.access_token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.data.tokens.access_token}`;
       localStorage.setItem("accessToken", res.data.data.tokens.access_token);
       commit("SET_USER_INFO", res.data.data.user);
       commit("SET_BEARER", res.data.data.tokens.access_token);

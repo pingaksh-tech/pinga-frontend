@@ -1,18 +1,18 @@
 <template>
   <div>
-    <!-- add category popup -->
-    <vs-popup id="add_category_modal" class="vs-con-loading__container" title="Add Category" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <!-- Add category popup -->
+    <vs-popup title="Add Category" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- strain name -->
+            <!-- Category name -->
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon icon-package"
                 icon-pack="feather"
                 class="w-full"
                 v-validate="'required|min:4'"
-                v-model="form.CategoryName"
+                v-model="form.name"
                 label="Category Name"
                 name="Category Name"
                 id="Category Name"
@@ -26,7 +26,8 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="add_category_modal" @click="save_changes" :disabled="!validateForm">Add Category</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container"
+                id="create-category" @click="save_changes" :disabled="!validateForm">Add Category</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -37,34 +38,39 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
 
 export default {
+  /** Page Name */
   name: 'AddCategory',
 
+  /** components */
   components: {
     Select2
   },
 
+  /** Props */
   props: {
     showModal: Boolean
   },
 
+  /** data */
   data() {
     return {
-      loading: false,
       form: {
-        CategoryName: '',
+        name: '',
         type: null
       },
       zIndex: 0
     }
   },
-
+  /** Mounted */
   mounted() {},
 
-  // computed
+  /** computed */
   computed: {
+    ...mapState('category', ['createLoading']),
     validateForm() {
       return !this.errors.any()
     },
@@ -78,40 +84,55 @@ export default {
     }
   },
 
-  // methods
+  /** methods */
   methods: {
+    ...mapActions("category", {
+      createCategory: "createCategory",
+    }),
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
+      try {
+        const { message } = await this.createCategory(this.form);
+        this.$emit('update-data', true);
+        this.$vs.notify({
+          title: "Success",
+          text: message,
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          position: "top-center",
+          time: 5000,
+          color: "success",
+        });
+        this.isActive = false
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: "Error",
+          text: message,
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          position: "top-center",
+          time: 5000,
+          color: "primary",
+        });
+      }
     },
   },
 
-  // watch
+  /** watch */
   watch: {
-    loading() {
-      if (this.loading) {
+    createLoading() {
+      if (this.createLoading) {
         this.$vs.loading({
-          container: '#add_category_modal .vs-popup .vs-popup--content',
-          scale: 0.45
-        })
+          container: "#create-category",
+          scale: 0.45,
+        });
       } else {
-        this.$vs.loading.close('#add_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
+        this.$vs.loading.close("#create-category > .con-vs-loading");
       }
-    }
+    },
   }
 }
 </script>
 
-<style lang="scss">
-#add_category_modal {
-  .vs-popup {
-    width: calc(100% - 80%) !important;
-    position: relative;
-
-    .con-vs-loading {
-      position: absolute;
-    }
-  }
-}
-</style>

@@ -1,16 +1,18 @@
 import { getMessageFromError } from "../utils/functions"
 
 export default {
-  // Create Category.
+  /* -------------------------------------------------------------------------- */
+  /*                               Create Category                              */
+  /* -------------------------------------------------------------------------- */
   async createCategory({ commit }, data) {
     commit('SET_STATE', {
-      action: 'loading',
+      action: 'createLoading',
       data: true
     })
     try {
-      const res = await this.$http.post('/announcement', data)
+      const res = await this.$http.post('category/', data)
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'createLoading',
         data: false
       })
       return {
@@ -18,7 +20,7 @@ export default {
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'createLoading',
         data: false
       })
       // Manage Error
@@ -29,34 +31,35 @@ export default {
     }
   },
 
-  // Get Category List
+  /* -------------------------------------------------------------------------- */
+  /*                              Get Category List                             */
+  /* -------------------------------------------------------------------------- */
   async getCategoryList({ commit }, params) {
     commit('SET_STATE', {
-      action: 'loading',
+      action: 'listLoading',
       data: true
     })
     try {
       const res = await this.$http.get('category/', { params })
-      console.log(res.data.data,'res.data.data');
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
         data: false
       })
       commit('SET_STATE', {
         action: 'CategoryRecords',
-        data: res.data.data
+        data: res.data.data.categories
       })
       commit('SET_STATE', {
         action: 'total',
-        data: res.data.data.announcement.totalDocs
+        data: res.data.data.totalCount
       })
       commit('SET_STATE', {
         action: 'FilteredCount',
-        data: res.data.data.announcement.totalDocs
+        data: res.data.data.filteredCount
       })
     } catch (error) {
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
         data: false
       })
       const { message } = getMessageFromError(error)
@@ -66,14 +69,16 @@ export default {
     }
   },
 
-  // Delete Category
+  /* -------------------------------------------------------------------------- */
+  /*                               Delete Category                              */
+  /* -------------------------------------------------------------------------- */
   async deleteCategoryRecord({ commit }, id) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.delete(`/announcement/${id}`)
+      const res = await this.$http.delete(`/category/${id}`)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -94,7 +99,9 @@ export default {
     }
   },
 
-  // Get Category Info
+  /* -------------------------------------------------------------------------- */
+  /*                              Get Category Info                             */
+  /* -------------------------------------------------------------------------- */
   async getCategoryRecord({ commit }, id) {
     commit('SET_STATE', {
       action: 'loading',
@@ -126,14 +133,16 @@ export default {
     }
   },
 
-  // Update Category
-  async updateCategoryRecord({ commit }, { id, data }) {
+  /* -------------------------------------------------------------------------- */
+  /*                               Update Category                              */
+  /* -------------------------------------------------------------------------- */
+  async updateCategoryRecord({ commit }, {categoryId, data} ) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.put(`announcement/${id}`, data)
+      const res = await this.$http.put(`category/${categoryId}`, data)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -154,7 +163,9 @@ export default {
     }
   },
 
-  // update Category status action.
+  /* -------------------------------------------------------------------------- */
+  /*                       update Category status action.                       */
+  /* -------------------------------------------------------------------------- */
   async publishCategory({ commit }, { id, publish }) {
     commit('SET_STATE', {
       action: 'loading',
