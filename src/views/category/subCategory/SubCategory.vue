@@ -79,6 +79,30 @@
                 </vx-tooltip>
               </div>
             </vs-td>
+            <template class="expand-user" slot="expand">
+              <div class="con-expand-users w-full">
+                <div class="con-btns-user flex items-center justify-between">
+                  <div class="con-userx flex items-center justify-start">
+                    <vs-table :data="tr.categories">
+                      <template slot="thead">
+                        <vs-th>Sr#</vs-th>
+                        <vs-th sort-key="category.name">Sub Category Name</vs-th>
+                      </template>
+                      <vs-tr :data="str" :key="i" v-for="(str, i) in tr.categories">
+                        <vs-td>
+                          {{ page * length - (length - i - 1) }}
+                        </vs-td>
+                        <vs-td>
+                          <p class="capitalize">{{ str.name }}</p>
+                        </vs-td>
+                      </vs-tr>
+                    </vs-table>
+                    <!-- <vs-avatar :badge="tr.id" size="45px" :src="`https://randomuser.me/api/portraits/women/${indextr}.jpg`" /> -->
+                    <!-- <span>{{ tr.name }}</span> -->
+                  </div>
+                </div>
+              </div>
+            </template>
           </vs-tr>
         </template>
       </vs-table>
