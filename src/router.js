@@ -13,6 +13,10 @@ import UserRoute from '@/views/Users/routes'
 import CategoryRoute from '@/views/category/routes'
 /** Product Module */
 import ProductRoute from '@/views/products/routes'
+/** Metal Module */
+import MetalRoute from '@/views/metal/routes'
+/** Diamond Module */
+import DiamondRoute from '@/views/diamond/routes'
 
 Vue.use(Router)
 
@@ -39,7 +43,11 @@ const router = new Router({
         // Category route
         ...CategoryRoute,
         // Product route
-        ...ProductRoute
+        ...ProductRoute,
+        // Metal route
+        ...MetalRoute,
+        // Daimond route
+        ...DiamondRoute,
       ]
     },
 

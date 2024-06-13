@@ -1,9 +1,9 @@
 <template>
   <div>
-    <!-- Category list -->
+    <!-- Sub Category list -->
     <div class="vx-card p-6">
       <vs-table
-        id="category_list"
+        id="sub_category_list"
         class="vs-con-loading__container"
         stripe
         :sst="true"
@@ -11,10 +11,10 @@
         @search="updateSearchQuery"
         @change-page="handleChangePage"
         @sort="handleSort"
-        :total="FilteredCount"
+        :total="subFilteredCount"
         :max-items="length"
         search
-        :data="CategoryRecords"
+        :data="subCategoryRecords"
       >
         <template slot="header">
           <div class="mb-2 flex items-center">
@@ -23,10 +23,10 @@
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
                   <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
-                      {{ page * length - (length - (FilteredCount && 1)) }}
+                      {{ page * length - (length - (subFilteredCount && 1)) }}
                       -
-                      {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
-                      of {{ total }}
+                      {{ subFilteredCount - page * length > 0 ? page * length : subFilteredCount }}
+                      of {{ subtotal }}
                     </span>
                     <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
                   </div>
@@ -48,11 +48,11 @@
               </div>
             </div>
             <div
-              @click="toggleAddCategoryModal"
+              @click="toggleAddSubCategoryModal"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
             >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add Category</span>
+              <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
           </div>
         </template>
@@ -71,61 +71,41 @@
             <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
             <vs-td>
               <div class="inline-flex">
-                <vx-tooltip text="Edit Category">
-                  <feather-icon @click="toggleEditCategoryModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                <vx-tooltip :text="`Edit ${module_name}`">
+                  <feather-icon @click="toggleEditSubCategoryModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip text="Delete Category">
+                <vx-tooltip :text="`Delete ${module_name}`">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
-            <!-- <vs-td>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <div class="p-4 border border-solid d-theme-border-grey-light cursor-pointer flex items-center justify-between font-medium">
-                  Actions
-                  <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                </div>
-                <vs-dropdown-menu class="locations__actions">
-                  <vs-dropdown-item @click="sendToEditPage()"> <feather-icon icon="Edit3Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" /> Edit Category </vs-dropdown-item>
-                  <vs-dropdown-item @click="deleteRecord()"> <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-danger cursor-pointer" /> Delete Category </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-              <div>-</div>
-            </vs-td> -->
           </vs-tr>
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination
-      v-if="FilteredCount"
-        v-model="page"
-        :total="totalPages"
-        :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8"
-        @change="handleChangePage"
-      ></vs-pagination>
+      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @change="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add category modal -->
-    <add-category-modal :module_name="module_name" @update-data="getData" v-if="isAddCategoryModalMounted" :showModal.sync="isAddCategoryModalShow" />
+    <add-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isAddSubCategoryModalMounted" :showModal.sync="isAddSubCategoryModalShow" />
 
     <!-- Edit category modal -->
-    <Edit-category-modal :module_name="module_name" @update-data="getData" v-if="isEditCategoryModalMounted" :data="selectedRecord" :showModal.sync="isEditCategoryModalShow" />
+    <Edit-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isEditSubCategoryModalMounted" :data="selectedRecord" :showModal.sync="isEditSubCategoryModalShow" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AddCategoryModal from '@/views/category/AddCategoryModal'
-import EditCategoryModal from '@/views/category/EditCategoryModal'
+import AddSubCategoryModal from '@/views/category/subCategory/AddSubCategoryModal'
+import EditSubCategoryModal from '@/views/category/subCategory/EditSubCategoryModal'
 
 export default {
   name: 'CategoryList',
 
   /** Components */
   components: {
-    AddCategoryModal,
-    EditCategoryModal
+    AddSubCategoryModal,
+    EditSubCategoryModal
   },
 
   /** Data */
@@ -135,31 +115,31 @@ export default {
     length: 10,
     page: 1,
     search: '',
-    module_name:'Category',
+    module_name: 'Sub-Category',
 
     // add category modal
-    isAddCategoryModalMounted: false,
-    isAddCategoryModalShow: false,
+    isAddSubCategoryModalMounted: false,
+    isAddSubCategoryModalShow: false,
 
     // Edit category modal
-    isEditCategoryModalMounted: false,
-    isEditCategoryModalShow: false,
+    isEditSubCategoryModalMounted: false,
+    isEditSubCategoryModalShow: false,
     selectedRecord: null
   }),
 
   /** computed */
   computed: {
-    ...mapState('category', ['CategoryRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapState('category', ['subCategoryRecords', 'subtotal', 'subFilteredCount', 'listLoading']),
     totalPages() {
-      return Math.ceil(this.FilteredCount / this.length)
+      return Math.ceil(this.subFilteredCount / this.length)
     }
   },
 
   /** Functions */
   methods: {
     ...mapActions('category', {
-      getCategoryList: 'getCategoryList',
-      deleteCategoryRecord: 'deleteCategoryRecord'
+      getSubCategoryList: 'getSubCategoryList',
+      deleteSubCategoryRecord: 'deleteSubCategoryRecord'
     }),
 
     /** Per Page Limit Change */
@@ -192,7 +172,7 @@ export default {
 
     /** Category List API */
     getData() {
-      this.getCategoryList({
+      this.getSubCategoryList({
         order: this.order,
         limit: this.length,
         page: this.page,
@@ -201,15 +181,15 @@ export default {
     },
 
     // Add category modal
-    toggleAddCategoryModal() {
-      this.isAddCategoryModalMounted = true
-      this.isAddCategoryModalShow = true
+    toggleAddSubCategoryModal() {
+      this.isAddSubCategoryModalMounted = true
+      this.isAddSubCategoryModalShow = true
     },
 
-    // Edit category modal
-    toggleEditCategoryModal(data) {
-      this.isEditCategoryModalMounted = true
-      this.isEditCategoryModalShow = true
+    // Edit Sub-category modal
+    toggleEditSubCategoryModal(data) {
+      this.isEditSubCategoryModalMounted = true
+      this.isEditSubCategoryModalShow = true
       this.selectedRecord = data
     },
 
@@ -228,7 +208,7 @@ export default {
     /** Delete category API */
     async deleteSingleRecord(id) {
       try {
-        const { message } = await this.deleteCategoryRecord(id)
+        const { message } = await this.deleteSubCategoryRecord(id)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -258,33 +238,33 @@ export default {
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({
-          container: '#category_list',
+          container: '#sub_category_list',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#category_list > .con-vs-loading')
+        this.$vs.loading.close('#sub_category_list > .con-vs-loading')
       }
     },
 
     // add category modal
-    isAddCategoryModalShow: {
+    isAddSubCategoryModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isAddCategoryModalMounted = false
+            this.isAddSubCategoryModalMounted = false
           }, 0)
         }
       }
     },
 
     // edit category modal
-    isEditCategoryModalShow: {
+    isEditSubCategoryModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isEditCategoryModalMounted = false
+            this.isEditSubCategoryModalMounted = false
           }, 0)
         }
       }

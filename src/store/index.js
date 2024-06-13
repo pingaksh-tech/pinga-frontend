@@ -6,9 +6,16 @@ import getters from './getters'
 import mutations from './mutations'
 import actions from './actions'
 
-import category from './category'
 /** Auth Module */
+import category from './category'
+/** Category API Store */
 import auth from './auth'
+/** Metal API Store */
+import metal from './metal'
+/** Common API Store */
+import common from './common'
+/** Diamond API Store */
+import diamond from './diamond'
 
 Vue.use(Vuex)
 
@@ -21,5 +28,8 @@ export default new Vuex.Store({
   modules: {
     category,
     auth,
+    metal,
+    common,
+    diamond,
   }
 })

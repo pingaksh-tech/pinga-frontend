@@ -57,7 +57,7 @@ export default [
         permissions: [ALLPERMISSIONS]
       },
       {
-        url: '/customers/import',
+        url: '/category/subcategory/list',
         name: 'Sub Category',
         slug: 'sub-category',
         icon: 'ListIcon',
@@ -162,9 +162,9 @@ export default [
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
-        url: '/products/list',
+        url: '/diamond/list',
         name: 'List',
-        slug: 'productsList',
+        slug: 'diamond-List',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }
@@ -179,9 +179,9 @@ export default [
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
-        url: '/products/list',
+        url: '/metal/list',
         name: 'List',
-        slug: 'productsList',
+        slug: 'metal-list',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }

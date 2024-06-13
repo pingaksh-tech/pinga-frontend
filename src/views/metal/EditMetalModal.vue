@@ -7,10 +7,42 @@
         <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Category name -->
+            <!-- Metal name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Metal Name" name="Metal Name" id="Metal Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name') }}</span>
+            </div>
+            <!-- Metal Carat -->
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Metal Carat</label>
+              <select-2
+                class="w-full"
+                name="Metal Carat"
+                placeholder="Select Metal Carat"
+                :value="form.metal_carat"
+                @input="(item) => (form.metal_carat = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                :options="MetalCaratOptions"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Carat')">{{ errors.first('Metal Carat') }}</span>
+            </div>
+            <!-- Metal Color -->
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Metal Color</label>
+              <select-2
+                class="w-full"
+                name="Metal Color"
+                placeholder="Select Metal Color"
+                :value="form.metal_color"
+                @input="(item) => (form.metal_color = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                :options="MetalColorOptions"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Color')">{{ errors.first('Metal Color') }}</span>
             </div>
           </div>
         </div>
@@ -33,10 +65,10 @@
 
 <script>
 import Select2 from '@/components/custom/form-elements/Select2.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'AddCategory',
+  name: 'Edit',
 
   /** Components */
   components: {
@@ -56,6 +88,8 @@ export default {
       loading: false,
       form: {
         name: this.data.name,
+        metal_carat: this.data.metal_carat,
+        metal_color: this.data.metal_color
       },
       zIndex: 0
     }
@@ -68,6 +102,7 @@ export default {
 
   /** Computed */
   computed: {
+    ...mapState('metal', ['updateLoading', 'MetalCaratOptions','MetalColorOptions']),
     /** Form Validation Manage */
     validateForm() {
       return !this.errors.any()
@@ -84,8 +119,8 @@ export default {
 
   /** methods */
   methods: {
-    ...mapActions("category", {
-      updateCategoryRecord: "updateCategoryRecord",
+    ...mapActions("metal", {
+      updateMetalRecord: "updateMetalRecord",
     }),
     // reset form data
     resetForm() {
@@ -106,8 +141,8 @@ export default {
         return false
       }
       try {
-        const { message } = await this.updateCategoryRecord({
-          categoryId: this.data._id,
+        const { message } = await this.updateMetalRecord({
+          metalId: this.data._id,
           data : this.form
         } );
         this.$emit('update-data', true);
@@ -137,8 +172,8 @@ export default {
 
   /** watch Loading Manage */
   watch: {
-    loading() {
-      if (this.loading) {
+    updateLoading() {
+      if (this.updateLoading) {
         this.$vs.loading({
           container: '#update_category_modal .vs-popup .vs-popup--content',
           scale: 0.45

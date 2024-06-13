@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Add category popup -->
-    <vs-popup title="Add Category" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full px-8">
@@ -27,7 +27,7 @@
           <div class="vx-col w-full">
             <div class="items-center">
               <vs-button class="mr-2 vs-con-loading__container"
-                id="create-category" @click="save_changes" :disabled="!validateForm">Add Category</vs-button>
+                id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -52,7 +52,8 @@ export default {
 
   /** Props */
   props: {
-    showModal: Boolean
+    showModal: Boolean,
+    module_name: String
   },
 
   /** data */
@@ -87,14 +88,14 @@ export default {
   /** methods */
   methods: {
     ...mapActions("category", {
-      createCategory: "createCategory",
+      createSubCategory: "createSubCategory",
     }),
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        const { message } = await this.createCategory(this.form);
+        const { message } = await this.createSubCategory(this.form);
         this.$emit('update-data', true);
         this.$vs.notify({
           title: "Success",

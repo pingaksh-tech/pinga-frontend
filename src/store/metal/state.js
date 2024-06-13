@@ -1,10 +1,12 @@
+import { MetalCaratOptions, MetalColorOptions } from "../../utils/predefineTypes.js/constant";
+
 export default {
   /* -------------------------------------------------------------------------- */
   /*                             Category List State                            */
   /* -------------------------------------------------------------------------- */
   loading: false,
   listLoading: false,
-  CategoryRecords: [],
+  MetalRecords: [],
   total: 0,
   FilteredCount: 0,
   /* -------------------------------------------------------------------------- */
@@ -17,9 +19,8 @@ export default {
   editLoading: false,
 
   /* -------------------------------------------------------------------------- */
-  /*                             Sub Category State                             */
+  /*                               Predefine types                              */
   /* -------------------------------------------------------------------------- */
-  subCategoryRecords: [],
-  subtotal: 0,
-  subFilteredCount: 0,
+  MetalCaratOptions,
+  MetalColorOptions
 }

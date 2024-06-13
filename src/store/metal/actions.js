@@ -2,15 +2,15 @@ import { getMessageFromError } from "../utils/functions"
 
 export default {
   /* -------------------------------------------------------------------------- */
-  /*                               Create Category                              */
+  /*                                Create Metal                                */
   /* -------------------------------------------------------------------------- */
-  async createCategory({ commit }, data) {
+  async createMetal({ commit }, data) {
     commit('SET_STATE', {
       action: 'createLoading',
       data: true
     })
     try {
-      const res = await this.$http.post('category/', data)
+      const res = await this.$http.post('metal/', data)
       commit('SET_STATE', {
         action: 'createLoading',
         data: false
@@ -32,29 +32,22 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                              Get Category List                             */
+  /*                               Get Metal List                               */
   /* -------------------------------------------------------------------------- */
-  async getCategoryList({ commit }, params) {
+  async getMetalList({ commit }, params) {
     commit('SET_STATE', {
       action: 'listLoading',
       data: true
     })
     try {
-      const res = await this.$http.get('category/', { params })
+      const res = await this.$http.get('metal/', { params })
       commit('SET_STATE', {
         action: 'listLoading',
         data: false
       })
       commit('SET_STATE', {
-        action: 'CategoryRecords',
-        data: res.data.data.categories
-      })
-      commit('SET_STATE', {
-        action: 'dropDownOpt',
-        data: res.data.data.categories.map((c) => ({
-          value: c._id,
-          label: c.name,
-        })),
+        action: 'MetalRecords',
+        data: res.data.data.metal
       })
       commit('SET_STATE', {
         action: 'total',
@@ -64,13 +57,6 @@ export default {
         action: 'FilteredCount',
         data: res.data.data.filteredCount
       })
-      return {
-        data: res.data.data.categories.map((c) => ({
-          value: c._id,
-          label: c.name,
-        })),
-        message: res.data.message,
-      };
     } catch (error) {
       commit('SET_STATE', {
         action: 'listLoading',
@@ -84,15 +70,15 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                               Delete Category                              */
+  /*                             Delete Metal Record                            */
   /* -------------------------------------------------------------------------- */
-  async deleteCategoryRecord({ commit }, id) {
+  async deleteMetalRecord({ commit }, id) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.delete(`/category/${id}`)
+      const res = await this.$http.delete(`/metal/${id}`)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -114,15 +100,15 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                              Get Category Info                             */
+  /*                              Get Metal Record                              */
   /* -------------------------------------------------------------------------- */
-  async getCategoryRecord({ commit }, id) {
+  async getMetalRecord({ commit }, id) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.get(`announcement/${id}`)
+      const res = await this.$http.get(`metal/${id}`)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -148,15 +134,15 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                               Update Category                              */
+  /*                             Update Metal Record                            */
   /* -------------------------------------------------------------------------- */
-  async updateCategoryRecord({ commit }, {categoryId, data} ) {
+  async updateMetalRecord({ commit }, {metalId, data} ) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.put(`category/${categoryId}`, data)
+      const res = await this.$http.put(`metal/${metalId}`, data)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -178,9 +164,9 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                       update Category status action.                       */
+  /*                             Update Metal Status                            */
   /* -------------------------------------------------------------------------- */
-  async publishCategory({ commit }, { id, publish }) {
+  async publishMetal({ commit }, { id, publish }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
@@ -207,74 +193,5 @@ export default {
         message
       })
     }
-  },
-
-  /* -------------------------------------------------------------------------- */
-  /*                           Sub Category Module API                          */
-  /* -------------------------------------------------------------------------- */
-  async getSubCategoryList({ commit }, params) {
-    commit('SET_STATE', {
-      action: 'listLoading',
-      data: true
-    })
-    try {
-      const res = await this.$http.get('sub-category/', { params })
-      commit('SET_STATE', {
-        action: 'listLoading',
-        data: false
-      })
-      commit('SET_STATE', {
-        action: 'subCategoryRecords',
-        data: res.data.data.sub_categories
-      })
-      commit('SET_STATE', {
-        action: 'subtotal',
-        data: res.data.data.totalCount
-      })
-      commit('SET_STATE', {
-        action: 'subFilteredCount',
-        data: res.data.data.filteredCount
-      })
-    } catch (error) {
-      commit('SET_STATE', {
-        action: 'listLoading',
-        data: false
-      })
-      const { message } = getMessageFromError(error)
-      return Promise.reject({
-        message
-      })
-    }
-  },
-
-  /* -------------------------------------------------------------------------- */
-  /*                             Create Sub Category                            */
-  /* -------------------------------------------------------------------------- */
-  async createSubCategory({ commit }, data) {
-    commit('SET_STATE', {
-      action: 'createLoading',
-      data: true
-    })
-    try {
-      const res = await this.$http.post('sub-category/', data)
-      commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
-      })
-      return {
-        message: res.data.message
-      }
-    } catch (error) {
-      commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
-      })
-      // Manage Error
-      const { message } = getMessageFromError(error)
-      return Promise.reject({
-        message
-      })
-    }
-  },
+  }
 }
-

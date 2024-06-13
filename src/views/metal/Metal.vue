@@ -14,7 +14,7 @@
         :total="FilteredCount"
         :max-items="length"
         search
-        :data="CategoryRecords"
+        :data="MetalRecords"
       >
         <template slot="header">
           <div class="mb-2 flex items-center">
@@ -48,18 +48,20 @@
               </div>
             </div>
             <div
-              @click="toggleAddCategoryModal"
+              @click="toggleAddMetalModal"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
             >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add Category</span>
+              <span class="ml-2 text-base text-primary">Add Metal</span>
             </div>
           </div>
         </template>
 
         <template slot="thead">
           <vs-th>Sr#</vs-th>
-          <vs-th sort-key="category.name">Category Name</vs-th>
+          <vs-th sort-key="category.name">Metal Name</vs-th>
+          <vs-th sort-key="category.name">Metal Carat</vs-th>
+          <vs-th sort-key="category.name">Metal Color</vs-th>
           <vs-th>Action</vs-th>
         </template>
 
@@ -69,87 +71,76 @@
               {{ page * length - (length - i - 1) }}
             </vs-td>
             <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.metal_carat || '-' }} </vs-td>
+            <!-- <vs-td class="text-left">{{ tr.metal_color || '-' }}÷ </vs-td> -->
+            <vs-td class="text-left"
+              ><vs-chip color="primary" class="mx-auto font-semibold text-sm">
+                <p class="fn12 p-2 font-semibold capitalize">{{ tr.metal_color }}</p>
+              </vs-chip>
+            </vs-td>
             <vs-td>
               <div class="inline-flex">
-                <vx-tooltip text="Edit Category">
-                  <feather-icon @click="toggleEditCategoryModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                <vx-tooltip :text="`Edit ${module_name}`">
+                  <feather-icon @click="toggleEditMetalModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip text="Delete Category">
+                <vx-tooltip :text="`Delete ${module_name}`">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
-            <!-- <vs-td>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <div class="p-4 border border-solid d-theme-border-grey-light cursor-pointer flex items-center justify-between font-medium">
-                  Actions
-                  <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                </div>
-                <vs-dropdown-menu class="locations__actions">
-                  <vs-dropdown-item @click="sendToEditPage()"> <feather-icon icon="Edit3Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" /> Edit Category </vs-dropdown-item>
-                  <vs-dropdown-item @click="deleteRecord()"> <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-danger cursor-pointer" /> Delete Category </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-              <div>-</div>
-            </vs-td> -->
           </vs-tr>
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination
-      v-if="FilteredCount"
-        v-model="page"
-        :total="totalPages"
-        :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8"
-        @change="handleChangePage"
-      ></vs-pagination>
+      <vs-pagination @change="handleChangePage" v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
 
-    <!-- Add category modal -->
-    <add-category-modal :module_name="module_name" @update-data="getData" v-if="isAddCategoryModalMounted" :showModal.sync="isAddCategoryModalShow" />
+    <!-- Add metal modal -->
+    <AddMetalModal :module_name="module_name" @update-data="getData" v-if="isAddMetalModalMounted" :showModal.sync="isAddMetalModalShow" />
 
-    <!-- Edit category modal -->
-    <Edit-category-modal :module_name="module_name" @update-data="getData" v-if="isEditCategoryModalMounted" :data="selectedRecord" :showModal.sync="isEditCategoryModalShow" />
+    <!-- Edit metal modal -->
+    <EditMetalModal :module_name="module_name" @update-data="getData" v-if="isEditMetalModalMounted" :data="selectedRecord" :showModal.sync="isEditMetalModalShow" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AddCategoryModal from '@/views/category/AddCategoryModal'
-import EditCategoryModal from '@/views/category/EditCategoryModal'
+import EditMetalModal from './EditMetalModal.vue'
+import AddMetalModal from './AddMetalModal.vue'
 
 export default {
   name: 'CategoryList',
 
   /** Components */
   components: {
-    AddCategoryModal,
-    EditCategoryModal
+    AddMetalModal,
+    EditMetalModal
   },
 
   /** Data */
-  data: () => ({
-    order: [],
-    records: [1, 2, 3],
-    length: 10,
-    page: 1,
-    search: '',
-    module_name:'Category',
+  data() {
+    return {
+      order: [],
+      records: [1, 2, 3],
+      length: 10,
+      page: 1,
+      search: '',
+      module_name: 'Metal',
 
-    // add category modal
-    isAddCategoryModalMounted: false,
-    isAddCategoryModalShow: false,
+      // add category modal
+      isAddMetalModalMounted: false,
+      isAddMetalModalShow: false,
 
-    // Edit category modal
-    isEditCategoryModalMounted: false,
-    isEditCategoryModalShow: false,
-    selectedRecord: null
-  }),
+      // Edit category modal
+      isEditMetalModalMounted: false,
+      isEditMetalModalShow: false,
+      selectedRecord: null
+    }
+  },
 
   /** computed */
   computed: {
-    ...mapState('category', ['CategoryRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapState('metal', ['MetalRecords', 'total', 'FilteredCount', 'listLoading']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }
@@ -157,9 +148,9 @@ export default {
 
   /** Functions */
   methods: {
-    ...mapActions('category', {
-      getCategoryList: 'getCategoryList',
-      deleteCategoryRecord: 'deleteCategoryRecord'
+    ...mapActions('metal', {
+      getMetalList: 'getMetalList',
+      deleteMetalRecord: 'deleteMetalRecord'
     }),
 
     /** Per Page Limit Change */
@@ -192,7 +183,7 @@ export default {
 
     /** Category List API */
     getData() {
-      this.getCategoryList({
+      this.getMetalList({
         order: this.order,
         limit: this.length,
         page: this.page,
@@ -201,15 +192,15 @@ export default {
     },
 
     // Add category modal
-    toggleAddCategoryModal() {
-      this.isAddCategoryModalMounted = true
-      this.isAddCategoryModalShow = true
+    toggleAddMetalModal() {
+      this.isAddMetalModalMounted = true
+      this.isAddMetalModalShow = true
     },
 
     // Edit category modal
-    toggleEditCategoryModal(data) {
-      this.isEditCategoryModalMounted = true
-      this.isEditCategoryModalShow = true
+    toggleEditMetalModal(data) {
+      this.isEditMetalModalMounted = true
+      this.isEditMetalModalShow = true
       this.selectedRecord = data
     },
 
@@ -228,7 +219,7 @@ export default {
     /** Delete category API */
     async deleteSingleRecord(id) {
       try {
-        const { message } = await this.deleteCategoryRecord(id)
+        const { message } = await this.deleteMetalRecord(id)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -267,24 +258,24 @@ export default {
     },
 
     // add category modal
-    isAddCategoryModalShow: {
+    isAddMetalModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isAddCategoryModalMounted = false
+            this.isAddMetalModalMounted = false
           }, 0)
         }
       }
     },
 
     // edit category modal
-    isEditCategoryModalShow: {
+    isEditMetalModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isEditCategoryModalMounted = false
+            this.isEditMetalModalMounted = false
           }, 0)
         }
       }

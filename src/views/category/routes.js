@@ -22,5 +22,22 @@ export default [
         { title: 'Add Category', active: true }
       ]
     }
+  },
+  /* -------------------------------------------------------------------------- */
+  /*                             Sub Category Routes                            */
+  /* -------------------------------------------------------------------------- */
+  {
+    path: '/category/subcategory/list',
+    name: 'sub-category-list',
+    component: () => import('@/views/category/subCategory/SubCategory.vue'),
+    meta: {
+      allowAnonymous: false,
+      pageTitle: 'Sub-Category',
+      breadcrumb: [
+        { title: 'Dashboard', url: '/dashboard' },
+        { title: 'Category List', url: '/category/list' },
+        { title: 'Sub Category List', active: true }
+      ]
+    }
   }
 ]
