@@ -2,15 +2,15 @@ import { getMessageFromError } from '../utils/functions'
 
 export default {
   /* -------------------------------------------------------------------------- */
-  /*                               Create Diamond                               */
+  /*                               Create Tag                              */
   /* -------------------------------------------------------------------------- */
-  async createDiamond({ commit }, data) {
+  async createTag({ commit }, data) {
     commit('SET_STATE', {
       action: 'createLoading',
       data: true
     })
     try {
-      const res = await this.$http.post('diamond/', data)
+      const res = await this.$http.post('product-tag/', data)
       commit('SET_STATE', {
         action: 'createLoading',
         data: false
@@ -32,22 +32,22 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                                List Diamonds                               */
+  /*                              Get Tag List                             */
   /* -------------------------------------------------------------------------- */
-  async getDiamondList({ commit }, params) {
+  async getTagList({ commit }, params) {
     commit('SET_STATE', {
       action: 'listLoading',
       data: true
     })
     try {
-      const res = await this.$http.get('diamond', { params })
+      const res = await this.$http.get('product-tag/', { params })
       commit('SET_STATE', {
         action: 'listLoading',
         data: false
       })
       commit('SET_STATE', {
-        action: 'DiamondRecords',
-        data: res.data.data.diamonds
+        action: 'TagRecords',
+        data: res.data.data.productTags
       })
       commit('SET_STATE', {
         action: 'total',
@@ -57,6 +57,13 @@ export default {
         action: 'FilteredCount',
         data: res.data.data.filteredCount
       })
+      return {
+        data: res.data.data.categories.map((c) => ({
+          value: c._id,
+          label: c.name
+        })),
+        message: res.data.message
+      }
     } catch (error) {
       commit('SET_STATE', {
         action: 'listLoading',
@@ -70,15 +77,15 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                               Delete Diamond                               */
+  /*                               Delete Tag                              */
   /* -------------------------------------------------------------------------- */
-  async deleteDiamondRecord({ commit }, id) {
+  async deleteTagRecord({ commit }, id) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.delete(`/diamond/${id}`)
+      const res = await this.$http.delete(`/product-tag/${id}`)
       commit('SET_STATE', {
         action: 'loading',
         data: false
@@ -100,15 +107,15 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                               Update Diamond                               */
+  /*                               Update Tag                              */
   /* -------------------------------------------------------------------------- */
-  async updateDiamondRecord({ commit }, { diamondId, data }) {
+  async updateTagRecord({ commit }, { productTagId, data }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.put(`diamond/${diamondId}`, data)
+      const res = await this.$http.put(`product-tag/${productTagId}`, data)
       commit('SET_STATE', {
         action: 'loading',
         data: false

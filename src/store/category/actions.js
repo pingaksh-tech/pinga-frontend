@@ -1,4 +1,4 @@
-import { getMessageFromError } from "../utils/functions"
+import { getMessageFromError } from '../utils/functions'
 
 export default {
   /* -------------------------------------------------------------------------- */
@@ -53,8 +53,8 @@ export default {
         action: 'dropDownOpt',
         data: res.data.data.categories.map((c) => ({
           value: c._id,
-          label: c.name,
-        })),
+          label: c.name
+        }))
       })
       commit('SET_STATE', {
         action: 'total',
@@ -67,10 +67,10 @@ export default {
       return {
         data: res.data.data.categories.map((c) => ({
           value: c._id,
-          label: c.name,
+          label: c.name
         })),
-        message: res.data.message,
-      };
+        message: res.data.message
+      }
     } catch (error) {
       commit('SET_STATE', {
         action: 'listLoading',
@@ -150,7 +150,7 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                               Update Category                              */
   /* -------------------------------------------------------------------------- */
-  async updateCategoryRecord({ commit }, {categoryId, data} ) {
+  async updateCategoryRecord({ commit }, { categoryId, data }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
@@ -276,5 +276,64 @@ export default {
       })
     }
   },
-}
 
+  /* -------------------------------------------------------------------------- */
+  /*                         Update Sub Category Record                         */
+  /* -------------------------------------------------------------------------- */
+  async updateSubCategoryRecord({ commit }, { subCategoryId, data }) {
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
+    try {
+      const res = await this.$http.put(`sub-category/${subCategoryId}`, data)
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      return {
+        data: res.data.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                         Delete Sub Category Record                         */
+  /* -------------------------------------------------------------------------- */
+  async deleteSubCategoryRecord({ commit }, id) {
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
+    try {
+      const res = await this.$http.delete(`/sub-category/${id}`)
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      return {
+        data: res.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  }
+}

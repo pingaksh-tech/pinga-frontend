@@ -22,5 +22,15 @@ export default [
         { title: 'Add product', active: true }
       ]
     }
+  },
+  {
+    path: '/tag/list',
+    name: 'tag-list',
+    component: () => import('@/views/products/tag/Tag.vue'),
+    meta: {
+      allowAnonymous: false,
+      pageTitle: 'Tag List',
+      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'tag' }, { title: 'Tag List', active: true }]
+    }
   }
 ]

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <!-- Daimond list -->
+    <!-- Category list -->
     <div class="vx-card p-6">
       <vs-table
-        id="diamond-list"
+        id="tag_list"
         class="vs-con-loading__container"
         stripe
         :sst="true"
@@ -14,7 +14,7 @@
         :total="FilteredCount"
         :max-items="length"
         search
-        :data="DiamondRecords"
+        :data="TagRecords"
       >
         <template slot="header">
           <div class="mb-2 flex items-center">
@@ -23,10 +23,10 @@
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
                   <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
-                      {{ page * length - (length - (FilteredCount && 1)) || 0 }}
+                      {{ page * length - (length - (FilteredCount && 1)) }}
                       -
                       {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
-                      of {{ total || 0 }}
+                      of {{ total }}
                     </span>
                     <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
                   </div>
@@ -47,10 +47,7 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div
-              @click="toggleAddDiamondModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
-            >
+            <div @click="toggleAddTagModal" class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
@@ -59,11 +56,7 @@
 
         <template slot="thead">
           <vs-th>Sr#</vs-th>
-          <vs-th sort-key="Diamond.name">Diamond Name</vs-th>
-          <vs-th sort-key="Diamond.name">Diamond Color</vs-th>
-          <vs-th sort-key="Diamond.name">Diamond Clarity</vs-th>
-          <vs-th sort-key="Diamond.name">Diamond Weight</vs-th>
-          <vs-th sort-key="Diamond.name">Diamond Price</vs-th>
+          <vs-th sort-key="category.name">Category Name</vs-th>
           <vs-th>Action</vs-th>
         </template>
 
@@ -72,25 +65,11 @@
             <vs-td>
               {{ page * length - (length - i - 1) }}
             </vs-td>
-            <vs-td class="text-left"
-              ><p class="capitalize">{{ tr.diamond_shape || '-' }}</p>
-            </vs-td>
-            <vs-td class="text-left"
-              ><p class="capitalize">{{ tr.diamond_color || '-' }}</p>
-            </vs-td>
-            <vs-td class="text-left"
-              ><p class="capitalize">{{ tr.diamond_clarity || '-' }}</p>
-            </vs-td>
-            <vs-td class="text-left"
-              ><p class="capitalize">{{ tr.diamond_weight || '-' }}</p>
-            </vs-td>
-            <vs-td class="text-left"
-              ><p class="capitalize">{{ formatPrice(tr.diamond_price) }}</p>
-            </vs-td>
+            <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
-                  <feather-icon @click="toggleEditDiamondModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="toggleEditTagModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
@@ -104,26 +83,26 @@
       <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @change="handleChangePage"></vs-pagination>
     </div>
 
-    <!-- Add Diamond modal -->
-    <add-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isAddDiamondModalMounted" :showModal.sync="isAddDiamondModalShow" />
+    <!-- Add category modal -->
+    <AddTagModalVue :module_name="module_name" @update-data="getData" v-if="isAddTagModalMounted" :showModal.sync="isAddTagModalShow" />
 
-    <!-- Edit Diamond modal -->
-    <Edit-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isEditDiamondModalMounted" :data="selectedRecord" :showModal.sync="isEditDiamondModalShow" />
+    <!-- Edit category modal -->
+    <EditTagModalVue :module_name="module_name" @update-data="getData" v-if="isEditTagModalMounted" :data="selectedRecord" :showModal.sync="isEditTagModalShow" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AddDiamondModal from '@/views/diamond/AddDiamondModal'
-import EditDiamondModal from '@/views/diamond/EditDiamondModal'
+import AddTagModalVue from './AddTagModal.vue'
+import EditTagModalVue from './EditTagModal.vue'
 
 export default {
-  name: 'DiamondList',
+  name: 'CategoryList',
 
   /** Components */
   components: {
-    AddDiamondModal,
-    EditDiamondModal
+    AddTagModalVue,
+    EditTagModalVue
   },
 
   /** Data */
@@ -133,21 +112,21 @@ export default {
     length: 10,
     page: 1,
     search: '',
-    module_name: 'Diamond',
+    module_name: 'Tag',
 
-    // add Diamond modal
-    isAddDiamondModalMounted: false,
-    isAddDiamondModalShow: false,
+    // add category modal
+    isAddTagModalMounted: false,
+    isAddTagModalShow: false,
 
-    // Edit Diamond modal
-    isEditDiamondModalMounted: false,
-    isEditDiamondModalShow: false,
+    // Edit category modal
+    isEditTagModalMounted: false,
+    isEditTagModalShow: false,
     selectedRecord: null
   }),
 
   /** computed */
   computed: {
-    ...mapState('diamond', ['DiamondRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapState('product', ['TagRecords', 'total', 'FilteredCount', 'listLoading']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }
@@ -155,9 +134,9 @@ export default {
 
   /** Functions */
   methods: {
-    ...mapActions('diamond', {
-      getDiamondList: 'getDiamondList',
-      deleteDiamondRecord: 'deleteDiamondRecord'
+    ...mapActions('product', {
+      getTagList: 'getTagList',
+      deleteTagRecord: 'deleteTagRecord'
     }),
 
     /** Per Page Limit Change */
@@ -188,9 +167,9 @@ export default {
       this.getData()
     },
 
-    /** Diamond List API */
+    /** Category List API */
     getData() {
-      this.getDiamondList({
+      this.getTagList({
         order: this.order,
         limit: this.length,
         page: this.page,
@@ -198,20 +177,20 @@ export default {
       })
     },
 
-    // Add Diamond modal
-    toggleAddDiamondModal() {
-      this.isAddDiamondModalMounted = true
-      this.isAddDiamondModalShow = true
+    // Add Tag modal
+    toggleAddTagModal() {
+      this.isAddTagModalMounted = true
+      this.isAddTagModalShow = true
     },
 
-    // Edit Diamond modal
-    toggleEditDiamondModal(data) {
-      this.isEditDiamondModalMounted = true
-      this.isEditDiamondModalShow = true
+    // Edit Tag modal
+    toggleEditTagModal(data) {
+      this.isEditTagModalMounted = true
+      this.isEditTagModalShow = true
       this.selectedRecord = data
     },
 
-    /** Delete Diamond Confirmation */
+    /** Delete category Confirmation */
     deleteRecord(id) {
       this.$vs.dialog({
         type: 'confirm',
@@ -223,10 +202,10 @@ export default {
       })
     },
 
-    /** Delete Diamond API */
+    /** Delete category API */
     async deleteSingleRecord(id) {
       try {
-        const { message } = await this.deleteDiamondRecord(id)
+        const { message } = await this.deleteTagRecord(id)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -248,12 +227,6 @@ export default {
           color: 'primary'
         })
       }
-    },
-
-    /** FormatPrice */
-    formatPrice(value) {
-      // Using the numeral library
-      return '₹' + new Intl.NumberFormat('en-IN').format(value)
     }
   },
 
@@ -262,33 +235,33 @@ export default {
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({
-          container: '#diamond-list',
+          container: '#tag_list',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#diamond-list > .con-vs-loading')
+        this.$vs.loading.close('#tag_list > .con-vs-loading')
       }
     },
 
-    // add Diamond modal
-    isAddDiamondModalShow: {
+    // add Tag modal
+    isAddTagModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isAddDiamondModalMounted = false
+            this.isAddTagModalMounted = false
           }, 0)
         }
       }
     },
 
-    // edit Diamond modal
-    isEditDiamondModalShow: {
+    // edit Tag modal
+    isEditTagModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isEditDiamondModalMounted = false
+            this.isEditTagModalMounted = false
           }, 0)
         }
       }

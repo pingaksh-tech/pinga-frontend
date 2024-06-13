@@ -8,7 +8,7 @@
             <!-- Diamond Clarity -->
             <div class="vx-row mb-2">
               <vs-input
-                icon="icon icon-package"
+                icon="icon icon-box"
                 icon-pack="feather"
                 class="w-full"
                 v-validate="'required'"
@@ -22,7 +22,7 @@
             <!-- Diamond Shape -->
             <div class="vx-row mb-2">
               <vs-input
-                icon="icon icon-package"
+                icon="icon icon-feather"
                 icon-pack="feather"
                 class="w-full"
                 v-validate="'required'"
@@ -36,7 +36,7 @@
             <!-- Diamond Color -->
             <div class="vx-row mb-2">
               <vs-input
-                icon="icon icon-package"
+                icon="icon icon-stop-circle"
                 icon-pack="feather"
                 class="w-full"
                 v-validate="'required'"
@@ -50,7 +50,7 @@
             <!-- Diamond Weight -->
             <div class="vx-row mb-2">
               <vs-input
-                icon="icon icon-package"
+                icon="icon icon-database"
                 icon-pack="feather"
                 class="w-full"
                 type="number"
@@ -65,7 +65,7 @@
             <!-- Diamond Price -->
             <div class="vx-row mb-2">
               <vs-input
-                icon="icon icon-package"
+                icon="icon icon-dollar-sign"
                 icon-pack="feather"
                 class="w-full"
                 type="number"
@@ -118,6 +118,9 @@ export default {
     return {
       form: {
         diamond_clarity: '',
+        diamond_color: '',
+        diamond_weight: '',
+        diamond_price: '',
         diamond_shape: ''
       },
       zIndex: 0

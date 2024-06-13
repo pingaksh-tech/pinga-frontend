@@ -107,7 +107,7 @@ export default [
         permissions: [ALLPERMISSIONS]
       },
       {
-        url: '/products/add',
+        url: '/tag/list',
         name: 'Tags Mgmt',
         slug: 'ImportCsv',
         icon: 'BarChartIcon',

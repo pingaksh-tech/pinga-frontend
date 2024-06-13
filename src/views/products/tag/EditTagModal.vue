@@ -7,77 +7,10 @@
         <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Diamond Clarity -->
+            <!-- Category name -->
             <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-box"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required'"
-                v-model="form.diamond_clarity"
-                label="Diamond Clarity"
-                name="Diamond Clarity"
-                id="Diamond Clarity"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Diamond Clarity')">{{ errors.first('Diamond Clarity') }}</span>
-            </div>
-            <!-- Diamond Shape -->
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-feather"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required'"
-                v-model="form.diamond_shape"
-                label="Diamond Shape"
-                name="Diamond Shape"
-                id="Diamond Shape"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Diamond Shape')">{{ errors.first('Diamond Shape') }}</span>
-            </div>
-            <!-- Diamond Color -->
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-stop-circle"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required'"
-                v-model="form.diamond_color"
-                label="Diamond Color"
-                name="Diamond Color"
-                id="Diamond Color"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Diamond Color')">{{ errors.first('Diamond Color') }}</span>
-            </div>
-            <!-- Diamond Weight -->
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-database"
-                icon-pack="feather"
-                class="w-full"
-                type="number"
-                v-validate="'required|min:1'"
-                v-model="form.diamond_weight"
-                label="Diamond Weight"
-                name="Diamond Weight"
-                id="Diamond Weight"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Diamond Weight')">{{ errors.first('Diamond Weight') }}</span>
-            </div>
-            <!-- Diamond Price -->
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-dollar-sign"
-                icon-pack="feather"
-                class="w-full"
-                type="number"
-                v-validate="'required|min:1'"
-                v-model="form.diamond_price"
-                label="Diamond Price"
-                name="Diamond Price"
-                id="Diamond Price"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Diamond Price')">{{ errors.first('Diamond Price') }}</span>
+              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
             </div>
           </div>
         </div>
@@ -122,20 +55,14 @@ export default {
     return {
       loading: false,
       form: {
-        diamond_clarity: this.data.diamond_clarity,
-        diamond_color: this.data.diamond_color,
-        diamond_weight: this.data.diamond_weight,
-        diamond_price: this.data.diamond_price,
-        diamond_shape: this.data.diamond_shape
+        name: this.data.name
       },
       zIndex: 0
     }
   },
 
   /** Page Render */
-  mounted() {
-    console.log(this.data._id)
-  },
+  mounted() {},
 
   /** Computed */
   computed: {
@@ -155,13 +82,13 @@ export default {
 
   /** methods */
   methods: {
-    ...mapActions('diamond', {
-      updateDiamondRecord: 'updateDiamondRecord'
+    ...mapActions('product', {
+      updateTagRecord: 'updateTagRecord'
     }),
     // reset form data
     resetForm() {
       this.form = {
-        CategoryName: '',
+        name: '',
         type: null
       }
 
@@ -177,8 +104,8 @@ export default {
         return false
       }
       try {
-        const { message } = await this.updateDiamondRecord({
-          diamondId: this.data._id,
+        const { message } = await this.updateTagRecord({
+          productTagId: this.data._id,
           data: this.form
         })
         this.$emit('update-data', true)
