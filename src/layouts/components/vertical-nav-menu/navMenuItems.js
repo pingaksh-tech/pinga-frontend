@@ -117,42 +117,7 @@ export default [
       }
     ]
   },
-
-  /** Admin Size Setting */
-  {
-    url: null,
-    name: 'Size',
-    slug: 'Size',
-    icon: 'PocketIcon',
-    permissions: [ALLPERMISSIONS],
-    submenu: [
-      {
-        url: '/products/list',
-        name: 'List',
-        slug: 'productsList',
-        icon: 'ListIcon',
-        permissions: [ALLPERMISSIONS]
-      }
-    ]
-  },
-
-  /** Admin Color Setting */
-  {
-    url: null,
-    name: 'Colors',
-    slug: 'colors',
-    icon: 'LifeBuoyIcon',
-    permissions: [ALLPERMISSIONS],
-    submenu: [
-      {
-        url: '/products/list',
-        name: 'List',
-        slug: 'productsList',
-        icon: 'ListIcon',
-        permissions: [ALLPERMISSIONS]
-      }
-    ]
-  },
+  
   /** Admin Daimond Setting */
   {
     url: null,
