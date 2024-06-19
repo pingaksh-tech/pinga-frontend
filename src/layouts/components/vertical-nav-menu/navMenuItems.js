@@ -178,9 +178,9 @@ export default [
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
-        url: '/products/list',
+        url: '/inventory/list',
         name: 'List',
-        slug: 'productsList',
+        slug: 'inventoryList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }

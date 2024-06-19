@@ -105,6 +105,7 @@ export default {
       total: 0,
       sso: [],
       processing: false,
+      // type: 'dropdown',
       nodata: false
     }
   },

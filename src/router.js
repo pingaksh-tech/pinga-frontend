@@ -20,6 +20,9 @@ import DiamondRoute from '@/views/diamond/routes'
 /** Retailer Module */
 import RetailerRoute from '@/views/retailers/routes'
 
+/** Inventory Module */
+import InventoryRoute from '@/views/inventory/routes'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -52,6 +55,8 @@ const router = new Router({
         ...DiamondRoute,
         // Daimond route
         ...RetailerRoute,
+        // Inventory route
+        ...InventoryRoute
       ]
     },
 
