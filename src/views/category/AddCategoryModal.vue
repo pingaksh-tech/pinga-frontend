@@ -88,14 +88,14 @@ export default {
   /** methods */
   methods: {
     ...mapActions("category", {
-      createSubCategory: "createSubCategory",
+      createCategory: "createCategory",
     }),
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        const { message } = await this.createSubCategory(this.form);
+        const { message } = await this.createCategory(this.form);
         this.$emit('update-data', true);
         this.$vs.notify({
           title: "Success",

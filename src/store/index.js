@@ -18,6 +18,8 @@ import common from './common'
 import diamond from './diamond'
 /** Tag API Store */
 import product from './product'
+/** Retailer API Store */
+import retailer from './retailer'
 
 Vue.use(Vuex)
 
@@ -33,6 +35,7 @@ export default new Vuex.Store({
     metal,
     common,
     product,
-    diamond
+    diamond,
+    retailer
   }
 })

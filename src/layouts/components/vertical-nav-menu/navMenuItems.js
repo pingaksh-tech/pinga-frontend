@@ -16,24 +16,41 @@ export default [
     permissions: ALLPERMISSIONS,
     roles: ALLROLES
   },
+  // // Users
+  // {
+  //   url: null,
+  //   name: 'Users',
+  //   slug: 'Users',
+  //   icon: 'UsersIcon',
+  //   permissions: [ALLPERMISSIONS],
+  //   submenu: [
+  //     {
+  //       url: '/Users/create',
+  //       name: 'Add Users',
+  //       slug: 'AddUsers',
+  //       icon: 'PlusIcon',
+  //       permissions: [ALLPERMISSIONS]
+  //     },
+  //     {
+  //       url: '/Users/list',
+  //       name: 'Users List',
+  //       slug: 'UserList',
+  //       icon: 'ListIcon',
+  //       permissions: [ALLPERMISSIONS]
+  //     }
+  //   ]
+  // },
   // Users
   {
     url: null,
-    name: 'Users',
-    slug: 'Users',
+    name: 'Retailers',
+    slug: 'retailers',
     icon: 'UsersIcon',
     permissions: [ALLPERMISSIONS],
     submenu: [
       {
-        url: '/Users/create',
-        name: 'Add Users',
-        slug: 'AddUsers',
-        icon: 'PlusIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/Users/list',
-        name: 'Users List',
+        url: '/retailer/list',
+        name: 'Retailers List',
         slug: 'UserList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]

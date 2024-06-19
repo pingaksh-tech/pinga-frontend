@@ -5,7 +5,7 @@
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Metal Color -->
+            <!-- Sub Category -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Category</label>
               <select-2

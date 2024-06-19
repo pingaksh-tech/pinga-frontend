@@ -32,5 +32,36 @@ export default {
         message
       })
     }
-  }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                            Upgrade Refresh Token                           */
+  /* -------------------------------------------------------------------------- */
+  async upgradeRefreshToken({ commit }, data) {
+    commit('SET_STATE', {
+      action: 'createLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.post('refresh-token/', data)
+      console.log(res);
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      return {
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      // Manage Error
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  },
 }

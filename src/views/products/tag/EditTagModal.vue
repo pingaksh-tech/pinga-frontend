@@ -1,16 +1,16 @@
 <template>
   <div>
     <!-- Update Category popup -->
-    <vs-popup id="update_category_modal" class="vs-con-loading__container" :title="`Update ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <vs-popup id="update_tag_modal" class="vs-con-loading__container" :title="`Update ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <!-- Form -->
       <form method="POST" @submit.prevent="save_changes">
         <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Category name -->
+            <!-- Tag name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Tag Name" name="Tag Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Tag Name')">{{ errors.first('Tag Name') }}</span>
             </div>
           </div>
         </div>
@@ -19,7 +19,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" @click="save_changes()" id="add-user-button" :disabled="!validateForm">Update</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="update-tag" @click="save_changes()" :disabled="!validateForm">Update</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -133,16 +133,16 @@ export default {
     }
   },
 
-  /** watch Loading Manage */
+  /** watch */
   watch: {
-    loading() {
-      if (this.loading) {
+    createLoading() {
+      if (this.createLoading) {
         this.$vs.loading({
-          container: '#update_category_modal .vs-popup .vs-popup--content',
+          container: '#update-tag',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#update_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
+        this.$vs.loading.close('#update-tag > .con-vs-loading')
       }
     }
   }
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss">
-#update_category_modal {
+#update_tag_modal {
   .vs-popup {
     width: calc(100% - 80%) !important;
     position: relative;

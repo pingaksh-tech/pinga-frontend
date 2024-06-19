@@ -1,14 +1,14 @@
 <template>
   <div>
-    <!-- Add category popup -->
+    <!-- Add Tag popup -->
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Category name -->
+            <!-- Tag name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Tag" name="Tag" id="Tag" />
+              <span class="text-danger text-sm" v-show="errors.has('Tag')">{{ errors.first('Tag') }}</span>
             </div>
           </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-tag" @click="save_changes" :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -116,11 +116,11 @@ export default {
     createLoading() {
       if (this.createLoading) {
         this.$vs.loading({
-          container: '#create-category',
+          container: '#create-tag',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#create-category > .con-vs-loading')
+        this.$vs.loading.close('#create-tag > .con-vs-loading')
       }
     }
   }

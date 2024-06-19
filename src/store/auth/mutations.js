@@ -2,9 +2,6 @@ import Axios from 'axios'
 import _ from 'lodash'
 
 export default {
-  SET_BEARER(state, accessToken) {
-    Axios.defaults.headers.common["x-access-token"] = `Bearer ${accessToken}`;
-  },
   SET_STATE: (state, payload) => {
     _.set(state, payload.action, payload.data);
   },

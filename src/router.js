@@ -17,6 +17,8 @@ import ProductRoute from '@/views/products/routes'
 import MetalRoute from '@/views/metal/routes'
 /** Diamond Module */
 import DiamondRoute from '@/views/diamond/routes'
+/** Retailer Module */
+import RetailerRoute from '@/views/retailers/routes'
 
 Vue.use(Router)
 
@@ -48,6 +50,8 @@ const router = new Router({
         ...MetalRoute,
         // Daimond route
         ...DiamondRoute,
+        // Daimond route
+        ...RetailerRoute,
       ]
     },
 
