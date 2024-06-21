@@ -19,6 +19,8 @@ import MetalRoute from '@/views/metal/routes'
 import DiamondRoute from '@/views/diamond/routes'
 /** Retailer Module */
 import RetailerRoute from '@/views/retailers/routes'
+/** Banner Module */
+import BannerRoute from '@/views/banner/routes'
 
 /** Inventory Module */
 import InventoryRoute from '@/views/inventory/routes'
@@ -51,12 +53,14 @@ const router = new Router({
         ...ProductRoute,
         // Metal route
         ...MetalRoute,
-        // Daimond route
+        // Diamond route
         ...DiamondRoute,
-        // Daimond route
+        // Retailer route
         ...RetailerRoute,
         // Inventory route
-        ...InventoryRoute
+        ...InventoryRoute,
+        // Banner route
+        ...BannerRoute
       ]
     },
 

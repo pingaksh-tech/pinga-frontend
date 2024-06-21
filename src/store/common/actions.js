@@ -278,5 +278,36 @@ export default {
         message
       })
     }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Upload Single File                             */
+  /* -------------------------------------------------------------------------- */
+  async storeSingleFile({ commit }, data) {
+    commit('SET_STATE', {
+      action: 'createLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.post('file/singleUpload/', data)
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      return {
+        data: res.data.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      // Manage Error
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
   }
 }

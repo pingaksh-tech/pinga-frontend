@@ -92,7 +92,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination @change="handleChangePage" v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
+      <vs-pagination @onchange="handleChangePage" v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
 
     <!-- Add metal modal -->

@@ -36,15 +36,20 @@ export default {
   /* -------------------------------------------------------------------------- */
   async getCategoryList({ commit }, params) {
     commit('SET_STATE', {
-      action: 'listLoading',
+      action: 'listLoading2',
       data: true
     })
     try {
+      console.log("=============1==============")
       const res = await this.$http.get('category/', { params })
+      console.log(res.data.data.categories,'res.data.data.categories');
+
       commit('SET_STATE', {
-        action: 'listLoading',
+        action: 'listLoading2',
         data: false
       })
+      console.log("==========2=================")
+
       commit('SET_STATE', {
         action: 'CategoryRecords',
         data: res.data.data.categories
@@ -73,13 +78,14 @@ export default {
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'listLoading',
+        action: 'listLoading2',
         data: false
       })
+      console.log(error,'error');
       const { message } = getMessageFromError(error)
-      return Promise.reject({
-        message
-      })
+      // return Promise.reject({
+      //   message
+      // })
     }
   },
 

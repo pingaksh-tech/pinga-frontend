@@ -82,9 +82,9 @@ export default {
   data() {
     return {
       form: {
-        name: '',
-        metal_carat: '',
-        metal_color: ''
+        name: 'test',
+        metal_carat: '14K',
+        metal_color: 'yellow'
       },
       zIndex: 0
     }
@@ -119,7 +119,8 @@ export default {
       }
       try {
         const { message } = await this.createMetal(this.form)
-        this.$emit('update-data', true)
+        console.log(message,'message API in VUE');
+        // this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
           text: message,

@@ -4,15 +4,8 @@
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
-          <div class="vx-col w-full px-8">
-            <!-- Category name -->
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
-            </div>
-          </div>
-          <div class="vx-col w-full px-8 mt-5 cursor-pointer">
-            <input type="file" ref="files" accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" />
+          <div class="vx-col w-full px-8 mt-5">
+            <input class="cursor-pointer" type="file" ref="files" accept=".jpg, .png , .jpeg, .webp" @change="handleFileUpload" />
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
                 <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
@@ -65,7 +58,7 @@ export default {
     return {
       form: {
         name: '',
-        category_image: '',
+        banner_image: '',
       },
       preview_image: null,
       zIndex: 0
@@ -76,7 +69,7 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('category', ['createLoading']),
+    ...mapState('banner', ['createLoading']),
     ...mapState('common', ['createLoading']),
     validateForm() {
       return !this.errors.any()
@@ -93,8 +86,8 @@ export default {
 
   /** methods */
   methods: {
-    ...mapActions('category', {
-      createCategory: 'createCategory'
+    ...mapActions('banner', {
+      createBanner: 'createBanner'
     }),
     ...mapActions('common', {
       storeSingleFile: 'storeSingleFile'
@@ -134,7 +127,7 @@ export default {
 
       try {
         const response = await this.storeSingleFile(data)
-        this.form.category_image =  response.data
+        this.form.banner_image =  response.data
         this.$vs.notify({
           title: 'Success',
           text: response.message,
@@ -162,7 +155,7 @@ export default {
         return false
       }
       try {
-        const { message } = await this.createCategory(this.form)
+        const { message } = await this.createBanner(this.form)
         console.log(message,'message Add Category Success');
         this.$emit('update-data', true)
         this.$vs.notify({

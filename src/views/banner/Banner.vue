@@ -1,20 +1,19 @@
 <template>
   <div>
-    <!-- Retailer list -->
+    <!-- banner list -->
     <div class="vx-card p-6">
       <vs-table
-        id="Retailer_list"
+        id="banner_list"
         class="vs-con-loading__container"
         stripe
         :sst="true"
         maxHeight="800px"
         @search="updateSearchQuery"
-        @change-page="handleChangePage"
         @sort="handleSort"
         :total="FilteredCount"
         :max-items="length"
         search
-        :data="RetailerRecords"
+        :data="BannerRecords"
       >
         <template slot="header">
           <div class="mb-2 flex items-center">
@@ -23,10 +22,10 @@
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
                   <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
-                      {{ page * length - (length - (FilteredCount && 1)) || 0 }}
+                      {{ page * length - (length - (FilteredCount && 1)) }}
                       -
                       {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
-                      of {{ total || 0 }}
+                      of {{ total }}
                     </span>
                     <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
                   </div>
@@ -48,26 +47,18 @@
               </div>
             </div>
             <div
-              @click="toggleAddRetailerModal"
+              @click="toggleAddBannerModal"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
             >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add Retailer</span>
+              <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
           </div>
         </template>
 
         <template slot="thead">
           <vs-th>Sr#</vs-th>
-          <vs-th sort-key="Retailer.name">First Name</vs-th>
-          <vs-th sort-key="Retailer.name">Last Name</vs-th>
-          <vs-th sort-key="Retailer.name">Business Name</vs-th>
-          <vs-th sort-key="Retailer.name">Email</vs-th>
-          <vs-th sort-key="Retailer.name">Phone</vs-th>
-          <vs-th sort-key="Retailer.name">Landline</vs-th>
-          <vs-th sort-key="Retailer.name">Address</vs-th>
-          <vs-th sort-key="Retailer.name">City</vs-th>
-          <vs-th sort-key="Retailer.name">State</vs-th>
+          <vs-th sort-key="category.name">{{module_name}} Name</vs-th>
           <vs-th>Action</vs-th>
         </template>
 
@@ -76,65 +67,46 @@
             <vs-td>
               {{ page * length - (length - i - 1) }}
             </vs-td>
-            <vs-td class="text-left">{{ tr.first_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.last_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.business_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.email || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.landline || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.address || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.city || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.state || '-' }} </vs-td>
+            <vs-td>
+              <img :src="tr.banner_image" height="140" width="160" alt="" srcset="">
+            </vs-td>
             <vs-td>
               <div class="inline-flex">
-                <vx-tooltip text="Edit Retailer">
-                  <feather-icon @click="toggleEditRetailerModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                <vx-tooltip :text="`Edit ${module_name}`">
+                  <feather-icon @click="toggleEditBannerModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip text="Delete Retailer">
+                <vx-tooltip :text="`Delete ${module_name}`">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
-            <!-- <vs-td>
-                <vs-dropdown vs-trigger-click class="cursor-pointer">
-                  <div class="p-4 border border-solid d-theme-border-grey-light cursor-pointer flex items-center justify-between font-medium">
-                    Actions
-                    <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                  </div>
-                  <vs-dropdown-menu class="locations__actions">
-                    <vs-dropdown-item @click="sendToEditPage()"> <feather-icon icon="Edit3Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" /> Edit Retailer </vs-dropdown-item>
-                    <vs-dropdown-item @click="deleteRecord()"> <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-danger cursor-pointer" /> Delete Retailer </vs-dropdown-item>
-                  </vs-dropdown-menu>
-                </vs-dropdown>
-                <div>-</div>
-              </vs-td> -->
           </vs-tr>
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
 
-    <!-- Add Retailer modal -->
-    <add-retailer-modal :module_name="module_name" @update-data="getData" v-if="isAddRetailerModalMounted" :showModal.sync="isAddRetailerModalShow" />
+    <!-- Add banner modal -->
+    <add-banner-modal :module_name="module_name" @update-data="getData" v-if="isAddBannerModalMounted" :showModal.sync="isAddBannerModalShow" />
 
-    <!-- Edit Retailer modal -->
-    <Edit-retailer-modal :module_name="module_name" @update-data="getData" v-if="isEditRetailerModalMounted" :data="selectedRecord" :showModal.sync="isEditRetailerModalShow" />
+    <!-- Edit banner modal -->
+    <Edit-banner-modal :module_name="module_name" @update-data="getData" v-if="isEditBannerModalMounted" :data="selectedRecord" :showModal.sync="isEditBannerModalShow" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AddRetailerModal from '@/views/retailers/AddRetailerModal'
-import EditRetailerModal from '@/views/retailers/EditRetailerModal'
+import AddBannerModal from '@/views/banner/AddBannerModal'
+import EditBannerModal from '@/views/banner/EditBannerModal'
 
 export default {
-  name: 'RetailerList',
+  name: 'Banner-List',
 
   /** Components */
   components: {
-    AddRetailerModal,
-    EditRetailerModal
+    AddBannerModal,
+    EditBannerModal
   },
 
   /** Data */
@@ -144,21 +116,21 @@ export default {
     length: 10,
     page: 1,
     search: '',
-    module_name: 'Retailer',
+    module_name: 'Banner',
 
-    // add Retailer modal
-    isAddRetailerModalMounted: false,
-    isAddRetailerModalShow: false,
+    // add banner modal
+    isAddBannerModalMounted: false,
+    isAddBannerModalShow: false,
 
-    // Edit Retailer modal
-    isEditRetailerModalMounted: false,
-    isEditRetailerModalShow: false,
+    // Edit banner modal
+    isEditBannerModalMounted: false,
+    isEditBannerModalShow: false,
     selectedRecord: null
   }),
 
   /** computed */
   computed: {
-    ...mapState('retailer', ['RetailerRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapState('banner', ['BannerRecords', 'total', 'FilteredCount', 'listLoading']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }
@@ -166,9 +138,9 @@ export default {
 
   /** Functions */
   methods: {
-    ...mapActions('retailer', {
-      getRetailerList: 'getRetailerList',
-      deleteRetailerRecord: 'deleteRetailerRecord'
+    ...mapActions('banner', {
+      getBannerList: 'getBannerList',
+      deleteBannerRecord: 'deleteBannerRecord'
     }),
 
     /** Per Page Limit Change */
@@ -199,9 +171,9 @@ export default {
       this.getData()
     },
 
-    /** Retailer List API */
+    /** banner List API */
     getData() {
-      this.getRetailerList({
+      this.getBannerList({
         order: this.order,
         limit: this.length,
         page: this.page,
@@ -209,20 +181,20 @@ export default {
       })
     },
 
-    // Add Retailer modal
-    toggleAddRetailerModal() {
-      this.isAddRetailerModalMounted = true
-      this.isAddRetailerModalShow = true
+    // Add banner modal
+    toggleAddBannerModal() {
+      this.isAddBannerModalMounted = true
+      this.isAddBannerModalShow = true
     },
 
-    // Edit Retailer modal
-    toggleEditRetailerModal(data) {
-      this.isEditRetailerModalMounted = true
-      this.isEditRetailerModalShow = true
+    // Edit banner modal
+    toggleEditBannerModal(data) {
+      this.isEditBannerModalMounted = true
+      this.isEditBannerModalShow = true
       this.selectedRecord = data
     },
 
-    /** Delete Retailer Confirmation */
+    /** Delete banner Confirmation */
     deleteRecord(id) {
       this.$vs.dialog({
         type: 'confirm',
@@ -234,10 +206,10 @@ export default {
       })
     },
 
-    /** Delete Retailer API */
+    /** Delete banner API */
     async deleteSingleRecord(id) {
       try {
-        const { message } = await this.deleteRetailerRecord(id)
+        const { message } = await this.deleteBannerRecord(id)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -264,36 +236,41 @@ export default {
 
   /** Watchers */
   watch: {
+    // On pagination change
+    page() {
+      this.getData()
+    },
+
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({
-          container: '#Retailer_list',
+          container: '#banner_list',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#Retailer_list > .con-vs-loading')
+        this.$vs.loading.close('#banner_list > .con-vs-loading')
       }
     },
 
-    // add Retailer modal
-    isAddRetailerModalShow: {
+    // add banner modal
+    isAddBannerModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isAddRetailerModalMounted = false
+            this.isAddBannerModalMounted = false
           }, 0)
         }
       }
     },
 
-    // edit Retailer modal
-    isEditRetailerModalShow: {
+    // edit banner modal
+    isEditBannerModalShow: {
       immediate: true,
       handler(newVal) {
         if (!newVal) {
           setTimeout(() => {
-            this.isEditRetailerModalMounted = false
+            this.isEditBannerModalMounted = false
           }, 0)
         }
       }

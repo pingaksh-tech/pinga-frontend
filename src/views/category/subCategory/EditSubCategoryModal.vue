@@ -150,16 +150,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#update_category_modal {
-  .vs-popup {
-    width: calc(100% - 80%) !important;
-    position: relative;
-
-    .con-vs-loading {
-      position: absolute;
-    }
-  }
-}
-</style>

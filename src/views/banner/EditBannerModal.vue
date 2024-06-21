@@ -6,11 +6,23 @@
       <form method="POST" @submit.prevent="save_changes">
         <!-- Form Content -->
         <div class="vx-row">
-          <div class="vx-col w-full px-8">
-            <!-- Category name -->
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+          <div class="vx-col w-full px-8 mt-5">
+            <input class="cursor-pointer" type="file" ref="files" accept=".jpg, .png , .jpeg, .webp" @change="handleFileUpload" />
+            <div class="mt-5">
+              <div class="relative" v-if="preview_image">
+                <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
+                  <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
+                </div>
+              </div>
+              <div class="relative" v-if="this.form.banner_image">
+                <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
+                  <img height="200px" width="250px" :src="this.form.banner_image" alt="Image Preview" class="object-fit" />
+                </div>
+                <!-- <div class="absolute close_icon bg-white w-8 h-8 flex items-center justify-center rounded-full">
+                  <feather-icon icon="Trash2Icon" @click="deleteImage(preview, index)"
+                    svgClasses="h-5 w-5 font-semibold text-black hover:text-primary cursor-pointer" />
+                </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -55,8 +67,9 @@ export default {
     return {
       loading: false,
       form: {
-        name: this.data.name,
+        banner_image: this.data.banner_image,
       },
+      preview_image: null,
       zIndex: 0
     }
   },
@@ -84,9 +97,65 @@ export default {
 
   /** methods */
   methods: {
-    ...mapActions("category", {
-      updateCategoryRecord: "updateCategoryRecord",
+    ...mapActions("banner", {
+      updateBannerRecord: "updateBannerRecord",
     }),
+    ...mapActions('common', {
+      storeSingleFile: 'storeSingleFile'
+    }),
+    async handleFileUpload(e) {
+      const file = e.target.files[0]
+
+      // Check if a file is selected
+      if (!file) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'No file selected',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+        return
+      }
+
+      // Create a preview URL for the image
+      this.preview_image = URL.createObjectURL(file)
+
+      // Create a new FormData object and append the file to it
+      const data = new FormData()
+      data.append('file', file)
+
+      // Log the contents of FormData to check if the file is appended correctly
+      for (let pair of data.entries()) {
+        console.log(pair[0] + ': ' + pair[1])
+      }
+
+      try {
+        const response = await this.storeSingleFile(data)
+        this.form.banner_image =  response.data
+        this.$vs.notify({
+          title: 'Success',
+          text: response.message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: 'Error',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+      }
+    },
     // reset form data
     resetForm() {
       this.form = {
@@ -106,8 +175,8 @@ export default {
         return false
       }
       try {
-        const { message } = await this.updateCategoryRecord({
-          categoryId: this.data._id,
+        const { message } = await this.updateBannerRecord({
+          bannerId: this.data._id,
           data : this.form
         } );
         this.$emit('update-data', true);

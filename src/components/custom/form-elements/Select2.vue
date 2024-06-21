@@ -255,14 +255,14 @@ export default {
 <style lang="scss">
 .select-head-btn {
   border-radius: 0.3rem;
-  background-color: #006622;
+  background-color: #0096dc;
 
   button {
     padding-left: 0.6rem;
 
     &:hover {
       border-radius: 0.3rem;
-      background-color: #006622;
+      background-color: #0096dc;
     }
 
     &::before {
@@ -282,7 +282,7 @@ export default {
 .spinner_circle {
   width: 20px;
   height: 20px;
-  background-color: #006622;
+  background-color: #0096dc;
   border-radius: 50%;
   animation: animate 1s infinite;
   transition: 0.5s;
