@@ -10,64 +10,14 @@
 
         <!-- Col Content -->
         <div>
-          <div class="flex items-center">
-            <div class="relative w-32 h-32">
-              <div v-if="this.image_preview" class="w-full h-full">
-                <img
-                  :src="this.image_preview"
-                  class="rounded-lg w-full h-full min-h-120 object-cover object-top"
-                />
-              </div>
-              <div v-else class="w-full h-full">
-                <img
-                  :src="this.form.image"
-                  class="rounded-lg w-full min-h-120 h-full object-cover object-top"
-                />
-              </div>
-            </div>
-            <div>
-              <vs-button
-                class="ml-4 vs-con-loading__container p-2"
-                @click="$refs.file.click()"
-                type="filled"
-              >
-                <input
-                  type="file"
-                  ref="file"
-                  @change="handleUpload"
-                  accept="image/*"
-                  class="hidden"
-                />
-                Upload Image</vs-button
-              >
-            </div>
-          </div>
-          <vs-input
-            class="w-full mt-6"
-            placeholder="Enter Full Name"
-            label="Full Name"
-            v-model="form.fullname"
-            name="Full Name"
-            v-validate="'required'"
-          />
-          <span class="text-danger text-sm" v-show="errors.has('Full Name')">{{
-            errors.first("Full Name")
-          }}</span>
+          <vs-input class="w-full mt-6" placeholder="Enter Full Name" label="Full Name" v-model="form.fullname" name="Full Name" v-validate="'required'" />
+          <span class="text-danger text-sm" v-show="errors.has('Full Name')">{{ errors.first('Full Name') }}</span>
 
           <!-- <vs-input class="w-full mt-4" placeholder="Enter Last Name" label="Last Name" v-model="form.lastname" name="Last Name" v-validate="'required'" />
           <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span> -->
 
-          <vs-input
-            class="w-full mt-4"
-            label="Email"
-            placeholder="Enter Email Address"
-            v-model="form.email"
-            name="Email"
-            disabled
-          />
-          <span class="text-danger text-sm" v-show="errors.has('Email')">{{
-            errors.first("Email")
-          }}</span>
+          <vs-input class="w-full mt-4" label="Email" placeholder="Enter Email Address" v-model="form.email" name="Email" disabled />
+          <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
         </div>
       </div>
     </div>
@@ -76,14 +26,7 @@
     <div class="vx-row">
       <div class="vx-col w-full">
         <div>
-          <vs-button
-            class="ml-auto mt-5 vs-con-loading__container"
-            id="edit-user-button"
-            type="filled"
-            @click="save_changes"
-            :disabled="!validateForm"
-            >Save Changes</vs-button
-          >
+          <vs-button class="ml-auto mt-5 vs-con-loading__container" id="edit-user-button" type="filled" @click="save_changes" :disabled="!validateForm">Save Changes</vs-button>
         </div>
       </div>
     </div>
@@ -91,51 +34,43 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import Select2 from "@/components/custom/form-elements/Select2.vue";
-
+import { mapActions, mapState } from 'vuex'
+import Select2 from '@/components/custom/form-elements/Select2.vue'
 
 export default {
-  name: "User",
+  name: 'User',
 
   // Form Data
   data() {
     return {
       form: {
-        fullname: "",
-        email: "",
-        department: "",
-        role: "",
-        image: {
-          src: "",
-          type: "",
-          isRound: true,
-        },
+        name: '',
+        email: localStorage.getItem('email'),
       },
       image_preview: 'null',
-      IsOpenImageCrop: false,
-    };
+      IsOpenImageCrop: false
+    }
   },
 
   components: {
-    Select2,
+    Select2
   },
 
   /* Form Validate */
   computed: {
-    ...mapState("auth", ["user", "loading", "userInfo"]),
-    ...mapState("developer", ["departmentType"]),
+    ...mapState('auth', ['user', 'loading', 'userInfo']),
+    ...mapState('developer', ['departmentType']),
     validateForm() {
-      return !this.errors.any();
+      return !this.errors.any()
     },
     stencilComponent() {
-      return CircleStencil;
-    },
+      return CircleStencil
+    }
   },
   /* API Calling Function */
   methods: {
-    ...mapActions("auth", {
-      getUserProfile: "getUserProfile",
+    ...mapActions('auth', {
+      getUserProfile: 'getUserProfile'
     }),
     change(result) {},
 
@@ -145,128 +80,118 @@ export default {
     // },
 
     cropImage() {
-      const result = this.$refs.cropper.getResult();
+      const result = this.$refs.cropper.getResult()
       if (result.canvas == undefined) {
-        this.toast.error("Please Select Image");
-        return;
+        this.toast.error('Please Select Image')
+        return
       }
-      const resultTest = result.canvas.toDataURL(this.form.image.type);
-      const base64Image = resultTest.replace(
-        `data:${this.form.image.type};base64,`,
-        ""
-      );
-      this.b64toBlob(base64Image, this.form.image.type);
+      const resultTest = result.canvas.toDataURL(this.form.image.type)
+      const base64Image = resultTest.replace(`data:${this.form.image.type};base64,`, '')
+      this.b64toBlob(base64Image, this.form.image.type)
 
-      this.IsOpenImageCrop = false;
+      this.IsOpenImageCrop = false
     },
-    b64toBlob(b64Data, contentType = "", sliceSize = 512) {
-      const byteCharacters = window.atob(b64Data);
-      const byteArrays = [];
+    b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+      const byteCharacters = window.atob(b64Data)
+      const byteArrays = []
 
-      for (
-        let offset = 0;
-        offset < byteCharacters.length;
-        offset += sliceSize
-      ) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
+      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize)
 
-        const byteNumbers = new Array(slice.length);
+        const byteNumbers = new Array(slice.length)
         for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
+          byteNumbers[i] = slice.charCodeAt(i)
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+        const byteArray = new Uint8Array(byteNumbers)
+        byteArrays.push(byteArray)
       }
 
-      const blob = new File(byteArrays, "image.jpg", {
-        type: contentType,
-      });
-      this.form.image = blob;
-      this.image_preview = URL.createObjectURL(blob);
-      return blob;
+      const blob = new File(byteArrays, 'image.jpg', {
+        type: contentType
+      })
+      this.form.image = blob
+      this.image_preview = URL.createObjectURL(blob)
+      return blob
     },
 
     handleUpload(e) {
-      const { files } = e.target;
-      const blob = URL.createObjectURL(files[0]);
+      const { files } = e.target
+      const blob = URL.createObjectURL(files[0])
     },
     async save_changes() {
       if (!(await this.$validator.validate())) {
         this.$vs.notify({
-          title: "Error",
-          text: "Please Fill The Form",
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          position: "top-center",
+          title: 'Error',
+          text: 'Please Fill The Form',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
           time: 5000,
-          color: "primary",
-        });
-        return;
+          color: 'primary'
+        })
+        return
       }
-      this.processing = true;
+      this.processing = true
       this.$vs.loading({
-        background: "primary",
-        color: "#fff",
-        container: "#edit-user-button",
-        scale: 0.45,
-      });
-      const data = new FormData();
-      data.append("image", this.form.image);
-      data.append("fullname", this.form.fullname);
-      data.append("email", this.form.email);
-      data.append("department", this.form.department);
-      data.append("role", this.form.role);
+        background: 'primary',
+        color: '#fff',
+        container: '#edit-user-button',
+        scale: 0.45
+      })
+      const data = new FormData()
+      data.append('image', this.form.image)
+      data.append('fullname', this.form.fullname)
+      data.append('email', this.form.email)
+      data.append('department', this.form.department)
+      data.append('role', this.form.role)
 
       try {
-        const { message } = await this.$store.dispatch(
-          "auth/updateProfile",
-          data
-        );
+        const { message } = await this.$store.dispatch('auth/updateProfile', data)
         this.$vs.notify({
-          title: "Success",
+          title: 'Success',
           text: message,
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          position: "top-center",
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
           time: 5000,
-          color: "success",
-        });
-        this.getUserRecord();
+          color: 'success'
+        })
+        this.getUserRecord()
         this.$router.push({
-          name: "home",
-        });
+          name: 'home'
+        })
       } catch ({ message }) {
         this.$vs.notify({
-          title: "Error",
+          title: 'Error',
           text: message,
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          position: "top-center",
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
           time: 5000,
-          color: "primary",
-        });
+          color: 'primary'
+        })
       }
-      this.$vs.loading.close("#edit-user-button > .con-vs-loading");
+      this.$vs.loading.close('#edit-user-button > .con-vs-loading')
     },
 
     // Get Profile
     async getUserRecord() {
-      await this.getUserProfile();
-    },
+      await this.getUserProfile()
+    }
   },
 
   async mounted() {
-    await this.getUserRecord();
-    this.form.fullname = this.userInfo.fullname;
-    this.form.lastname = this.userInfo.lastname;
-    this.form.email = this.userInfo.email;
-    this.form.department = this.userInfo.department;
-    this.form.role = this.userInfo.role._id;
-    this.form.image = this.userInfo.image;
-    this.image_preview = this.userInfo.image;
-  },
-};
+    await this.getUserRecord()
+    this.form.fullname = this.userInfo.fullname
+    this.form.lastname = this.userInfo.lastname
+    this.form.email = this.userInfo.email
+    this.form.department = this.userInfo.department
+    this.form.role = this.userInfo.role._id
+    this.form.image = this.userInfo.image
+    this.image_preview = this.userInfo.image
+  }
+}
 </script>
 <style scoped>
 .edit-icon {
