@@ -326,5 +326,33 @@ export default {
         message
       })
     }
-  }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Forget Password                              */
+  /* -------------------------------------------------------------------------- */
+  async forgetPassword({ commit }, data) {
+    console.log(data);
+    commit("SET_STATE", {
+      action: "loading",
+      data: true,
+    });
+    try {
+      const res = await this.$http.post("auth/send-pass-reset-link", data);
+      commit("SET_STATE", {
+        action: "loading",
+        data: false,
+      });
+      return {
+        message: res.data.message,
+      };
+    } catch (error) {
+      commit("SET_STATE", {
+        action: "loading",
+        data: false,
+      });
+      const messages = getMessageFromError(error);
+      return Promise.reject(messages);
+    }
+  },
 }

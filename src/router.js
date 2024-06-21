@@ -78,6 +78,11 @@ const router = new Router({
           path: '/pages/error-404',
           name: 'page-error-404',
           component: () => import('@/views/pages/Error404.vue')
+        },
+        {
+          path: '/forget-password',
+          name: 'forget-password',
+          component: () => import('@/views/pages/ForgetPassword.vue')
         }
       ]
     },

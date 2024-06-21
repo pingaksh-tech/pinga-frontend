@@ -85,56 +85,6 @@ export default [
     ]
   },
 
-  /** Products Routes */
-  {
-    url: null,
-    name: 'Products',
-    slug: 'Products',
-    icon: 'LayersIcon',
-    permissions: [ALLPERMISSIONS],
-    submenu: [
-      {
-        url: '/products/list',
-        name: 'List',
-        slug: 'productsList',
-        icon: 'ListIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/products/add',
-        name: 'Add Product',
-        slug: 'ImportCsv',
-        icon: 'PlusIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/products/add',
-        name: 'Collection',
-        slug: 'collection',
-        icon: 'ShoppingBagIcon',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/products/add',
-        name: 'Add Variant',
-        slug: 'ImportCsv',
-        icon: 'BarChartIcon',
-        tag: 'variant',
-        tagColor: 'success',
-        permissions: [ALLPERMISSIONS]
-      },
-      {
-        url: '/tag/list',
-        name: 'Tags Mgmt',
-        slug: 'ImportCsv',
-        icon: 'BarChartIcon',
-        tag: 'Tag',
-        tagColor: 'warning',
-        permissions: [ALLPERMISSIONS]
-      }
-    ]
-  },
-  
   /** Admin Daimond Setting */
   {
     url: null,

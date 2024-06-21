@@ -59,7 +59,7 @@ export const getMessageFromError = (err) => {
       ? err.response.data.message
       : err.message
 
-  return Promise.resolve({ message })
+  return { message }
 }
 
 export const handleFormError = (err) => {

@@ -62,9 +62,12 @@
                         <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
                       </div>
                     </div>
-                    <vs-button class="mt-3 items-center vs-con-loading__container" id="login-user" @click="save_changes" v-on:keyup.enter="save_changes" :disabled="!validateForm"
-                      >Login</vs-button
-                    >
+                    <div class="flex justify-between items-center gap-2 w-full" >
+                      <vs-button class="mt-3 items-center vs-con-loading__container" id="login-user" @click="save_changes" v-on:keyup.enter="save_changes" :disabled="!validateForm"
+                        >Login</vs-button
+                      >
+                      <router-link to="/forget-password">Forgot Password?</router-link>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -84,17 +87,11 @@ export default {
   data() {
     return {
       email: null,
-      isAllow: false,
       password: null,
-      checkbox_remember_me: false,
-      tempName: 'Micrans',
+      tempName: 'Pingaksh',
       loading: false,
       today_note: null,
       author: null,
-      location: {
-        latitude: null,
-        longitude: null
-      },
       motivationNotes: [
         {
           text: 'Jewelry is like the perfect spice – it always complements what’s already there.',
@@ -451,7 +448,7 @@ export default {
     function func(a, b) {
       return 0.5 - Math.random()
     }
-    this.tempName = localStorage.getItem('LN')
+    this.tempName = localStorage.getItem('userName')
   }
 }
 </script>
