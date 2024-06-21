@@ -9,7 +9,6 @@
         :sst="true"
         maxHeight="800px"
         @search="updateSearchQuery"
-        @change-page="handleChangePage"
         @sort="handleSort"
         :total="FilteredCount"
         :max-items="length"
@@ -96,14 +95,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination
-      v-if="FilteredCount"
-        v-model="page"
-        :total="totalPages"
-        :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8"
-        @change="handleChangePage"
-      ></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
 
     <!-- Add category modal -->
@@ -135,7 +127,7 @@ export default {
     length: 10,
     page: 1,
     search: '',
-    module_name:'Category',
+    module_name: 'Category',
 
     // add category modal
     isAddCategoryModalMounted: false,
@@ -255,6 +247,11 @@ export default {
 
   /** Watchers */
   watch: {
+    // On pagination change
+    page() {
+      this.getData()
+    },
+
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({

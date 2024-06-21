@@ -185,5 +185,22 @@ export default [
         permissions: [ALLPERMISSIONS]
       }
     ]
+  },
+  /** Admin Banner Setting */
+  {
+    url: null,
+    name: 'Banner',
+    slug: 'banner',
+    icon: 'ImageIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/banner/list',
+        name: 'List',
+        slug: 'productsList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
   }
 ]

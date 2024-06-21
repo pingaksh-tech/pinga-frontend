@@ -19,6 +19,8 @@ import MetalRoute from '@/views/metal/routes'
 import DiamondRoute from '@/views/diamond/routes'
 /** Retailer Module */
 import RetailerRoute from '@/views/retailers/routes'
+/** Banner Module */
+import BannerRoute from '@/views/banner/routes'
 
 Vue.use(Router)
 
@@ -48,10 +50,12 @@ const router = new Router({
         ...ProductRoute,
         // Metal route
         ...MetalRoute,
-        // Daimond route
+        // Diamond route
         ...DiamondRoute,
-        // Daimond route
+        // Retailer route
         ...RetailerRoute,
+        // Banner route
+        ...BannerRoute,
       ]
     },
 

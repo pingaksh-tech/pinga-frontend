@@ -518,7 +518,7 @@ export default {
   right: 1.4rem;
   width: 20px;
   height: 20px;
-  background-color: #006622;
+  background-color: #0096dc;
   animation: animate 1s infinite;
   transition: 0.5s;
 

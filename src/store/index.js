@@ -20,6 +20,8 @@ import diamond from './diamond'
 import product from './product'
 /** Retailer API Store */
 import retailer from './retailer'
+/** Banner API Store */
+import banner from './banner'
 
 Vue.use(Vuex)
 
@@ -36,6 +38,7 @@ export default new Vuex.Store({
     common,
     product,
     diamond,
-    retailer
+    retailer,
+    banner,
   }
 })

@@ -107,7 +107,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @change="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add category modal -->
