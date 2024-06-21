@@ -85,23 +85,23 @@ export default [
     ]
   },
 
-  /** Admin Daimond Setting */
-  {
-    url: null,
-    name: 'Diamond',
-    slug: 'diamond',
-    icon: 'CpuIcon',
-    permissions: [ALLPERMISSIONS],
-    submenu: [
-      {
-        url: '/diamond/list',
-        name: 'List',
-        slug: 'diamond-List',
-        icon: 'ListIcon',
-        permissions: [ALLPERMISSIONS]
-      }
-    ]
-  },
+  // /** Admin Daimond Setting */
+  // {
+  //   url: null,
+  //   name: 'Diamond',
+  //   slug: 'diamond',
+  //   icon: 'CpuIcon',
+  //   permissions: [ALLPERMISSIONS],
+  //   submenu: [
+  //     {
+  //       url: '/diamond/list',
+  //       name: 'List',
+  //       slug: 'diamond-List',
+  //       icon: 'ListIcon',
+  //       permissions: [ALLPERMISSIONS]
+  //     }
+  //   ]
+  // },
   /** Admin Metal Setting */
   {
     url: null,
@@ -132,6 +132,15 @@ export default [
         name: 'List',
         slug: 'inventoryList',
         icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      },
+      {
+        url: '/tag/list',
+        name: 'Tags Mgmt',
+        slug: 'ImportCsv',
+        icon: 'BarChartIcon',
+        tag: 'Tag',
+        tagColor: 'warning',
         permissions: [ALLPERMISSIONS]
       }
     ]

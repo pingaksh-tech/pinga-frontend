@@ -1,16 +1,39 @@
 <template>
   <div>
     <!-- Update Category popup -->
-    <vs-popup id="update_category_modal" class="vs-con-loading__container" :title="`Update ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <vs-popup id="update_category_modal" class="vs-con-loading__container" :title="`Update ${module_name}`"
+      button-accept="false" button-cancel="false" :active.sync="isActive">
       <!-- Form -->
       <form method="POST" @submit.prevent="save_changes">
-        <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full px-8">
-            <!-- Category name -->
+            <!-- Sub Category -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full" v-model="form.name" label="Category Name" name="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+              <label class="vs-input--label">Category</label>
+              <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
+                :value="form.categoryIds" @input="(item) => (form.categoryIds = item && item.value)" autocomplete
+                :ssr="true" :multiple="true" v-validate="'required'" action="common/getCategories" />
+              <span class="text-primary text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
+            </div>
+
+            <!-- Sub Category name -->
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
+                v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
+                }}</span>
+            </div>
+          </div>
+          <div class="vx-col w-full cursor-pointer">
+            <label class="vs-input--label block">Image</label>
+            <input type="file" class="border p-2 rounded w-full" ref="files" accept=".jpg, .png , .jpeg,.pdf"
+              @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);" />
+            <div class="mt-5">
+              <div class="relative" v-if="preview_image">
+                <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
+                  <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -19,12 +42,12 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" @click="save_changes()" id="add-user-button" :disabled="!validateForm">Update</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes"
+                :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
         </div>
-        <!-- End Form Content -->
       </form>
       <!-- End Form -->
     </vs-popup>
@@ -56,14 +79,17 @@ export default {
       loading: false,
       form: {
         name: this.data.name,
+        sub_category_image: this.data.sub_category_image,
+        categoryIds: this.data.categories.map((c) => c._id)
       },
+      preview_image: this.data.sub_category_image,
       zIndex: 0
     }
   },
 
   /** Page Render */
   mounted() {
-    console.log(this.data._id);
+    console.log(this.form.categoryIds);
   },
 
   /** Computed */
@@ -85,20 +111,8 @@ export default {
   /** methods */
   methods: {
     ...mapActions("category", {
-      updateCategoryRecord: "updateCategoryRecord",
+      updateSubCategoryRecord: "updateSubCategoryRecord",
     }),
-    // reset form data
-    resetForm() {
-      this.form = {
-        CategoryName: '',
-        type: null
-      }
-
-      this.$nextTick(() => {
-        this.errors.clear()
-        this.$validator.reset()
-      })
-    },
 
     /** Update Category */
     async save_changes() {
@@ -106,10 +120,17 @@ export default {
         return false
       }
       try {
-        const { message } = await this.updateCategoryRecord({
-          categoryId: this.data._id,
-          data : this.form
-        } );
+        const data = new FormData();
+        this.form.categoryIds.map((value) => {
+          data.append("categoryIds[]", value);
+        })
+        data.append("name", this.form.name);
+        data.append("sub_category_image", this.form.sub_category_image);
+
+        const { message } = await this.updateSubCategoryRecord({
+          subCategoryId: this.data._id,
+          data: data
+        });
         this.$emit('update-data', true);
         this.$vs.notify({
           title: "Success",
@@ -132,6 +153,34 @@ export default {
           color: "primary",
         });
       }
+    },
+
+    /** file upload  */
+    handleFileUpload(e) {
+      const file = e.target.files[0]
+
+      // Check if a file is selected
+      if (!file) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'No file selected',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+        return
+      }
+
+      // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+      if (this.form.sub_category_image && this.form.sub_category_image.src) {
+        URL.revokeObjectURL(this.form.sub_category_image.src);
+      }
+      // 2. Create the image link to the file to optimize performance:
+      this.preview_image = URL.createObjectURL(file);
+      this.form.sub_category_image = file
+
     },
   },
 

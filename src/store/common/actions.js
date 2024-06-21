@@ -300,59 +300,59 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                             Upload Single File                             */
   /* -------------------------------------------------------------------------- */
-  async storeSingleFile({ commit }, data) {
-    commit('SET_STATE', {
-      action: 'createLoading',
-      data: true
-    })
-    try {
-      const res = await this.$http.post('file/singleUpload/', data)
-      commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
-      })
-      return {
-        data: res.data.data,
-        message: res.data.message
-      }
-    } catch (error) {
-      commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
-      })
-      // Manage Error
-      const { message } = getMessageFromError(error)
-      return Promise.reject({
-        message
-      })
-    }
-  },
+  // async storeSingleFile({ commit }, data) {
+  //   commit('SET_STATE', {
+  //     action: 'createLoading',
+  //     data: true
+  //   })
+  //   try {
+  //     const res = await this.$http.post('file/singleUpload/', data)
+  //     commit('SET_STATE', {
+  //       action: 'createLoading',
+  //       data: false
+  //     })
+  //     return {
+  //       data: res.data.data,
+  //       message: res.data.message
+  //     }
+  //   } catch (error) {
+  //     commit('SET_STATE', {
+  //       action: 'createLoading',
+  //       data: false
+  //     })
+  //     // Manage Error
+  //     const { message } = getMessageFromError(error)
+  //     return Promise.reject({
+  //       message
+  //     })
+  //   }
+  // },
 
   /* -------------------------------------------------------------------------- */
   /*                               Forget Password                              */
   /* -------------------------------------------------------------------------- */
   async forgetPassword({ commit }, data) {
-    console.log(data);
-    commit("SET_STATE", {
-      action: "loading",
-      data: true,
-    });
+    console.log(data)
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
     try {
-      const res = await this.$http.post("auth/send-pass-reset-link", data);
-      commit("SET_STATE", {
-        action: "loading",
-        data: false,
-      });
+      const res = await this.$http.post('auth/send-pass-reset-link', data)
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
       return {
-        message: res.data.message,
-      };
+        message: res.data.message
+      }
     } catch (error) {
-      commit("SET_STATE", {
-        action: "loading",
-        data: false,
-      });
-      const messages = getMessageFromError(error);
-      return Promise.reject(messages);
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const messages = getMessageFromError(error)
+      return Promise.reject(messages)
     }
-  },
+  }
 }

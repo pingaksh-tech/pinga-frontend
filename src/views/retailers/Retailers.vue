@@ -2,26 +2,16 @@
   <div>
     <!-- Retailer list -->
     <div class="vx-card p-6">
-      <vs-table
-        id="Retailer_list"
-        class="vs-con-loading__container"
-        stripe
-        :sst="true"
-        maxHeight="800px"
-        @search="updateSearchQuery"
-        @change-page="handleChangePage"
-        @sort="handleSort"
-        :total="FilteredCount"
-        :max-items="length"
-        search
-        :data="RetailerRecords"
-      >
+      <vs-table id="Retailer_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
+        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
+        :max-items="length" search :data="RetailerRecords">
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div
+                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) || 0 }}
                       -
@@ -47,10 +37,8 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div
-              @click="toggleAddRetailerModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
-            >
+            <div @click="toggleAddRetailerModal"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add Retailer</span>
             </div>
@@ -88,10 +76,12 @@
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip text="Edit Retailer">
-                  <feather-icon @click="toggleEditRetailerModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="toggleEditRetailerModal(tr)" icon="EditIcon"
+                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip text="Delete Retailer">
-                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
+                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -112,14 +102,17 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
+        class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add Retailer modal -->
-    <add-retailer-modal :module_name="module_name" @update-data="getData" v-if="isAddRetailerModalMounted" :showModal.sync="isAddRetailerModalShow" />
+    <add-retailer-modal :module_name="module_name" @update-data="getData" v-if="isAddRetailerModalMounted"
+      :showModal.sync="isAddRetailerModalShow" />
 
     <!-- Edit Retailer modal -->
-    <Edit-retailer-modal :module_name="module_name" @update-data="getData" v-if="isEditRetailerModalMounted" :data="selectedRecord" :showModal.sync="isEditRetailerModalShow" />
+    <Edit-retailer-modal :module_name="module_name" @update-data="getData" v-if="isEditRetailerModalMounted"
+      :data="selectedRecord" :showModal.sync="isEditRetailerModalShow" />
   </div>
 </template>
 
@@ -202,7 +195,7 @@ export default {
     /** Retailer List API */
     getData() {
       this.getRetailerList({
-        order: this.order,
+        // order: this.order,
         limit: this.length,
         page: this.page,
         search: this.search
@@ -297,6 +290,9 @@ export default {
           }, 0)
         }
       }
+    },
+    page() {
+      this.getData()
     }
   },
 

@@ -159,7 +159,7 @@ export default {
     /** Inventory List API */
     getData() {
       this.getInventoryList({
-        order: this.order,
+        // order: this.order,
         limit: this.length,
         page: this.page,
         search: this.search

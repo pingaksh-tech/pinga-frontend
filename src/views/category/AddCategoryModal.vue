@@ -7,19 +7,26 @@
           <div class="vx-col w-full px-8">
             <!-- Category name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
+                v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
+                }}</span>
             </div>
           </div>
-          <div class="vx-col w-full px-8 mt-5 cursor-pointer">
-            <input type="file" ref="files" accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" />
+          <div class="vx-col w-full cursor-pointer">
+            <label class="vs-input--label block">Image</label>
+            <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
+              accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
+              v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image')
+              }}</span>
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
                 <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
                   <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
                 </div>
-                <!-- <div class="absolute close_icon bg-white w-8 h-8 flex items-center justify-center rounded-full">
-                  <feather-icon icon="Trash2Icon" @click="deleteImage(preview, index)"
+                <!-- <div class="absolute close_icon bg-danger w-8 h-8 flex items-center justify-center rounded-full">
+                  <feather-icon icon="Trash2Icon" @click="deleteImage()"
                     svgClasses="h-5 w-5 font-semibold text-black hover:text-primary cursor-pointer" />
                 </div> -->
               </div>
@@ -31,7 +38,8 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes"
+                :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -72,7 +80,7 @@ export default {
     }
   },
   /** Mounted */
-  mounted() {},
+  mounted() { },
 
   /** computed */
   computed: {
@@ -96,14 +104,13 @@ export default {
     ...mapActions('category', {
       createCategory: 'createCategory'
     }),
-    ...mapActions('common', {
-      storeSingleFile: 'storeSingleFile'
-    }),
-    deleteImage() {
-      this.preview_image = null
-    },
 
-    async handleFileUpload(e) {
+    // deleteImage() {
+    //   this.preview_image = this.form.category_image = null
+    // },
+
+    /** file upload  */
+    handleFileUpload(e) {
       const file = e.target.files[0]
 
       // Check if a file is selected
@@ -120,41 +127,14 @@ export default {
         return
       }
 
-      // Create a preview URL for the image
-      this.preview_image = URL.createObjectURL(file)
-
-      // Create a new FormData object and append the file to it
-      const data = new FormData()
-      data.append('file', file)
-
-      // Log the contents of FormData to check if the file is appended correctly
-      for (let pair of data.entries()) {
-        console.log(pair[0] + ': ' + pair[1])
+      // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+      if (this.form.category_image.src) {
+        URL.revokeObjectURL(this.form.category_image.src);
       }
+      // 2. Create the image link to the file to optimize performance:
+      this.preview_image = URL.createObjectURL(file);
+      this.form.category_image = file
 
-      try {
-        const response = await this.storeSingleFile(data)
-        this.form.category_image =  response.data
-        this.$vs.notify({
-          title: 'Success',
-          text: response.message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          position: 'top-center',
-          time: 5000,
-          color: 'success'
-        })
-      } catch ({ message }) {
-        this.$vs.notify({
-          title: 'Error',
-          text: message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          position: 'top-center',
-          time: 5000,
-          color: 'primary'
-        })
-      }
     },
 
     async save_changes() {
@@ -162,8 +142,10 @@ export default {
         return false
       }
       try {
-        const { message } = await this.createCategory(this.form)
-        console.log(message,'message Add Category Success');
+        const data = new FormData();
+        data.append("name", this.form.name);
+        data.append("category_image", this.form.category_image);
+        const { message } = await this.createCategory(data)
         this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
@@ -176,7 +158,7 @@ export default {
         })
         this.isActive = false
       } catch ({ message }) {
-        console.log(message,'message catch error Category');
+        console.log(message, 'message catch error Category');
         this.$vs.notify({
           title: 'Error',
           text: message,
