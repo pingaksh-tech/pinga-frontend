@@ -4,125 +4,141 @@
             <div class="vx-col w-full px-8">
                 <form method="POST" @submit.prevent="save_changes">
                     <div class="vx-row">
-                        <div class="vx-col w-1/2 px-8">
-                            <!-- Inventory Name -->
-                            <div class="vx-row mb-2">
-                                <vs-input icon="icon icon-box" icon-pack="feather" class="w-full"
-                                    v-validate="'required'" v-model="form.name" label="Inventory Name"
-                                    name="Inventory Name" id="Inventory Name" />
-                                <span class="text-danger text-sm" v-show="errors.has('Inventory Name')">{{
-                                    errors.first('Inventory Name') }}</span>
-                            </div>
-
-                            <!-- Category -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Category</label>
-                                <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
-                                    :value="form.category_id" @input="(item) => (form.category_id = item && item.value)"
-                                    autocomplete :ssr="true" :multiple="false" v-model="categoryID"
-                                    v-validate="'required'" action="common/getCategories" />
-                                <span class="text-danger text-sm" v-show="errors.has('Category')">{{
-                                    errors.first('Category') }}</span>
-                            </div>
-
-                            <!-- Sub Category -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Sub Category</label>
-                                <select-2 class="w-full category-input" name="Sub Category"
-                                    placeholder="Select Sub Category" :value="form.sub_category_id"
-                                    v-model="subCategoryID"
-                                    @input="(item) => (form.sub_category_id = item && item.value)"
-                                    :options="SubCategoryList" action="common/getSubCategoryByCategoryId"
-                                    :actionCallRemove=false autocomplete :ssr="true" :multiple="false"
-                                    v-validate="'required'" />
-                                <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{
-                                    errors.first('Sub Category')
-                                    }}</span>
-                            </div>
-
-                            <!-- Size -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Size</label>
-                                <select-2 class="w-full category-input" name="Size" placeholder="Select Size"
-                                    :value="form.size" v-model="sizeID"
-                                    @input="(item) => (form.size = item && item.value)" :options="SizeList" autocomplete
-                                    :ssr="true" :multiple="false" />
-                                <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
-                                    }}</span>
-                            </div>
-
-                            <!-- Inventory Metal -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Inventory Metal</label>
-                                <select-2 class="w-full metal-input" name="Metal" placeholder="Select Metal"
-                                    :value="form.metal_id" @input="(item) => (form.metal_id = item && item.value)"
-                                    autocomplete :ssr="true" :multiple="false" v-validate="'required'"
-                                    action="common/getMetals" />
-                                <span class="text-danger text-sm" v-show="errors.has('Metal')">{{ errors.first('Metal')
-                                    }}</span>
-                            </div>
-
-                            <!-- Metal Weight -->
-                            <div class="vx-row mb-2">
-                                <vs-input icon="icon icon-database" icon-pack="feather" class="w-full" type="number"
-                                    v-validate="'required|min:1'" v-model="form.metal_weight" label="Metal Weight"
-                                    name="Metal Weight" id="Metal Weight" />
-                                <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{
-                                    errors.first('Metal Weight') }}</span>
-                            </div>
-
-                            <!-- Diamond -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Diamond</label>
-                                <select-2 class="w-full category-input" name="Diamond" placeholder="Select Diamond"
-                                    :value="form.diamonds" @input="(item) => (form.diamonds = item && item.value)"
-                                    autocomplete :ssr="true" :multiple="true" action="common/getDiamonds" />
-                                <span class="text-primary text-sm" v-show="errors.has('Diamond')">{{
-                                    errors.first('Diamond') }}</span>
-                            </div>
-
-
+                        <!-- Inventory Name -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-validate="'required'"
+                                v-model="form.name" label="Inventory Name *" name="Inventory Name"
+                                id="Inventory Name" />
+                            <span class="text-danger text-sm" v-show="errors.has('Inventory Name')">{{
+                                errors.first('Inventory Name') }}</span>
                         </div>
-                        <div class="vx-col w-1/2 px-8">
 
-                            <!-- Product Tags -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Product Tag</label>
-                                <select-2 class="w-full category-input" name="Product Tag"
-                                    placeholder="Select Product Tag" :value="form.product_tags"
-                                    @input="(item) => (form.product_tags = item && item.value)" autocomplete :ssr="true"
-                                    :multiple="true" action="common/getProductTags" />
-                                <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{
-                                    errors.first('Product Tag')
-                                    }}</span>
-                            </div>
+                        <!-- Category -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Category *</label>
+                            <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
+                                :value="form.category_id" @input="(item) => (form.category_id = item && item.value)"
+                                autocomplete :ssr="true" :multiple="false" v-model="categoryID" v-validate="'required'"
+                                action="common/getCategories" />
+                            <span class="text-danger text-sm" v-show="errors.has('Category')">{{
+                                errors.first('Category') }}</span>
+                        </div>
 
+                        <!-- Sub Category -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Sub Category *</label>
+                            <select-2 class="w-full category-input" name="Sub Category"
+                                placeholder="Select Sub Category" :value="form.sub_category_id" v-model="subCategoryID"
+                                @input="(item) => (form.sub_category_id = item && item.value)"
+                                :options="SubCategoryList" action="common/getSubCategoryByCategoryId"
+                                :actionCallRemove=false autocomplete :ssr="true" :multiple="false"
+                                v-validate="'required'" />
+                            <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{
+                                errors.first('Sub Category')
+                            }}</span>
+                        </div>
 
-                            <!-- Manufacturing Price -->
-                            <div class="vx-row mb-2">
-                                <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
-                                    v-validate="'required|min:1'" v-model="form.manufacturing_price"
-                                    label="Manufacturing Price" name="Manufacturing Price" id="Manufacturing Price" />
-                                <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{
-                                    errors.first('Manufacturing Price') }}</span>
-                            </div>
+                        <!-- Size -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Size</label>
+                            <select-2 class="w-full category-input" name="Size" placeholder="Select Size"
+                                :value="form.size" v-model="sizeID" @input="(item) => (form.size = item && item.value)"
+                                :options="SizeList" autocomplete :ssr="true" :multiple="false" />
+                            <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
+                                }}</span>
+                        </div>
 
-                            <!-- Inventory Gender -->
-                            <div class="vx-row mb-2">
-                                <label class="vs-input--label">Inventory G ender</label>
-                                <div class="w-full mt-1">
-                                    <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
-                                        vs-value="male" class="mr-4" vs-name="layout-type-male">MALE</vs-radio>
-                                    <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
-                                        vs-value="female" class="mr-4" vs-name="layout-type-female">FEMALE</vs-radio>
-                                    <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
-                                        vs-value="unisex" class="mr-4" vs-name="layout-type-unisex">UNISEX</vs-radio>
+                        <!-- Inventory Metal -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Inventory Metal *</label>
+                            <select-2 class="w-full metal-input" name="Metal" placeholder="Select Metal"
+                                :value="form.metal_id" @input="(item) => (form.metal_id = item && item.value)"
+                                autocomplete :ssr="true" :multiple="false" v-validate="'required'"
+                                action="common/getMetals" />
+                            <span class="text-danger text-sm" v-show="errors.has('Metal')">{{ errors.first('Metal')
+                                }}</span>
+                        </div>
+
+                        <!-- Metal Weight -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <vs-input icon="icon icon-database" icon-pack="feather" class="w-full" type="number"
+                                v-validate="'required|min:1'" v-model="form.metal_weight" label="Metal Weight *"
+                                name="Metal Weight" id="Metal Weight" />
+                            <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{
+                                errors.first('Metal Weight') }}</span>
+                        </div>
+
+                        <!-- Diamond -->
+                        <!-- <div class="vx-col w-1/2 mb-2">
+                                <label class="vs-input--label">Diamond</label>
+                                <v-select class="w-full category-input" v-model="tempDiamond"
+                                    placeholder="Select Diamond" :options="diamondOption"
+                                    @input="addDiamond(tempDiamond)">
+                                </v-select>
+                            </div> -->
+
+                        <!-- Display Selected Diamonds with Quantity Inputs and Remove Buttons -->
+                        <!-- <div class="vx-row my-2 block" v-if="diamondQuantityWiseList.length">
+                                <h3>Selected Diamonds ({{ diamondQuantityWiseList.length }})</h3>
+                                <div class="flex items-center flex-wrap gap-2 px-2 py-2">
+                                    <span v-for="(diamond, index) in diamondQuantityWiseList" :key="diamond.diamond_id"
+                                        class="flex items-center">
+                                        <div class="flex items-center">
+                                            <h4>{{ diamond.label }}</h4>
+                                        </div>
+                                        <div class="mx-4">
+                                            <vs-input class="" type="number" v-model.number="diamond.diamond_count"
+                                                min="1" v-validate="'required|min:1'"
+                                                :name="'diamond-quantity-' + index" :id="'diamond-quantity-' + index">
+                                            </vs-input>
+                                        </div>
+                                        <div>
+                                            <vx-tooltip text="Remove">
+                                                <feather-icon @click="removeDiamond(index)" icon="Trash2Icon"
+                                                    svgClasses="text-danger h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                                            </vx-tooltip>
+                                        </div>
+                                    </span>
                                 </div>
-                                <span class="text-danger text-sm" v-show="errors.has('Gender')">{{
-                                    errors.first('Gender') }}</span>
-                            </div>
+                            </div> -->
+                        <!-- Product Tags -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Product Tag</label>
+                            <select-2 class="w-full category-input" name="Product Tag" placeholder="Select Product Tag"
+                                :value="form.product_tags" @input="(item) => (form.product_tags = item && item.value)"
+                                autocomplete :ssr="true" :multiple="true" action="common/getProductTags" />
+                            <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{
+                                errors.first('Product Tag')
+                            }}</span>
+                        </div>
 
-                            <div class="vx-row mb-2">
+
+                        <!-- Manufacturing Price -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
+                                v-validate="'required|min:1'" v-model="form.manufacturing_price"
+                                label="Manufacturing Price *" name="Manufacturing Price" id="Manufacturing Price" />
+                            <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{
+                                errors.first('Manufacturing Price') }}</span>
+                        </div>
+
+                        <!-- Inventory Gender -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Inventory Gender *</label>
+                            <div class="w-full mt-1">
+                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="male"
+                                    class="mr-4" vs-name="layout-type-male">MALE</vs-radio>
+                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="female"
+                                    class="mr-4" vs-name="layout-type-female">FEMALE</vs-radio>
+                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="unisex"
+                                    class="mr-4" vs-name="layout-type-unisex">UNISEX</vs-radio>
+                            </div>
+                            <span class="text-danger text-sm" v-show="errors.has('Gender')">{{
+                                errors.first('Gender') }}</span>
+                        </div>
+
+                        <div class="vx-col w-1/2 mb-2">
+                            <div class="vx-row px-5">
                                 <!-- Inventory In Stock -->
                                 <div class="mb-2 w-48">
                                     <label class="vs-input--label pl-0">Inventory In Stock ?</label>
@@ -144,26 +160,24 @@
                                         </vs-switch>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <!-- Delivery -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-validate="'required'"
+                                v-model="form.delivery" label="Delivery *" name="Delivery" id="Delivery" />
+                            <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{
+                                errors.first('Delivery')
+                            }}</span>
+                        </div>
 
-                            </div>
-                            <!-- Delivery -->
-                            <div class="vx-row mb-2">
-                                <vs-input icon="icon icon-box" icon-pack="feather" class="w-full"
-                                    v-validate="'required'" v-model="form.delivery" label="Delivery" name="Delivery"
-                                    id="Delivery" />
-                                <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{
-                                    errors.first('Delivery')
-                                    }}</span>
-                            </div>
-
-                            <!-- Production Name -->
-                            <div class="vx-row mb-2">
-                                <vs-input icon="icon icon-box" icon-pack="feather" class="w-full"
-                                    v-validate="'required'" v-model="form.production_name" label="Production Name"
-                                    name="Production Name" id="Production Name" />
-                                <span class="text-danger text-sm" v-show="errors.has('Production Name')">
-                                    {{ errors.first('Production Name') }}</span>
-                            </div>
+                        <!-- Production Name -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-validate="'required'"
+                                v-model="form.production_name" label="Production Name *" name="Production Name"
+                                id="Production Name" />
+                            <span class="text-danger text-sm" v-show="errors.has('Production Name')">
+                                {{ errors.first('Production Name') }}</span>
                         </div>
                     </div>
                     <!-- Save & Reset Button -->
@@ -208,6 +222,9 @@ export default {
             subCategoryID: null,
             sizeID: null,
             SubCategoryList: [],
+            // tempDiamond: null,
+            // diamondOption: [],
+            // diamondQuantityWiseList: [],
             form: {
                 name: null,
                 category_id: null,
@@ -220,7 +237,7 @@ export default {
                 wear_it_item: false,
                 delivery: null,
                 production_name: null,
-                diamonds: [],
+                // diamonds: [],
                 product_tags: [],
                 manufacturing_price: null
             },
@@ -228,12 +245,15 @@ export default {
         }
     },
     /** Mounted */
-    mounted() { },
+    async mounted() {
+        // await this.getDiamonds({ page: 1, limit: 25 })
+        // this.diamondOption = this.DiamondList;
+    },
 
     /** computed */
     computed: {
         ...mapState('inventory', ['createLoading']),
-        ...mapState("common", ["SizeList"]),
+        ...mapState("common", ["SizeList", "DiamondList"]),
 
         validateForm() {
             return !this.errors.any()
@@ -248,6 +268,7 @@ export default {
         ...mapActions('common', {
             getSubCategory: 'getSubCategoryByCategoryId',
             getSize: 'getSizeBySubCategoryId',
+            // getDiamonds: 'getDiamonds'
         }),
         async save_changes() {
             if (!(await this.$validator.validate())) {
@@ -294,8 +315,20 @@ export default {
         /** navigate to inventoryList */
         navigateToInventoryList() {
             this.$router.push({ name: 'inventory-list' });
-        }
+        },
 
+        // addDiamond(diamond) {
+        //     if (diamond && !this.diamondQuantityWiseList.some(d => d.value === diamond.diamond_id)) {
+        //         this.diamondQuantityWiseList.push({
+        //             ...diamond,
+        //             diamond_count: 1 // Default quantity
+        //         });
+        //     }
+        //     this.tempDiamond = null;
+        // },
+        // removeDiamond(index) {
+        //     this.diamondQuantityWiseList.splice(index, 1);
+        // },
     },
 
     /** watch */

@@ -92,7 +92,7 @@
       </vs-table>
       <!-- Custom Pagination -->
       <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8" @onchange="handleChangePage"></vs-pagination>
+        class="mt-8"></vs-pagination>
     </div>
   </div>
 </template>
@@ -173,7 +173,7 @@ export default {
 
     // Edit Inventory modal
     toggleEditInventoryModal(id) {
-       this.$router.push(`/inventory/${id}/edit`);
+      this.$router.push(`/inventory/${id}/edit`);
     },
 
     /** Delete Inventory Confirmation */
@@ -234,6 +234,9 @@ export default {
         this.$vs.loading.close('#inventory-list > .con-vs-loading')
       }
     },
+    page() {
+      this.getData()
+    }
   },
 
   /** On Rendering */

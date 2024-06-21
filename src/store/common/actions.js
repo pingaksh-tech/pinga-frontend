@@ -84,23 +84,40 @@ export default {
       action: 'listLoading',
       data: true
     })
+    commit('SET_STATE', {
+      action: 'DiamondList',
+      data: []
+    })
+
     try {
       const res = await this.$http.get('diamond/', { params })
       commit('SET_STATE', {
         action: 'listLoading',
         data: false
       })
+
+      const data = res.data.data.diamonds.map((c) => ({
+        value: c._id,
+        label: c.diamond_clarity
+      }))
+      commit('SET_STATE', {
+        action: 'DiamondList',
+        data
+      })
+
       return {
-        data: res.data.data.diamonds.map((c) => ({
-          value: c._id,
-          label: c.diamond_clarity
-        })),
+        data,
         message: res.data.message
       }
     } catch (error) {
       commit('SET_STATE', {
         action: 'listLoading',
         data: false
+      })
+
+      commit('SET_STATE', {
+        action: 'DiamondList',
+        data: []
       })
       const { message } = getMessageFromError(error)
       return Promise.reject({

@@ -8,5 +8,6 @@ export default {
   listLoading: false,
   categoryOptions: [],
   SubCategoryList: [],
-  SizeList: []
+  SizeList: [],
+  DiamondList: []
 }
