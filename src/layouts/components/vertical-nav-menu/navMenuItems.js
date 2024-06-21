@@ -85,7 +85,7 @@ export default [
     ]
   },
 
-  // /** Admin Daimond Setting */
+  /** Admin Daimond Setting */
   // {
   //   url: null,
   //   name: 'Diamond',
