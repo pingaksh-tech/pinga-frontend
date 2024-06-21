@@ -15,4 +15,5 @@ export default {
   /*                             Edit Category State                            */
   /* -------------------------------------------------------------------------- */
   editLoading: false,
+  inventoryRecord: {}
 }

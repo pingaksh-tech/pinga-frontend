@@ -1,23 +1,13 @@
 <template lang="html">
   <div class="custom__select center w-full">
-    <VsSelect
-      ref="selectBox"
-      :typeable="autocomplete"
-      :disabled="disabled"
-      @clearValue="clearVal"
-      @input-change="inputChanged"
-      class="w-full"
-      :placeholder="placeholder"
-      v-model="inputVal"
-      @scrollEnd="handleScrollEnd"
-      :loader="processing || loading"
-      :clearable="clearable"
-      :multiple="multiple"
-    >
+    <VsSelect ref="selectBox" :typeable="autocomplete" :disabled="disabled" @clearValue="clearVal"
+      @input-change="inputChanged" class="w-full" :placeholder="placeholder" v-model="inputVal"
+      @scrollEnd="handleScrollEnd" :loader="processing || loading" :clearable="clearable" :multiple="multiple">
       <vs-select-item v-if="newLabel" :text="newLabel" value="newItemAddEvent" class="select-head-btn" />
-      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label" :value="item[val] || item['value']" />
+      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label"
+        :value="item[val] || item['value']" />
     </VsSelect>
-    
+
   </div>
 </template>
 
@@ -94,6 +84,10 @@ export default {
     clearable: {
       type: Boolean,
       default: true
+    },
+    actionCallRemove: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -105,7 +99,7 @@ export default {
       total: 0,
       sso: [],
       processing: false,
-      // type: 'dropdown',
+      type: 'dropdown',
       nodata: false
     }
   },
@@ -119,9 +113,7 @@ export default {
     inputVal: {
       get() {
         if (this.multiple) {
-          const filteredArray = this.vOptions
-            .filter((value) => this.value.includes(value[this.val] || value['value'])
-            )
+          const filteredArray = this.vOptions.filter((value) => (this.value || []).includes(value[this.val] || value['value']))
             .reduce((acc, item) => {
               acc.push(item[this.val] || item['value'])
 
@@ -219,22 +211,26 @@ export default {
         ...this.params
       }
       if (this.action) {
-        this.processing = true
+        if (this.actionCallRemove || this.page != 1) {
+          this.processing = true
+          this.$store
+            .dispatch(this.action, payload)
+            .then((response) => {
+              if (apiStat) {
+                this.sso = []
+              }
 
-        this.$store
-          .dispatch(this.action, payload)
-          .then((response) => {
-            if (apiStat) {
-              this.sso = []
-            }
+              this.nodata = response.data.length < 1
+              this.sso.push(...response.data)
+            })
+            .catch(() => { })
+            .finally(() => {
+              this.processing = false
+            })
+        } else {
 
-            this.nodata = response.data.length < 1
-            this.sso.push(...response.data)
-          })
-          .catch(() => {})
-          .finally(() => {
-            this.processing = false
-          })
+        }
+
       }
     },
 
@@ -296,6 +292,7 @@ export default {
       opacity: 0.1;
       transform: scale(0.2);
     }
+
     100% {
       opacity: 1;
       transform: scale(1);

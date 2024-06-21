@@ -7,5 +7,6 @@ export default {
   loading: false,
   listLoading: false,
   categoryOptions: [],
-  SubCategoryList: []
+  SubCategoryList: [],
+  SizeList: []
 }

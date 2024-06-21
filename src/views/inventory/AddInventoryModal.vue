@@ -27,16 +27,20 @@
             <div class="vx-row mb-2">
               <label class="vs-input--label">Sub Category</label>
               <select-2 class="w-full category-input" name="Sub Category" placeholder="Select Sub Category"
-                :value="form.sub_category_id" v-model="form.sub_category_id" :options="SubCategoryList" autocomplete
+                :value="form.sub_category_id" v-model="subCategoryID" @input="(item) => (form.sub_category_id = item && item.value)" :options="SubCategoryList" autocomplete
                 :ssr="true" :multiple="false" v-validate="'required'" />
               <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category')
                 }}</span>
             </div>
 
-            <!-- Inventory Size -->
+             <!-- Size -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-model="form.size"
-                label="Inventory Size" Size="Inventory Size" id="Inventory Size" />
+              <label class="vs-input--label">Size</label>
+              <select-2 class="w-full category-input" name="Size" placeholder="Select Size"
+                :value="form.size" v-model="sizeID"  @input="(item) => (form.size = item && item.value)"  :options="SizeList" autocomplete
+                :ssr="true" :multiple="false" />
+              <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
+                }}</span>
             </div>
 
             <!-- Inventory Metal -->
@@ -181,11 +185,13 @@ export default {
   data() {
     return {
       categoryID:null,
+      subCategoryID:null,
+      sizeID:null,
       form: {
         name: null,
         category_id: null,
         sub_category_id:null,
-        size: null,
+        size:null,
         metal_id: null,
         metal_weight: null,
         gender:null,
@@ -207,6 +213,7 @@ export default {
   computed: {
     ...mapState('inventory', ['createLoading']),
     ...mapState("common", ["SubCategoryList"]),
+    ...mapState("common", ["SizeList"]),
 
     validateForm() {
       return !this.errors.any()
@@ -227,14 +234,14 @@ export default {
       createInventory: 'createInventory'
     }),
     ...mapActions('common', {
-      getSubCategory: 'getSubCategoryByCategoryId'
+      getSubCategory: 'getSubCategoryByCategoryId',
+      getSize: 'getSizeBySubCategoryId',
     }),
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        this.form.sub_category_id = this.form.sub_category_id.value
         const { message } = await this.createInventory(this.form)
         this.$emit('update-data', true)
         this.$vs.notify({
@@ -260,11 +267,15 @@ export default {
       }
     },
     /* -------------------------------------------------------------------------- */
-    /*                         Get Category List By Project                         */
+    /*                         Get Category List By Inventory                         */
     /* -------------------------------------------------------------------------- */
     async fetchSubCategories() {
       await this.getSubCategory(this.categoryID.value)
-    }
+    },
+    async fetchSizes() {
+      await this.getSize(this.subCategoryID.value)
+    },
+    
   },
 
   /** watch */
@@ -279,9 +290,20 @@ export default {
         this.$vs.loading.close('#create-inventory > .con-vs-loading')
       }
     },
-    categoryID(){
-      this.fetchSubCategories();
-    }
+    categoryID(newValue){
+      if(newValue && newValue.value){
+        this.fetchSubCategories();
+      }
+      this.form.sub_category_id = null;
+      this.subCategoryID = null
+    },
+    subCategoryID(newValue,oldValue) {
+      if (newValue && newValue.value) {
+        this.fetchSizes();
+      } 
+      this.form.size = null;
+      this.sizeID = null;
+    },
   }
 }
 </script>

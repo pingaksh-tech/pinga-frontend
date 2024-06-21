@@ -74,13 +74,13 @@ export default {
   /* -------------------------------------------------------------------------- */
   async deleteInventoryRecord({ commit }, id) {
     commit('SET_STATE', {
-      action: 'loading',
+      action: 'listLoading',
       data: true
     })
     try {
       const res = await this.$http.delete(`/inventory/${id}`)
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
         data: false
       })
       return {
@@ -89,7 +89,7 @@ export default {
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
         data: false
       })
       const { message } = getMessageFromError(error)
@@ -104,13 +104,13 @@ export default {
   /* -------------------------------------------------------------------------- */
   async updateInventoryRecord({ commit }, { inventoryId, data }) {
     commit('SET_STATE', {
-      action: 'loading',
+      action: 'listLoading',
       data: true
     })
     try {
       const res = await this.$http.put(`inventory/${inventoryId}`, data)
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
         data: false
       })
       return {
@@ -119,7 +119,41 @@ export default {
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'loading',
+        action: 'listLoading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  },
+
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+  /*                                                  get invantory by id action.                                                 */
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+  async getInvantoryById({ commit }, id) {
+    commit('SET_STATE', {
+      action: 'listLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.get(`inventory/${id}`)
+      commit('SET_STATE', {
+        action: 'listLoading',
+        data: false
+      })
+      commit('SET_STATE', {
+        action: 'inventoryRecord',
+        data: res.data.data
+      })
+      return {
+        data: res.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'listLoading',
         data: false
       })
       const { message } = getMessageFromError(error)

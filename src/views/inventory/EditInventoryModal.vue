@@ -30,17 +30,21 @@
             <div class="vx-row mb-2">
               <label class="vs-input--label">Sub Category</label>
               <select-2 class="w-full category-input" name="Sub Category" placeholder="Select Sub Category"
-                :value="form.sub_category_id" @input="(item) => (form.sub_category_id = item && item.value)"
-                :options="SubCategoryList" autocomplete :ssr="true" :multiple="false"
-                v-validate="'required'" />
+                :value="form.sub_category_id" v-model="subCategoryID"
+                @input="(item) => (form.sub_category_id = item && item.value)" :options="SubCategoryList" autocomplete
+                :ssr="true" :multiple="false" v-validate="'required'" />
               <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category')
                 }}</span>
             </div>
 
-            <!-- Inventory Size -->
+            <!-- Size -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-model="form.size"
-                label="Inventory Size" Size="Inventory Size" id="Inventory Size" />
+              <label class="vs-input--label">Size</label>
+              <select-2 class="w-full category-input" name="Size" placeholder="Select Size" :value="form.size"
+                v-model="sizeID" @input="(item) => (form.size = item && item.value)" :options="SizeList" autocomplete
+                :ssr="true" :multiple="false" />
+              <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
+                }}</span>
             </div>
 
             <!-- Inventory Metal -->
@@ -169,7 +173,7 @@ import Select2 from '@/components/custom/form-elements/Select2.vue'
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'AddCategory',
+  name: 'EditInventory',
 
   /** Components */
   components: {
@@ -188,7 +192,9 @@ export default {
     return {
       loading: false,
       categoryID: this.data.category_id,
-      form: 
+      subCategoryID: this.data.sub_category_id,
+      sizeID: this.data.size,
+      form:
       {
         name: this.data.name,
         category_id: this.data.category_id,
@@ -205,7 +211,8 @@ export default {
         manufacturing_price: this.data.manufacturing_price
       },
       zIndex: 0,
-      SubCategoryList:[],
+      SubCategoryList: [],
+      SizeList: [],
     }
   },
 
@@ -213,8 +220,11 @@ export default {
   async created() {
     const sub_category = await this.getSubCategory(this.data.category_id);
     this.SubCategoryList = sub_category.data
-    this.form.sub_category_id = this.data.sub_category_id
-    console.log(this.form.sub_category_id);
+    this.form.sub_category_id = this.subCategoryID = this.data.sub_category_id
+
+    const size = await this.getSize(this.data.sub_category_id)
+    this.SizeList = size.data
+    this.form.size = this.sizeID = this.data.size
   },
 
   /** Computed */
@@ -239,7 +249,8 @@ export default {
       updateInventoryRecord: 'updateInventoryRecord'
     }),
     ...mapActions('common', {
-      getSubCategory: 'getSubCategoryByCategoryId'
+      getSubCategory: 'getSubCategoryByCategoryId',
+      getSize: 'getSizeBySubCategoryId',
     }),
     // reset form data
     resetForm() {
@@ -260,8 +271,6 @@ export default {
         return false
       }
       try {
-        console.log("this.form.sub_category_id.value", this.form.sub_category_id)
-        this.form.sub_category_id = this.form.sub_category_id
         const { message } = await this.updateInventoryRecord({
           inventoryId: this.data._id,
           data: this.form
@@ -291,11 +300,18 @@ export default {
     },
 
     /* -------------------------------------------------------------------------- */
-    /*                         Get Category List By Project                         */
+    /*                         Get Category List By Inventory                         */
     /* -------------------------------------------------------------------------- */
     async fetchSubCategories() {
-      await this.getSubCategory(this.categoryID.value)
-    }
+      const sub_category = await this.getSubCategory(this.categoryID.value);
+      console.log("🚀 ~ created ~ sub_category:", sub_category)
+      this.SubCategoryList = sub_category.data
+    },
+    async fetchSizes() {
+      const size = await this.getSize(this.subCategoryID.value)
+      console.log("🚀 ~ created ~ size:", size)
+      this.SizeList = size.data
+    },
   },
 
   /** watch Loading Manage */
@@ -310,11 +326,23 @@ export default {
         this.$vs.loading.close('#update_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
       }
     },
-    categoryID() {
-      this.fetchSubCategories();
-    }
+    categoryID(newValue) {
+      if (newValue && newValue.value) {
+        this.SubCategoryList = []
+        this.fetchSubCategories();
+      }
+      this.form.sub_category_id = null;
+      this.subCategoryID = null
+    },
+    subCategoryID(newValue, oldValue) {
+      this.form.size = null;
+      this.sizeID = null;
+      if (newValue && newValue.value) {
+        this.SizeList = []
+        this.fetchSizes();
+      }
+
+    },
   }
 }
 </script>
-
-

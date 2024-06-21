@@ -78,7 +78,7 @@
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
-                  <feather-icon @click="toggleEditInventoryModal(tr)" icon="EditIcon"
+                  <feather-icon @click="toggleEditInventoryModal(tr._id)" icon="EditIcon"
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`">
@@ -94,30 +94,14 @@
       <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
         class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
-
-    <!-- Add Inventory modal -->
-    <add-Inventory-modal :module_name="module_name" @update-data="getData" v-if="isAddInventoryModalMounted"
-      :showModal.sync="isAddInventoryModalShow" />
-
-    <!-- Edit Inventory modal -->
-    <Edit-Inventory-modal :module_name="module_name" @update-data="getData" v-if="isEditInventoryModalMounted"
-      :data="selectedRecord" :showModal.sync="isEditInventoryModalShow" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AddInventoryModal from '@/views/inventory/AddInventoryModal'
-import EditInventoryModal from '@/views/inventory/EditInventoryModal'
 
 export default {
   name: 'InventoryList',
-
-  /** Components */
-  components: {
-    AddInventoryModal,
-    EditInventoryModal
-  },
 
   /** Data */
   data: () => ({
@@ -127,15 +111,6 @@ export default {
     page: 1,
     search: '',
     module_name: 'Inventory',
-
-    // add Inventory modal
-    isAddInventoryModalMounted: false,
-    isAddInventoryModalShow: false,
-
-    // Edit Inventory modal
-    isEditInventoryModalMounted: false,
-    isEditInventoryModalShow: false,
-    selectedRecord: null
   }),
 
   /** computed */
@@ -193,15 +168,12 @@ export default {
 
     // Add Inventory modal
     toggleAddInventoryModal() {
-      this.isAddInventoryModalMounted = true
-      this.isAddInventoryModalShow = true
+      this.$router.push(`/inventory/add`);
     },
 
     // Edit Inventory modal
-    toggleEditInventoryModal(data) {
-      this.isEditInventoryModalMounted = true
-      this.isEditInventoryModalShow = true
-      this.selectedRecord = data
+    toggleEditInventoryModal(id) {
+       this.$router.push(`/inventory/${id}/edit`);
     },
 
     /** Delete Inventory Confirmation */
@@ -262,30 +234,6 @@ export default {
         this.$vs.loading.close('#inventory-list > .con-vs-loading')
       }
     },
-
-    // add Inventory modal
-    isAddInventoryModalShow: {
-      immediate: true,
-      handler(newVal) {
-        if (!newVal) {
-          setTimeout(() => {
-            this.isAddInventoryModalMounted = false
-          }, 0)
-        }
-      }
-    },
-
-    // edit Inventory modal
-    isEditInventoryModalShow: {
-      immediate: true,
-      handler(newVal) {
-        if (!newVal) {
-          setTimeout(() => {
-            this.isEditInventoryModalMounted = false
-          }, 0)
-        }
-      }
-    }
   },
 
   /** On Rendering */
