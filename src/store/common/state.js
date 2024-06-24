@@ -9,5 +9,6 @@ export default {
   categoryOptions: [],
   SubCategoryList: [],
   SizeList: [],
+  diamondConstantList: [],
   DiamondList: []
 }

@@ -35,15 +35,16 @@
                                 v-validate="'required'" />
                             <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{
                                 errors.first('Sub Category')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <!-- Size -->
                         <div class="vx-col w-1/2 mb-2">
                             <label class="vs-input--label">Size</label>
                             <select-2 class="w-full category-input" name="Size" placeholder="Select Size"
-                                :value="form.size" v-model="sizeID" @input="(item) => (form.size = item && item.value)"
-                                :options="SizeList" autocomplete :ssr="true" :multiple="false" />
+                                :value="form.size_id" v-model="sizeID"
+                                @input="(item) => (form.size_id = item && item.value)" :options="SizeList" autocomplete
+                                :ssr="true" :multiple="false" />
                             <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
                                 }}</span>
                         </div>
@@ -62,46 +63,13 @@
                         <!-- Metal Weight -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-database" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|min:1'" v-model="form.metal_weight" label="Metal Weight *"
-                                name="Metal Weight" id="Metal Weight" />
+                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.metal_weight"
+                                label="Metal Weight *" name="Metal Weight" id="Metal Weight" />
                             <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{
                                 errors.first('Metal Weight') }}</span>
                         </div>
 
-                        <!-- Diamond -->
-                        <!-- <div class="vx-col w-1/2 mb-2">
-                                <label class="vs-input--label">Diamond</label>
-                                <v-select class="w-full category-input" v-model="tempDiamond"
-                                    placeholder="Select Diamond" :options="diamondOption"
-                                    @input="addDiamond(tempDiamond)">
-                                </v-select>
-                            </div> -->
-
-                        <!-- Display Selected Diamonds with Quantity Inputs and Remove Buttons -->
-                        <!-- <div class="vx-row my-2 block" v-if="diamondQuantityWiseList.length">
-                                <h3>Selected Diamonds ({{ diamondQuantityWiseList.length }})</h3>
-                                <div class="flex items-center flex-wrap gap-2 px-2 py-2">
-                                    <span v-for="(diamond, index) in diamondQuantityWiseList" :key="diamond.diamond_id"
-                                        class="flex items-center">
-                                        <div class="flex items-center">
-                                            <h4>{{ diamond.label }}</h4>
-                                        </div>
-                                        <div class="mx-4">
-                                            <vs-input class="" type="number" v-model.number="diamond.diamond_count"
-                                                min="1" v-validate="'required|min:1'"
-                                                :name="'diamond-quantity-' + index" :id="'diamond-quantity-' + index">
-                                            </vs-input>
-                                        </div>
-                                        <div>
-                                            <vx-tooltip text="Remove">
-                                                <feather-icon @click="removeDiamond(index)" icon="Trash2Icon"
-                                                    svgClasses="text-danger h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
-                                            </vx-tooltip>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div> -->
-                        <!-- Product Tags -->
+                        <!-- Product Tag -->
                         <div class="vx-col w-1/2 mb-2">
                             <label class="vs-input--label">Product Tag</label>
                             <select-2 class="w-full category-input" name="Product Tag" placeholder="Select Product Tag"
@@ -109,14 +77,14 @@
                                 autocomplete :ssr="true" :multiple="true" action="common/getProductTags" />
                             <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{
                                 errors.first('Product Tag')
-                            }}</span>
+                                }}</span>
                         </div>
 
 
                         <!-- Manufacturing Price -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|min:1'" v-model="form.manufacturing_price"
+                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.manufacturing_price"
                                 label="Manufacturing Price *" name="Manufacturing Price" id="Manufacturing Price" />
                             <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{
                                 errors.first('Manufacturing Price') }}</span>
@@ -168,7 +136,7 @@
                                 v-model="form.delivery" label="Delivery *" name="Delivery" id="Delivery" />
                             <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{
                                 errors.first('Delivery')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <!-- Production Name -->
@@ -179,7 +147,99 @@
                             <span class="text-danger text-sm" v-show="errors.has('Production Name')">
                                 {{ errors.first('Production Name') }}</span>
                         </div>
+
+                        <!-- Diamond Section -->
+                        <div class="w-full px-4 mt-4">
+                            <!-- Add Diamond -->
+                            <vs-button @click="addDiamond" class="mb-4">Add Diamond</vs-button>
+                            <div class="diamond-container">
+                                <div v-for="(diamond, index) in form.diamonds" :key="index"
+                                    class="diamond-entry vx-row border-sky-500 border">
+                                    <div class="flex items-center mt-2">
+                                        <h4>{{ index + 1 }}</h4>
+                                    </div>
+                                    <!-- Diamond Clarity -->
+                                    <div class="vx-col w-1/8 mb-2">
+                                        <label class="vs-input--label">Diamond Clarity *</label>
+                                        <select-2 class="w-full category-input" :name="'diamond_clarity_' + index"
+                                            v-validate="'required'" placeholder="Select Diamond Clarity"
+                                            v-model="diamond.diamond_clarity" :options="DIAMOND_CLARITY" autocomplete
+                                            :ssr="true" :multiple="false" />
+
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`diamond_clarity_${index}`)">{{
+                                                errors.first(`diamond_clarity_${index}`) }}</span>
+                                    </div>
+
+
+                                    <!-- Diamond Shape -->
+                                    <div class="vx-col w-1/8 mb-2">
+
+                                        <label class="vs-input--label">Diamond Shape *</label>
+                                        <select-2 class="w-full category-input" :name="'diamond_shape_' + index"
+                                            v-validate="'required'" placeholder="Select Diamond Shape"
+                                            v-model="diamond.diamond_shape" :options="DIAMOND_SHAPES" autocomplete
+                                            :ssr="true" :multiple="false" />
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`diamond_shape_${index}`)">{{
+                                                errors.first(`diamond_shape_${index}`) }}</span>
+                                    </div>
+                                    <!-- Diamond Weight -->
+                                    <div class="vx-col w-1/8 mb-2">
+                                        <vs-input type="number" icon="icon icon-database" icon-pack="feather"
+                                            v-model="diamond.diamond_weight" label="Diamond Weight *"
+                                            :name="'diamond_weight_' + index" min="1"
+                                            v-validate="'required|numeric|min_value:1'" data-vv-as="Diamond Weight" />
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`diamond_weight_${index}`)">{{
+                                                errors.first(`diamond_weight_${index}`) }}</span>
+                                    </div>
+                                    <!-- Diamond Color -->
+                                    <div class="vx-col w-1/8 mb-2">
+                                        <label class="vs-input--label">Diamond Color *</label>
+                                        <select-2 class="w-full category-input" :name="'diamond_color_' + index"
+                                            v-validate="'required'" placeholder="Select Diamond Color"
+                                            v-model="diamond.diamond_color" :options="DIAMOND_COLORS" autocomplete
+                                            :ssr="true" :multiple="false" />
+
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`diamond_color_${index}`)">{{
+                                                errors.first(`diamond_color_${index}`) }}</span>
+                                    </div>
+                                    <!-- Diamond Count -->
+                                    <div class="vx-col w-1/8 mb-2">
+                                        <vs-input icon="icon icon-hash" icon-pack="feather" type="number"
+                                            v-validate="'required|numeric|min_value:1'" data-vv-as="Diamond Count"
+                                            v-model="diamond.diamond_count" label="Diamond Count *" min="1"
+                                            :name="'diamond_count_' + index" />
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`diamond_count_${index}`)">{{
+                                                errors.first(`diamond_count_${index}`) }}</span>
+                                    </div>
+                                    <!-- Single Diamond Price -->
+                                    <div class="vx-col w-1/8 mb-2">
+                                        <vs-input icon="icon icon-dollar-sign" icon-pack="feather" type="number"
+                                            v-validate="'required|numeric|min_value:1'" min="1"
+                                            data-vv-as="Single Diamond Price" v-model="diamond.single_diamond_price"
+                                            label="Single Diamond Price *" :name="'single_diamond_price_' + index" />
+                                        <span class="text-danger text-xs"
+                                            v-show="errors.has(`single_diamond_price_${index}`)">{{
+                                                errors.first(`single_diamond_price_${index}`) }}</span>
+                                    </div>
+
+                                    <!-- Remove Diamond -->
+                                    <div class="flex items-center">
+                                        <vx-tooltip :text="`Remove`">
+                                            <feather-icon @click="removeDiamond(index)" icon="Trash2Icon"
+                                                svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
+                                        </vx-tooltip>
+                                    </div>
+                                    <vs-divider></vs-divider>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <!-- Save & Reset Button -->
                     <div class="vx-row pt-5 px-5 text-center">
                         <div class="vx-col w-full">
@@ -222,14 +282,14 @@ export default {
             subCategoryID: null,
             sizeID: null,
             SubCategoryList: [],
-            // tempDiamond: null,
-            // diamondOption: [],
-            // diamondQuantityWiseList: [],
+            DIAMOND_CLARITY: [],
+            DIAMOND_COLORS: [],
+            DIAMOND_SHAPES: [],
             form: {
                 name: null,
                 category_id: null,
                 sub_category_id: null,
-                size: null,
+                size_id: null,
                 metal_id: null,
                 metal_weight: null,
                 gender: null,
@@ -237,23 +297,25 @@ export default {
                 wear_it_item: false,
                 delivery: null,
                 production_name: null,
-                // diamonds: [],
                 product_tags: [],
-                manufacturing_price: null
+                manufacturing_price: null,
+                diamonds: []
             },
             zIndex: 0
         }
     },
     /** Mounted */
     async mounted() {
-        // await this.getDiamonds({ page: 1, limit: 25 })
-        // this.diamondOption = this.DiamondList;
+        await this.diamondConstant();
+        this.DIAMOND_CLARITY = Object.entries(this.diamondConstantList.DIAMOND_CLARITY).map(([value, label]) => ({ value: label, label }));
+        this.DIAMOND_COLORS = Object.entries(this.diamondConstantList.DIAMOND_COLORS).map(([value, label]) => ({ value: label, label }));
+        this.DIAMOND_SHAPES = Object.entries(this.diamondConstantList.DIAMOND_SHAPES).map(([value, label]) => ({ value: label, label }));
     },
 
     /** computed */
     computed: {
         ...mapState('inventory', ['createLoading']),
-        ...mapState("common", ["SizeList", "DiamondList"]),
+        ...mapState("common", ["SizeList", "diamondConstantList"]),
 
         validateForm() {
             return !this.errors.any()
@@ -268,7 +330,7 @@ export default {
         ...mapActions('common', {
             getSubCategory: 'getSubCategoryByCategoryId',
             getSize: 'getSizeBySubCategoryId',
-            // getDiamonds: 'getDiamonds'
+            diamondConstant: 'diamondConstant'
         }),
         async save_changes() {
             if (!(await this.$validator.validate())) {
@@ -312,23 +374,25 @@ export default {
             await this.getSize(this.subCategoryID.value)
         },
 
+        addDiamond() {
+            this.form.diamonds.push({
+                diamond_clarity: '',
+                diamond_shape: '',
+                diamond_weight: 0,
+                diamond_color: '',
+                diamond_count: 0,
+                single_diamond_price: 0,
+            });
+        },
+
+        removeDiamond(index) {
+            this.form.diamonds.splice(index, 1);
+        },
+
         /** navigate to inventoryList */
         navigateToInventoryList() {
             this.$router.push({ name: 'inventory-list' });
         },
-
-        // addDiamond(diamond) {
-        //     if (diamond && !this.diamondQuantityWiseList.some(d => d.value === diamond.diamond_id)) {
-        //         this.diamondQuantityWiseList.push({
-        //             ...diamond,
-        //             diamond_count: 1 // Default quantity
-        //         });
-        //     }
-        //     this.tempDiamond = null;
-        // },
-        // removeDiamond(index) {
-        //     this.diamondQuantityWiseList.splice(index, 1);
-        // },
     },
 
     /** watch */
@@ -352,7 +416,7 @@ export default {
             }
         },
         subCategoryID(newValue, oldValue) {
-            this.form.size = null;
+            this.form.size_id = null;
             this.sizeID = null;
             if (newValue && newValue.value) {
                 this.fetchSizes();

@@ -12,7 +12,7 @@
                                 id="Inventory Name" />
                             <span class="text-danger text-sm" v-show="errors.has('Inventory Name')">{{
                                 errors.first('Inventory Name')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <!-- Category -->
@@ -39,15 +39,16 @@
                                 :params="{ subCategoryId: form.initial_sub_category_id, categoryId: form.category_id }" />
                             <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{
                                 errors.first('Sub Category')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <!-- Size -->
                         <div class="vx-col w-1/2 mb-2">
                             <label class="vs-input--label">Size</label>
                             <select-2 class="w-full category-input" name="Size" placeholder="Select Size"
-                                :value="form.size" v-model="sizeID" @input="(item) => (form.size = item && item.value)"
-                                :options="SizeList" autocomplete :ssr="true" :multiple="false" />
+                                :value="form.size_id" v-model="sizeID"
+                                @input="(item) => (form.size_id = item && item.value)" :options="SizeList" autocomplete
+                                :ssr="true" :multiple="false" />
                             <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size')
                                 }}</span>
                         </div>
@@ -66,45 +67,11 @@
                         <!-- Metal Weight -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-database" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|min:1'" v-model="form.metal_weight" label="Metal Weight *"
-                                name="Metal Weight" id="Metal Weight" />
+                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.metal_weight"
+                                label="Metal Weight *" name="Metal Weight" id="Metal Weight" />
                             <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{
                                 errors.first('Metal Weight') }}</span>
                         </div>
-
-                        <!-- Diamond -->
-                        <!-- <div class="vx-col w-1/2 mb-2">
-                                <label class="vs-input--label">Diamond</label>
-                                <v-select class="w-full category-input" v-model="tempDiamond"
-                                    placeholder="Select Diamond" :options="diamondOption"
-                                    @input="addDiamond(tempDiamond)">
-                                </v-select>
-                            </div> -->
-
-                        <!-- Display Selected Diamonds with Quantity Inputs and Remove Buttons -->
-                        <!-- <div class="vx-row my-2 block" v-if="diamondQuantityWiseList.length">
-                                <h3>Selected Diamonds ({{ diamondQuantityWiseList.length }})</h3>
-                                <div class="flex items-center flex-wrap gap-2 px-2 py-2">
-                                    <span v-for="(diamond, index) in diamondQuantityWiseList" :key="diamond.diamond_id"
-                                        class="flex items-center">
-                                        <div class="flex items-center">
-                                            <h4>{{ diamond.label }}</h4>
-                                        </div>
-                                        <div class="mx-4">
-                                            <vs-input class="" type="number" v-model.number="diamond.diamond_count"
-                                                min="1" v-validate="'required|min:1'"
-                                                :name="'diamond-quantity-' + index" :id="'diamond-quantity-' + index">
-                                            </vs-input>
-                                        </div>
-                                        <div>
-                                            <vx-tooltip text="Remove">
-                                                <feather-icon @click="removeDiamond(index)" icon="Trash2Icon"
-                                                    svgClasses="text-danger h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
-                                            </vx-tooltip>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div> -->
 
                         <!-- Product Tags -->
                         <div class="vx-col w-1/2 mb-2">
@@ -114,14 +81,14 @@
                                 autocomplete :ssr="true" :multiple="true" action="common/getProductTags" />
                             <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{
                                 errors.first('Product Tag')
-                            }}</span>
+                                }}</span>
                         </div>
 
 
                         <!-- Manufacturing Price -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|min:1'" v-model="form.manufacturing_price"
+                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.manufacturing_price"
                                 label="Manufacturing Price *" name="Manufacturing Price" id="Manufacturing Price" />
                             <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{
                                 errors.first('Manufacturing Price') }}</span>
@@ -174,7 +141,7 @@
                                 v-model="form.delivery" label="Delivery *" name="Delivery" id="Delivery" />
                             <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{
                                 errors.first('Delivery')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <!-- Production Name -->

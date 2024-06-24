@@ -354,5 +354,51 @@ export default {
       const messages = getMessageFromError(error)
       return Promise.reject(messages)
     }
+  },
+
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+  /*                                               Get Diamond constant For Dropdown API                                          */
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+
+  async diamondConstant({ commit }) {
+    commit('SET_STATE', {
+      action: 'listLoading',
+      data: true
+    })
+    commit('SET_STATE', {
+      action: 'diamondConstantList',
+      data: []
+    })
+    try {
+      const res = await this.$http.get(`/inventory/diamond/constant`)
+      commit('SET_STATE', {
+        action: 'listLoading',
+        data: false
+      })
+
+      const finalData = res.data.data
+      commit('SET_STATE', {
+        action: 'diamondConstantList',
+        data: finalData
+      })
+
+      return {
+        data: finalData,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'listLoading',
+        data: false
+      })
+      commit('SET_STATE', {
+        action: 'SizeList',
+        data: []
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
   }
 }
