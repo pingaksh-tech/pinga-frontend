@@ -21,9 +21,12 @@ import DiamondRoute from '@/views/diamond/routes'
 import RetailerRoute from '@/views/retailers/routes'
 /** Banner Module */
 import BannerRoute from '@/views/banner/routes'
-
+/** LatestProductRoute Module */
+import LatestProductRoute from '@/views/latest-product/routes'
 /** Inventory Module */
 import InventoryRoute from '@/views/inventory/routes'
+/** Setting Module */
+import SettingRoute from '@/views/setting/routes'
 
 Vue.use(Router)
 
@@ -60,7 +63,11 @@ const router = new Router({
         // Inventory route
         ...InventoryRoute,
         // Banner route
-        ...BannerRoute
+        ...BannerRoute,
+        // LatestProductRoute route
+        ...LatestProductRoute,
+        // Setting route
+        ...SettingRoute
       ]
     },
 

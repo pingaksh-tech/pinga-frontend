@@ -24,6 +24,10 @@ import retailer from './retailer'
 import inventory from './inventory'
 /** Banner API Store */
 import banner from './banner'
+/** latestProduct API Store */
+import latestProduct from './latest-product'
+/** setting API Store */
+import setting from './setting'
 
 Vue.use(Vuex)
 
@@ -42,6 +46,8 @@ export default new Vuex.Store({
     diamond,
     retailer,
     inventory,
-    banner
+    banner,
+    latestProduct,
+    setting
   }
 })

@@ -145,6 +145,43 @@ export default [
       }
     ]
   },
+
+  /** Latest Product List */
+  {
+    url: null,
+    name: 'Latest Product',
+    slug: 'latest-product',
+    icon: 'BoxIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/latest-product/list',
+        name: 'Latest Product List',
+        slug: 'LatestProductList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+
+  /** Setting */
+  {
+    url: null,
+    name: 'Setting',
+    slug: 'setting',
+    icon: 'BoxIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/setting/list',
+        name: 'Setting List',
+        slug: 'LatestProductList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+
   /** Admin Banner Setting */
   {
     url: null,

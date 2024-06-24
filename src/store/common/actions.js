@@ -400,5 +400,38 @@ export default {
         message
       })
     }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                      Inventory For Dropdown API                     */
+  /* -------------------------------------------------------------------------- */
+  async getInventories({ commit }, params) {
+    commit('SET_STATE', {
+      action: 'listLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.get('inventory/', { params })
+      commit('SET_STATE', {
+        action: 'listLoading',
+        data: false
+      })
+      return {
+        data: res.data.data.inventories.map((c) => ({
+          value: c._id,
+          label: c.name
+        })),
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'listLoading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
   }
 }
