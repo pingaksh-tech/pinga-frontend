@@ -1,34 +1,43 @@
 <template>
-  <form method="POST" @submit.prevent="save_changes">
-    <div class="vx-row">
+  <div class="vx-card p-6">
+    <h3 class="mb-2">Policy</h3>
+    <form method="POST">
       <div class="vx-col w-full cursor-pointer">
-        <label class="vs-input--label block">Privacy Policy</label>
-        <input type="file" class="border p-2 rounded w-full" name="privacy_policy" ref="files"
-          accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
+        <div class="flex gap-2">
+          <label class="vs-input--label block">Privacy Policy</label>
+          <vx-tooltip text="View Privacy Policy"
+            v-if="settingRecord && settingRecord.Policies && settingRecord.Policies.setting_value && settingRecord.Policies.setting_value.privacy_policy">
+            <feather-icon icon="EyeIcon"
+              @click="openPrivacyPolicy(s3Path + settingRecord.Policies.setting_value.privacy_policy)"
+              svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+          </vx-tooltip>
+        </div>
+        <input type="file" class="border p-2 rounded w-full" name="privacy_policy" ref="files" accept=".pdf"
+          @change="handleFileUpload($event, 'privacy')" style="border: 1px solid rgba(0, 0, 0, 0.2);"
           data-vv-as="Privacy Policy" />
         <span class="text-danger text-sm" v-show="errors.has('privacy_policy')">{{ errors.first('privacy_policy')
           }}</span>
+
       </div>
-      <div class="vx-col w-full cursor-pointer">
-        <label class="vs-input--label block">Return Policy</label>
-        <input type="file" class="border p-2 rounded w-full" name="return_policy" ref="files"
-          accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
+      <div class="vx-col w-full cursor-pointer my-3">
+        <div class="flex gap-2">
+          <label class="vs-input--label block">Return Policy</label>
+          <vx-tooltip text="View Return Policy">
+            <feather-icon icon="EyeIcon"
+              v-if="settingRecord && settingRecord.Policies && settingRecord.Policies.setting_value && settingRecord.Policies.setting_value.return_policy"
+              @click="openPrivacyPolicy(s3Path + settingRecord.Policies.setting_value.return_policy)"
+              svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+          </vx-tooltip>
+        </div>
+        <input type="file" class="border p-2 rounded w-full" name="return_policy" ref="files" accept=".pdf"
+          @change="handleFileUpload($event, 'return')" style="border: 1px solid rgba(0, 0, 0, 0.2);"
           data-vv-as="Return Policy" />
         <span class="text-danger text-sm" v-show="errors.has('return_policy')">{{ errors.first('return_policy')
           }}</span>
       </div>
-    </div>
 
-    <!-- Save & Reset Button -->
-    <div class="vx-row pt-5 px-5 text-center">
-      <div class="vx-col w-full">
-        <div class="items-center">
-          <vs-button class="mr-2 vs-con-loading__container" id="create-policy" @click="save_changes"
-            :disabled="!validateForm">Save</vs-button>
-        </div>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -38,93 +47,45 @@ export default {
   /** Page Name */
   name: `Policy`,
 
-  /** Props */
-  props: {
-    data: Object
-  },
-
   /** data */
   data() {
     return {
-      form: {
-        categoryId: null,
-        product_name: null,
-        inventory_ids: [],
-        product_image: null
-      },
-      preview_image: null,
-      zIndex: 0
-    }
-  },
-  /** Mounted */
-  mounted() {
-    if (this.data) {
-      this.form.categoryId = this.data.category_id ? this.data.category_id : null;
-      this.form.product_name = this.data.product_name ? this.data.product_name : null;
-      this.form.inventory_ids = this.data.inventory ? this.data.inventory.map((v) => v._id) : []
-      this.preview_image = this.data.product_image ? this.data.product_image : null;
+      type: 'Policies'
     }
   },
 
   /** computed */
   computed: {
-    ...mapState('latestProduct', ['createLoading', 'dropDownOpt']),
-    validateForm() {
-      return !this.errors.any()
-    },
+    ...mapState('setting', ['settingRecord', 's3Path']),
   },
 
+  /** Mounted */
+  async mounted() {
+    try {
+      await this.getSetting({
+        setting_name: this.type
+      });
+    } catch ({ message }) {
+      this.$vs.notify({
+        title: 'Error',
+        text: message,
+        iconPack: 'feather',
+        icon: 'icon-alert-circle',
+        position: 'top-center',
+        time: 5000,
+        color: 'primary'
+      })
+    }
+  },
   /** methods */
   methods: {
-    ...mapActions('latestProduct', {
-      createLatestProduct: 'createLatestProduct',
-      updateLatestProduct: 'updateLatestProduct'
+    ...mapActions('setting', {
+      updatePolicy: 'updatePolicy',
+      getSetting: 'getSetting',
     }),
-    async save_changes() {
-      if (!(await this.$validator.validate())) {
-        return false
-      }
-      try {
-        const data = new FormData();
-        data.append("product_image", this.form.product_image);
-        data.append("categoryId", this.form.categoryId);
-        data.append("product_name", this.form.product_name);
-        let result;
-        if (!this.data) {
-          result = await this.createLatestProduct(data)
-        } else {
-          data.append("latestProductId", this.data._id);
-          result = await this.updateLatestProduct({
-            data: data
-          });
-        }
-        const message = result.message
-        this.$emit('update-data', true)
-        this.$vs.notify({
-          title: 'Success',
-          text: message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          position: 'top-center',
-          time: 5000,
-          color: 'success'
-        })
-        this.isActive = false
-      } catch ({ message }) {
-        this.$vs.notify({
-          title: 'Error',
-          text: message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          position: 'top-center',
-          time: 5000,
-          color: 'primary'
-        })
-      }
-    },
 
     /** file upload  */
-    handleFileUpload(e) {
+    async handleFileUpload(e, value) {
       const file = e.target.files[0]
 
       // Check if a file is selected
@@ -141,29 +102,40 @@ export default {
         return
       }
 
-      // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
-      if (this.form.product_image && this.form.product_image.src) {
-        URL.revokeObjectURL(this.form.product_image.src);
-      }
-      // 2. Create the image link to the file to optimize performance:
-      this.preview_image = URL.createObjectURL(file);
-      this.form.product_image = file
+      try {
+        const data = new FormData();
+        data.append("policy", file);
+        data.append("type", value);
+        const { message } = await this.updatePolicy({
+          data
+        });
 
+        this.$vs.notify({
+          title: 'Success',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: 'Error',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+      }
     },
+    openPrivacyPolicy(url) {
+      window.open(url, '_blank');
+    }
+
   },
 
-  /** watch */
-  watch: {
-    createLoading() {
-      if (this.createLoading) {
-        this.$vs.loading({
-          container: '#create-policy',
-          scale: 0.45
-        })
-      } else {
-        this.$vs.loading.close('#create-policy > .con-vs-loading')
-      }
-    }
-  }
 }
 </script>

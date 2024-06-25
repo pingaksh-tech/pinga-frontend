@@ -36,27 +36,19 @@ export default {
   /* -------------------------------------------------------------------------- */
   async getLatestProductList({ commit }, params) {
     commit('SET_STATE', {
-      action: 'listLoading2',
+      action: 'listLoading',
       data: true
     })
     try {
       const res = await this.$http.get('latest-product/', { params })
 
       commit('SET_STATE', {
-        action: 'listLoading2',
+        action: 'listLoading',
         data: false
       })
-
       commit('SET_STATE', {
         action: 'LatestProductRecords',
-        data: res.data.data
-      })
-      commit('SET_STATE', {
-        action: 'dropDownOpt',
-        data: res.data.data.map((c) => ({
-          value: c._id,
-          label: c.name
-        }))
+        data: res.data.data.latestProducts
       })
       commit('SET_STATE', {
         action: 'total',
@@ -67,21 +59,18 @@ export default {
         data: res.data.data.filteredCount
       })
       return {
-        data: res.data.data.map((c) => ({
-          value: c._id,
-          label: c.name
-        })),
+        data: res.data.data.latestProducts,
         message: res.data.message
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'listLoading2',
+        action: 'listLoading',
         data: false
       })
       const { message } = getMessageFromError(error)
-      // return Promise.reject({
-      //   message
-      // })
+      return Promise.reject({
+        message
+      })
     }
   },
 
@@ -118,13 +107,13 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                               Update Category                              */
   /* -------------------------------------------------------------------------- */
-  async updateLatestProduct({ commit }, { data }) {
+  async updateLatestProduct({ commit }, { latestProductId, data }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.put(`latest-product`, data)
+      const res = await this.$http.put(`latest-product/${latestProductId}`, data)
       commit('SET_STATE', {
         action: 'loading',
         data: false

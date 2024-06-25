@@ -3,7 +3,7 @@
     <!-- Latest Product list -->
     <div class="vx-card p-6">
       <vs-table id="product_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="subFilteredCount"
+        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
         :max-items="length" search :data="LatestProductRecords">
         <template slot="header">
           <div class="mb-2 flex items-center">
@@ -13,9 +13,9 @@
                   <div
                     class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
-                      {{ page * length - (length - (subFilteredCount && 1)) }}
+                      {{ page * length - (length - (FilteredCount && 1)) }}
                       -
-                      {{ subFilteredCount - page * length > 0 ? page * length : subFilteredCount }}
+                      {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
                       of {{ subtotal }}
                     </span>
                     <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
@@ -62,7 +62,7 @@
               <img :src="tr.product_image" height="140" width="160" alt="" srcset="">
             </vs-td>
             <vs-td class="text-left">{{ tr.product_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.category_id || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.category && tr.category.name || '-' }} </vs-td>
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
@@ -79,7 +79,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
         class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
@@ -126,9 +126,9 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('latestProduct', ['LatestProductRecords', 'subtotal', 'subFilteredCount', 'listLoading']),
+    ...mapState('latestProduct', ['LatestProductRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     totalPages() {
-      return Math.ceil(this.subFilteredCount / this.length)
+      return Math.ceil(this.FilteredCount / this.length)
     }
   },
 

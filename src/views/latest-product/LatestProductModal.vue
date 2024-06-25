@@ -19,7 +19,7 @@
               <label class="vs-input--label">Category</label>
               <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
                 :value="form.categoryId" @input="(item) => (form.categoryId = item && item.value)" autocomplete
-                :ssr="true" :multiple="true" v-validate="'required'" action="common/getCategories" />
+                :ssr="true" v-validate="'required'" action="common/getCategories" />
               <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
             </div>
             <!-- Product Tag -->
@@ -27,8 +27,9 @@
               <label class="vs-input--label">Inventory</label>
               <select-2 class="w-full category-input" name="inventory" placeholder="Select Inventory"
                 :value="form.inventory_ids" @input="(item) => (form.inventory_ids = item && item.value)" autocomplete
-                :ssr="true" :multiple="true" action="common/getInventories" data-vv-as="Inventory" />
-              <span class="text-primary text-sm" v-show="errors.has('inventory')">{{
+                :ssr="true" :multiple="true" v-validate="'required'" action="common/getInventories"
+                data-vv-as="Inventory" />
+              <span class="text-danger text-sm" v-show="errors.has('inventory')">{{
                 errors.first('inventory')
               }}</span>
             </div>
@@ -102,10 +103,9 @@ export default {
   /** Mounted */
   mounted() {
     if (this.data) {
-      this.form.categoryId = this.data.category_id ? this.data.category_id : null;
+      this.form.categoryId = this.data.category ? this.data.category._id : null;
       this.form.product_name = this.data.product_name ? this.data.product_name : null;
-      this.form.inventory_ids = this.data.inventory ? this.data.inventory.map((v) => v._id) : []
-      console.log(this.data.inventory ? this.data.inventory.map((v) => v._id) : [])
+      this.form.inventory_ids = this.data.inventory_ids ? this.data.inventory_ids : []
       this.preview_image = this.data.product_image ? this.data.product_image : null;
     }
   },
@@ -141,8 +141,10 @@ export default {
       }
       try {
         const data = new FormData();
-        data.append("product_image", this.form.product_image);
-        data.append("categoryId", this.form.categoryId);
+        if (this.form.product_image) {
+          data.append("product_image", this.form.product_image);
+        }
+        data.append("category_id", this.form.categoryId);
         data.append("product_name", this.form.product_name);
         this.form.inventory_ids.map((value) => {
           data.append("inventory_ids[]", value);
@@ -151,8 +153,8 @@ export default {
         if (!this.data) {
           result = await this.createLatestProduct(data)
         } else {
-          data.append("latestProductId", this.data._id);
           result = await this.updateLatestProduct({
+            latestProductId: this.data._id,
             data: data
           });
         }

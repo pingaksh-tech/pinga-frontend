@@ -1,9 +1,9 @@
 <template>
-    <div class="p-6">
-        <div class="vx-card p-6 w-1/3">
+    <div class="p-6 vx-row">
+        <div class="vx-col p-6 w-1/2">
             <Policy />
         </div>
-        <div class="vx-card p-6 w-1/3">
+        <div class="vx-col p-6 w-1/2">
             <CustomerSupport />
         </div>
 

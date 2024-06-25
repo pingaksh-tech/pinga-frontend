@@ -19,21 +19,21 @@ export default [
       breadcrumb: [
         { title: 'Dashboard', url: '/dashboard' },
         { title: 'Inventorys', url: '/inventory/list' },
-        { title: 'Add Category', active: true }
+        { title: 'Add Inventory', active: true }
       ]
     }
   },
   {
     path: '/inventory/:id/edit',
     name: 'edit-inventory',
-    component: () => import('@/views/inventory/EditInventory.vue'),
+    component: () => import('@/views/inventory/AddInventory.vue'),
     meta: {
       allowAnonymous: false,
       pageTitle: 'Edit Inventory',
       breadcrumb: [
         { title: 'Dashboard', url: '/dashboard' },
         { title: 'Inventorys', url: '/inventory/list' },
-        { title: 'Edit Category', active: true }
+        { title: 'Edit Inventory', active: true }
       ]
     }
   }
