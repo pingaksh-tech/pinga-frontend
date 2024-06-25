@@ -5,8 +5,8 @@ export default [
     component: () => import('@/views/inventory/Inventory.vue'),
     meta: {
       allowAnonymous: false,
-      pageTitle: 'Categories List',
-      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Category' }, { title: 'Category List', active: true }]
+      pageTitle: 'Inventories List',
+      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Inventory' }, { title: 'Inventory List', active: true }]
     }
   },
   {

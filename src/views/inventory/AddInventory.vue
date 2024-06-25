@@ -35,7 +35,7 @@
                                 v-validate="'required'" />
                             <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{
                                 errors.first('Sub Category')
-                                }}</span>
+                            }}</span>
                         </div>
 
                         <!-- Size -->
@@ -77,7 +77,7 @@
                                 autocomplete :ssr="true" :multiple="true" action="common/getProductTags" />
                             <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{
                                 errors.first('Product Tag')
-                                }}</span>
+                            }}</span>
                         </div>
 
 
@@ -90,25 +90,26 @@
                                 errors.first('Manufacturing Price') }}</span>
                         </div>
 
-                        <!-- Inventory Gender -->
-                        <div class="vx-col w-1/2 mb-2">
-                            <label class="vs-input--label">Inventory Gender *</label>
-                            <div class="w-full mt-1">
-                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="male"
-                                    class="mr-4" vs-name="layout-type-male">MALE</vs-radio>
-                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="female"
-                                    class="mr-4" vs-name="layout-type-female">FEMALE</vs-radio>
-                                <vs-radio v-validate="'required'" v-model="form.gender" name="Gender" vs-value="unisex"
-                                    class="mr-4" vs-name="layout-type-unisex">UNISEX</vs-radio>
-                            </div>
-                            <span class="text-danger text-sm" v-show="errors.has('Gender')">{{
-                                errors.first('Gender') }}</span>
-                        </div>
-
                         <div class="vx-col w-1/2 mb-2">
                             <div class="vx-row px-5">
+                                <!-- Inventory Gender -->
+                                <div class="mb-2 w-1/2">
+                                    <label class="vs-input--label">Inventory Gender *</label>
+                                    <div class="w-full mt-1">
+                                        <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
+                                            vs-value="male" class="mr-4" vs-name="layout-type-male">MALE</vs-radio>
+                                        <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
+                                            vs-value="female" class="mr-4"
+                                            vs-name="layout-type-female">FEMALE</vs-radio>
+                                        <vs-radio v-validate="'required'" v-model="form.gender" name="Gender"
+                                            vs-value="unisex" class="mr-4"
+                                            vs-name="layout-type-unisex">UNISEX</vs-radio>
+                                    </div>
+                                    <span class="text-danger text-sm" v-show="errors.has('Gender')">{{
+                                        errors.first('Gender') }}</span>
+                                </div>
                                 <!-- Inventory In Stock -->
-                                <div class="mb-2 w-48">
+                                <div class="mb-2 w-1/4">
                                     <label class="vs-input--label pl-0">Inventory In Stock ?</label>
                                     <div class="mt-1">
                                         <vs-switch color="primary" v-model="form.in_stock">
@@ -119,7 +120,7 @@
                                 </div>
 
                                 <!-- Inventory In Stock -->
-                                <div class="mb-2 w-48 ">
+                                <div class="mb-2 w-1/4">
                                     <label class="vs-input--label pl-0">Wear It Item ?</label>
                                     <div class="mt-1">
                                         <vs-switch color="primary" v-model="form.wear_it_item">
@@ -136,7 +137,7 @@
                                 v-model="form.delivery" label="Delivery *" name="Delivery" id="Delivery" />
                             <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{
                                 errors.first('Delivery')
-                                }}</span>
+                            }}</span>
                         </div>
 
                         <!-- Production Name -->
@@ -147,6 +148,43 @@
                             <span class="text-danger text-sm" v-show="errors.has('Production Name')">
                                 {{ errors.first('Production Name') }}</span>
                         </div>
+
+
+                        <!-- Family Products -->
+                        <div class="vx-col w-1/2 mb-2">
+                            <label class="vs-input--label">Family Product</label>
+                            <select-2 class="w-full category-input" name="Family Product"
+                                placeholder="Select Family Product" :value="form.family_products"
+                                @input="(item) => (form.family_products = item && item.value)" autocomplete :ssr="true"
+                                :multiple="true" action="common/getFamilyProducts" />
+                            <span class="text-primary text-sm" v-show="errors.has('Family Product')">{{
+                                errors.first('Family Product')
+                            }}</span>
+                        </div>
+
+
+                        <div class="vx-col w-1/2 cursor-pointer">
+                            <label class="vs-input--label block">Inventory Images</label>
+                            <input type="file" class="border p-2 rounded w-full" name="inventory_images" ref="files"
+                                accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload"
+                                style="border: 1px solid rgba(0, 0, 0, 0.2);" multiple />
+                            <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{
+                                errors.first('inventory_images') }}</span>
+                            <div class="mt-5 grid grid-cols-2 gap-4">
+                                <div v-for="(image, index) in preview_images" :key="index" class="relative group">
+                                    <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
+                                        <img :src="image.src" alt="Image Preview" class="object-cover h-full w-full" />
+                                        <button @click="removeFile(index)" class="absolute">
+                                            <vx-tooltip :text="`Remove`">
+                                                <feather-icon icon="XIcon" @click="removeFile(index)"
+                                                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                                            </vx-tooltip>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <!-- Diamond Section -->
                         <div class="w-full px-4 mt-4">
@@ -163,9 +201,9 @@
                                         <label class="vs-input--label">Diamond Clarity *</label>
                                         <select-2 class="w-full category-input" :name="'diamond_clarity_' + index"
                                             v-validate="'required'" placeholder="Select Diamond Clarity"
-                                            v-model="diamond.diamond_clarity" :options="DIAMOND_CLARITY" autocomplete
-                                            :ssr="true" :multiple="false" />
-
+                                            :options="DIAMOND_CLARITY" autocomplete :ssr="true" :multiple="false"
+                                            :value="form.diamonds[index].diamond_clarity" data-vv-as="Diamond Clarity"
+                                            @input="(item) => (form.diamonds[index].diamond_clarity = item && item.value)" />
                                         <span class="text-danger text-xs"
                                             v-show="errors.has(`diamond_clarity_${index}`)">{{
                                                 errors.first(`diamond_clarity_${index}`) }}</span>
@@ -178,8 +216,9 @@
                                         <label class="vs-input--label">Diamond Shape *</label>
                                         <select-2 class="w-full category-input" :name="'diamond_shape_' + index"
                                             v-validate="'required'" placeholder="Select Diamond Shape"
-                                            v-model="diamond.diamond_shape" :options="DIAMOND_SHAPES" autocomplete
-                                            :ssr="true" :multiple="false" />
+                                            :options="DIAMOND_SHAPES" autocomplete :ssr="true" :multiple="false"
+                                            :value="form.diamonds[index].diamond_shape" data-vv-as="Diamond Shape"
+                                            @input="(item) => (form.diamonds[index].diamond_shape = item && item.value)" />
                                         <span class="text-danger text-xs"
                                             v-show="errors.has(`diamond_shape_${index}`)">{{
                                                 errors.first(`diamond_shape_${index}`) }}</span>
@@ -199,8 +238,9 @@
                                         <label class="vs-input--label">Diamond Color *</label>
                                         <select-2 class="w-full category-input" :name="'diamond_color_' + index"
                                             v-validate="'required'" placeholder="Select Diamond Color"
-                                            v-model="diamond.diamond_color" :options="DIAMOND_COLORS" autocomplete
-                                            :ssr="true" :multiple="false" />
+                                            :options="DIAMOND_COLORS" autocomplete :ssr="true" :multiple="false"
+                                            :value="form.diamonds[index].diamond_color" data-vv-as="Diamond Color"
+                                            @input="(item) => (form.diamonds[index].diamond_color = item && item.value)" />
 
                                         <span class="text-danger text-xs"
                                             v-show="errors.has(`diamond_color_${index}`)">{{
@@ -245,7 +285,9 @@
                         <div class="vx-col w-full">
                             <div class="items-center">
                                 <vs-button class="mr-2 vs-con-loading__container" id="create-inventory"
-                                    @click="save_changes" :disabled="!validateForm">Add</vs-button>
+                                    @click="save_changes" :disabled="!validateForm"> {{ $route.params.id ? "Update"
+                                        :
+                                        "Add" }}</vs-button>
                                 <vs-button color="danger" class="text-left"
                                     @click="navigateToInventoryList">Cancel</vs-button>
                             </div>
@@ -269,12 +311,6 @@ export default {
         Select2
     },
 
-    /** Props */
-    props: {
-        showModal: Boolean,
-        module_name: String
-    },
-
     /** data */
     data() {
         return {
@@ -285,6 +321,7 @@ export default {
             DIAMOND_CLARITY: [],
             DIAMOND_COLORS: [],
             DIAMOND_SHAPES: [],
+            SizeList: [],
             form: {
                 name: null,
                 category_id: null,
@@ -298,10 +335,12 @@ export default {
                 delivery: null,
                 production_name: null,
                 product_tags: [],
+                family_products: [],
                 manufacturing_price: null,
-                diamonds: []
+                diamonds: [],
+                inventory_images: []
             },
-            zIndex: 0
+            preview_images: []
         }
     },
     /** Mounted */
@@ -315,36 +354,114 @@ export default {
     /** computed */
     computed: {
         ...mapState('inventory', ['createLoading']),
-        ...mapState("common", ["SizeList", "diamondConstantList"]),
+        ...mapState("common", ["diamondConstantList"]),
 
         validateForm() {
             return !this.errors.any()
         }
     },
 
+    /** created */
+    async created() {
+        if (this.$route.params.id) {
+            await this.$store.dispatch('inventory/getInvantoryById', this.$route.params.id)
+                .then(async (res) => {
+
+                    const data = res.data.data
+                    this.categoryID = data.category_id
+                    this.subCategoryID = data.sub_category_id
+                    this.sizeID = data.size
+                    this.initial_category_id = data.category_id
+                    this.initial_sub_category_id = data.sub_category_id
+
+                    /* form variable */
+                    this.form.name = data.name
+                    this.form.category_id = data.category_id
+                    this.form.metal_id = data.metal_id
+                    this.form.metal_weight = data.metal_weight
+                    this.form.gender = data.gender
+                    this.form.in_stock = data.in_stock
+                    this.form.wear_it_item = data.wear_it_item
+                    this.form.delivery = data.delivery
+                    this.form.production_name = data.production_name
+                    this.form.diamonds = data.diamonds.map((v) => {
+                        delete v._id
+                        delete v.total_price
+                        return v
+                    })
+                    this.form.product_tags = data.product_tags
+                    this.form.family_products = data.family_products
+                    this.preview_images = data.inventory_images
+                    this.form.manufacturing_price = data.manufacturing_price
+                    const category = await this.getCategories({ page: 1, limit: 25, type: 'dropdown', categoryId: data.category_id });
+                    this.categoryList = category.data
+                    /** change sub category & size */
+                    if (this.form.category_id) {
+                        const sub_category = await this.getSubCategory({ categoryId: this.form.category_id, page: 1, limit: 25, type: 'dropdown', subCategoryId: data.sub_category_id });
+                        this.SubCategoryList = sub_category.data
+                        this.subCategoryID = data.sub_category_id
+                    }
+
+                    if (data.sub_category_id) {
+                        const size = await this.getSize(data.sub_category_id)
+                        this.SizeList = size.data
+                        this.sizeID = data.size
+                    }
+
+                    if (data.size) {
+                        this.form.size_id = data.size
+                    }
+                    this.form.sub_category_id = data.sub_category_id
+
+                })
+        }
+    },
+
     /** methods */
     methods: {
         ...mapActions('inventory', {
-            createInventory: 'createInventory'
+            createInventory: 'createInventory',
+            updateInventoryRecord: 'updateInventoryRecord'
         }),
         ...mapActions('common', {
             getSubCategory: 'getSubCategoryByCategoryId',
             getSize: 'getSizeBySubCategoryId',
-            diamondConstant: 'diamondConstant'
+            diamondConstant: 'diamondConstant',
+            getCategories: 'getCategories',
         }),
         async save_changes() {
             if (!(await this.$validator.validate())) {
                 return false
             }
             try {
-                const { message } = await this.createInventory(this.form)
+                let response;
+                const data = new FormData()
+                for (const key in this.form) {
+                    if (typeof this.form[key] == 'object') {
+                        if (this.form[key]) {
+                            this.form[key].forEach(element => {
+                                data.append(key, element)
+                            });
+                        }
+                    } else {
+                        data.append(key, this.form[key])
+                    }
+                }
+                if (this.$route.params.id) {
+                    response = await this.updateInventoryRecord({
+                        inventoryId: this.$route.params.id,
+                        data: data
+                    })
+                } else {
+                    response = await this.createInventory(data)
+                }
                 this.$router.push({
                     name: "inventory-list",
                 });
                 this.$emit('update-data', true)
                 this.$vs.notify({
                     title: 'Success',
-                    text: message,
+                    text: response.message,
                     iconPack: 'feather',
                     icon: 'icon-alert-circle',
                     position: 'top-center',
@@ -371,7 +488,9 @@ export default {
             this.SubCategoryList = sub_category.data
         },
         async fetchSizes() {
-            await this.getSize(this.subCategoryID.value)
+            const size = await this.getSize(this.subCategoryID.value)
+            console.log("🚀 ~ fetchSizes ~ size:", size)
+            this.SizeList = size.data
         },
 
         addDiamond() {
@@ -393,6 +512,42 @@ export default {
         navigateToInventoryList() {
             this.$router.push({ name: 'inventory-list' });
         },
+
+        /** file upload  */
+        handleFileUpload(e) {
+            const files = Array.from(e.target.files); // Convert FileList to array
+
+            // Validate and handle each file
+            files.forEach(file => {
+                if (!file) {
+                    this.$vs.notify({
+                        title: 'Error',
+                        text: 'No file selected',
+                        iconPack: 'feather',
+                        icon: 'icon-alert-circle',
+                        position: 'top-center',
+                        time: 5000,
+                        color: 'primary'
+                    });
+                    return;
+                }
+
+                // Create a preview URL and add it to the array
+                const previewURL = URL.createObjectURL(file);
+                this.preview_images.push({ src: previewURL, file });
+                this.form.inventory_images.push(file);
+            });
+        },
+
+        /** remove file */
+        removeFile(index) {
+            // Revoke the object URL
+            URL.revokeObjectURL(this.preview_images[index].src);
+
+            // Remove the file from the arrays
+            this.preview_images.splice(index, 1);
+            this.form.inventory_images.splice(index, 1);
+        }
     },
 
     /** watch */
