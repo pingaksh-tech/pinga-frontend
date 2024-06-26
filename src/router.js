@@ -27,7 +27,8 @@ import LatestProductRoute from '@/views/latest-product/routes'
 import InventoryRoute from '@/views/inventory/routes'
 /** Setting Module */
 import SettingRoute from '@/views/setting/routes'
-
+/** Setting Module */
+import DiamondPricingRoute from '@/views/diamond-pricing/routes'
 Vue.use(Router)
 
 const router = new Router({
@@ -64,10 +65,12 @@ const router = new Router({
         ...InventoryRoute,
         // Banner route
         ...BannerRoute,
-        // LatestProductRoute route
+        // LatestProduct route
         ...LatestProductRoute,
         // Setting route
-        ...SettingRoute
+        ...SettingRoute,
+        // DiamondPricing route
+        ...DiamondPricingRoute
       ]
     },
 

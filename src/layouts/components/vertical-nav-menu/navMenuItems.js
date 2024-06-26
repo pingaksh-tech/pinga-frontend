@@ -146,6 +146,23 @@ export default [
     ]
   },
 
+  /** Diamond Pricing List */
+  {
+    url: null,
+    name: 'Diamond Pricing',
+    slug: 'diamond-pricing',
+    icon: 'CpuIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/diamond-pricing/list',
+        name: 'Diamond Pricing List',
+        slug: 'LatestProductList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
   /** Latest Product List */
   {
     url: null,
@@ -169,7 +186,7 @@ export default [
     url: null,
     name: 'Setting',
     slug: 'setting',
-    icon: 'BoxIcon',
+    icon: 'SettingsIcon',
     permissions: [ALLPERMISSIONS],
     submenu: [
       {

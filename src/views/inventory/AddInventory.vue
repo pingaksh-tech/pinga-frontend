@@ -63,7 +63,7 @@
                         <!-- Metal Weight -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-database" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.metal_weight"
+                                v-validate="'required|decimal|min_value:1'" min="1" v-model="form.metal_weight"
                                 label="Metal Weight *" name="Metal Weight" id="Metal Weight" />
                             <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{
                                 errors.first('Metal Weight') }}</span>
@@ -84,7 +84,7 @@
                         <!-- Manufacturing Price -->
                         <div class="vx-col w-1/2 mb-2">
                             <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
-                                v-validate="'required|numeric|min_value:1'" min="1" v-model="form.manufacturing_price"
+                                v-validate="'required|decimal|min_value:1'" min="1" v-model="form.manufacturing_price"
                                 label="Manufacturing Price *" name="Manufacturing Price" id="Manufacturing Price" />
                             <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{
                                 errors.first('Manufacturing Price') }}</span>
@@ -163,23 +163,37 @@
                         </div>
 
 
-                        <div class="vx-col w-1/2 cursor-pointer">
+                        <div class="vx-col w-full">
                             <label class="vs-input--label block">Inventory Images</label>
                             <input type="file" class="border p-2 rounded w-full" name="inventory_images" ref="files"
                                 accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload"
                                 style="border: 1px solid rgba(0, 0, 0, 0.2);" multiple />
                             <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{
                                 errors.first('inventory_images') }}</span>
-                            <div class="mt-5 grid grid-cols-2 gap-4">
+                            <div class="mt-5 grid grid-cols-4 gap-4">
+                                <div v-for="(image, index) in form.exist_inventory_images" :key="index"
+                                    class="relative group">
+                                    <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
+                                        <img :src="image" alt="Image Preview" class="object-cover h-full w-full" />
+                                        <div class="absolute top-0 right-0">
+                                            <vx-tooltip :text="`Remove`" class="cursor-pointer">
+                                                <div class="text-xl w-8 h-8 flex justify-center items-center bg-grey text-white rounded-full"
+                                                    @click="removeFile(image, 'edit')">
+                                                    &#x2715;</div>
+                                            </vx-tooltip>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div v-for="(image, index) in preview_images" :key="index" class="relative group">
                                     <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
                                         <img :src="image.src" alt="Image Preview" class="object-cover h-full w-full" />
-                                        <button @click="removeFile(index)" class="absolute">
-                                            <vx-tooltip :text="`Remove`">
-                                                <feather-icon icon="XIcon" @click="removeFile(index)"
-                                                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                                        <div class="absolute top-0 right-0">
+                                            <vx-tooltip :text="`Remove`" class="cursor-pointer">
+                                                <div class="text-xl w-8 h-8 flex justify-center items-center bg-grey text-white rounded-full"
+                                                    @click="removeFile(index, 'preview')">
+                                                    &#x2715;</div>
                                             </vx-tooltip>
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -197,7 +211,7 @@
                                         <h4>{{ index + 1 }}</h4>
                                     </div>
                                     <!-- Diamond Clarity -->
-                                    <div class="vx-col w-1/8 mb-2">
+                                    <div class="vx-col w-1/5 mb-2">
                                         <label class="vs-input--label">Diamond Clarity *</label>
                                         <select-2 class="w-full category-input" :name="'diamond_clarity_' + index"
                                             v-validate="'required'" placeholder="Select Diamond Clarity"
@@ -211,7 +225,7 @@
 
 
                                     <!-- Diamond Shape -->
-                                    <div class="vx-col w-1/8 mb-2">
+                                    <div class="vx-col w-1/5 mb-2">
 
                                         <label class="vs-input--label">Diamond Shape *</label>
                                         <select-2 class="w-full category-input" :name="'diamond_shape_' + index"
@@ -223,48 +237,29 @@
                                             v-show="errors.has(`diamond_shape_${index}`)">{{
                                                 errors.first(`diamond_shape_${index}`) }}</span>
                                     </div>
-                                    <!-- Diamond Weight -->
-                                    <div class="vx-col w-1/8 mb-2">
-                                        <vs-input type="number" icon="icon icon-database" icon-pack="feather"
-                                            v-model="diamond.diamond_weight" label="Diamond Weight *"
-                                            :name="'diamond_weight_' + index" min="1"
-                                            v-validate="'required|numeric|min_value:1'" data-vv-as="Diamond Weight" />
-                                        <span class="text-danger text-xs"
-                                            v-show="errors.has(`diamond_weight_${index}`)">{{
-                                                errors.first(`diamond_weight_${index}`) }}</span>
-                                    </div>
-                                    <!-- Diamond Color -->
-                                    <div class="vx-col w-1/8 mb-2">
-                                        <label class="vs-input--label">Diamond Color *</label>
-                                        <select-2 class="w-full category-input" :name="'diamond_color_' + index"
-                                            v-validate="'required'" placeholder="Select Diamond Color"
-                                            :options="DIAMOND_COLORS" autocomplete :ssr="true" :multiple="false"
-                                            :value="form.diamonds[index].diamond_color" data-vv-as="Diamond Color"
-                                            @input="(item) => (form.diamonds[index].diamond_color = item && item.value)" />
+
+                                    <!-- Diamond Size -->
+                                    <div class="vx-col w-1/5 mb-2">
+                                        <label class="vs-input--label">Diamond Size *</label>
+                                        <select-2 class="w-full category-input" :name="'diamond_size_' + index"
+                                            v-validate="'required'" placeholder="Select Diamond Size"
+                                            :options="DIAMOND_SIZES" autocomplete :ssr="true" :multiple="false"
+                                            :value="form.diamonds[index].diamond_size" data-vv-as="Diamond Size"
+                                            @input="(item) => (form.diamonds[index].diamond_size = item && item.value)" />
 
                                         <span class="text-danger text-xs"
-                                            v-show="errors.has(`diamond_color_${index}`)">{{
-                                                errors.first(`diamond_color_${index}`) }}</span>
+                                            v-show="errors.has(`diamond_size_${index}`)">{{
+                                                errors.first(`diamond_size_${index}`) }}</span>
                                     </div>
                                     <!-- Diamond Count -->
-                                    <div class="vx-col w-1/8 mb-2">
+                                    <div class="vx-col w-1/5 mb-2">
                                         <vs-input icon="icon icon-hash" icon-pack="feather" type="number"
-                                            v-validate="'required|numeric|min_value:1'" data-vv-as="Diamond Count"
+                                            v-validate="'required|decimal|min_value:1'" data-vv-as="Diamond Count"
                                             v-model="diamond.diamond_count" label="Diamond Count *" min="1"
-                                            :name="'diamond_count_' + index" />
+                                            :name="'diamond_count_' + index" class="w-full" />
                                         <span class="text-danger text-xs"
                                             v-show="errors.has(`diamond_count_${index}`)">{{
                                                 errors.first(`diamond_count_${index}`) }}</span>
-                                    </div>
-                                    <!-- Single Diamond Price -->
-                                    <div class="vx-col w-1/8 mb-2">
-                                        <vs-input icon="icon icon-dollar-sign" icon-pack="feather" type="number"
-                                            v-validate="'required|numeric|min_value:1'" min="1"
-                                            data-vv-as="Single Diamond Price" v-model="diamond.single_diamond_price"
-                                            label="Single Diamond Price *" :name="'single_diamond_price_' + index" />
-                                        <span class="text-danger text-xs"
-                                            v-show="errors.has(`single_diamond_price_${index}`)">{{
-                                                errors.first(`single_diamond_price_${index}`) }}</span>
                                     </div>
 
                                     <!-- Remove Diamond -->
@@ -319,7 +314,7 @@ export default {
             sizeID: null,
             SubCategoryList: [],
             DIAMOND_CLARITY: [],
-            DIAMOND_COLORS: [],
+            DIAMOND_SIZES: [],
             DIAMOND_SHAPES: [],
             SizeList: [],
             form: {
@@ -338,17 +333,18 @@ export default {
                 family_products: [],
                 manufacturing_price: null,
                 diamonds: [],
-                inventory_images: []
+                inventory_images: [],
+                exist_inventory_images: []
             },
-            preview_images: []
+            preview_images: [],
         }
     },
     /** Mounted */
     async mounted() {
         await this.diamondConstant();
         this.DIAMOND_CLARITY = Object.entries(this.diamondConstantList.DIAMOND_CLARITY).map(([value, label]) => ({ value: label, label }));
-        this.DIAMOND_COLORS = Object.entries(this.diamondConstantList.DIAMOND_COLORS).map(([value, label]) => ({ value: label, label }));
         this.DIAMOND_SHAPES = Object.entries(this.diamondConstantList.DIAMOND_SHAPES).map(([value, label]) => ({ value: label, label }));
+        this.DIAMOND_SIZES = this.diamondConstantList.DIAMOND_SIZES.map((v) => ({ value: v._id, label: v.diamond_slieve_size }))
     },
 
     /** computed */
@@ -384,14 +380,16 @@ export default {
                     this.form.wear_it_item = data.wear_it_item
                     this.form.delivery = data.delivery
                     this.form.production_name = data.production_name
-                    this.form.diamonds = data.diamonds.map((v) => {
-                        delete v._id
-                        delete v.total_price
-                        return v
-                    })
+                    if (data.diamonds) {
+                        this.form.diamonds = data.diamonds.map((v) => {
+                            delete v._id
+                            delete v.total_price
+                            return v
+                        })
+                    }
                     this.form.product_tags = data.product_tags
                     this.form.family_products = data.family_products
-                    this.preview_images = data.inventory_images
+                    this.form.exist_inventory_images = data.inventory_images;
                     this.form.manufacturing_price = data.manufacturing_price
                     const category = await this.getCategories({ page: 1, limit: 25, type: 'dropdown', categoryId: data.category_id });
                     this.categoryList = category.data
@@ -437,11 +435,19 @@ export default {
                 let response;
                 const data = new FormData()
                 for (const key in this.form) {
-                    if (typeof this.form[key] == 'object') {
-                        if (this.form[key]) {
-                            this.form[key].forEach(element => {
-                                data.append(key, element)
-                            });
+                    if (typeof this.form[key] == "object") {
+                        if (key == 'diamonds') {
+                            this.form[key].map((item, index) => {
+                                for (const field in item) {
+                                    data.append(`${key}[${index}][${field}]`, item[field]);
+                                }
+                            })
+                        } else {
+                            if (this.form[key]) {
+                                this.form[key].map((item) => {
+                                    data.append(key == 'inventory_images' ? key : key + "[]", item)
+                                });
+                            }
                         }
                     } else {
                         data.append(key, this.form[key])
@@ -497,10 +503,8 @@ export default {
             this.form.diamonds.push({
                 diamond_clarity: '',
                 diamond_shape: '',
-                diamond_weight: 0,
-                diamond_color: '',
+                diamond_size: '',
                 diamond_count: 0,
-                single_diamond_price: 0,
             });
         },
 
@@ -540,13 +544,21 @@ export default {
         },
 
         /** remove file */
-        removeFile(index) {
-            // Revoke the object URL
-            URL.revokeObjectURL(this.preview_images[index].src);
+        removeFile(index, type) {
+            if (type == 'preview') {
+                // Revoke the object URL
+                URL.revokeObjectURL(this.preview_images[index].src);
 
-            // Remove the file from the arrays
-            this.preview_images.splice(index, 1);
-            this.form.inventory_images.splice(index, 1);
+                // Remove the file from the arrays
+                this.preview_images.splice(index, 1);
+                this.form.inventory_images.splice(index, 1);
+            } else {
+                const exist_index = this.form.exist_inventory_images.findIndex((value) => index == value)
+                if (exist_index != -1) {
+                    this.form.exist_inventory_images.splice(exist_index, 1);
+                }
+            }
+
         }
     },
 

@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- Update Category popup -->
-    <vs-popup id="update_category_modal" class="vs-con-loading__container" :title="`Update ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
+    <vs-popup id="update_category_modal" class="vs-con-loading__container" :title="`Update ${module_name}`"
+      button-accept="false" button-cancel="false" :active.sync="isActive">
       <!-- Form -->
       <form method="POST" @submit.prevent="save_changes">
         <!-- Form Content -->
@@ -9,40 +10,35 @@
           <div class="vx-col w-full px-8">
             <!-- Metal name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Metal Name" name="Metal Name" id="Metal Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
+                v-model="form.name" label="Metal Name" name="Metal Name" id="Metal Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name')
+                }}</span>
+            </div>
+            <!-- Sort Name -->
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
+                v-model="form.sort_name" label="Sort Name" name="Sort Name" id="Sort Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Sort Name')">{{ errors.first('Sort Name')
+                }}</span>
             </div>
             <!-- Metal Carat -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Metal Carat</label>
-              <select-2
-                class="w-full"
-                name="Metal Carat"
-                placeholder="Select Metal Carat"
-                :value="form.metal_carat"
-                @input="(item) => (form.metal_carat = item && item.value)"
-                autocomplete
-                :ssr="true"
-                v-validate="'required'"
-                :options="MetalCaratOptions"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Carat')">{{ errors.first('Metal Carat') }}</span>
+              <select-2 class="w-full" name="Metal Carat" placeholder="Select Metal Carat" :value="form.metal_carat"
+                @input="(item) => (form.metal_carat = item && item.value)" autocomplete :ssr="true"
+                v-validate="'required'" :options="MetalCaratOptions" />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Carat')">{{ errors.first('Metal Carat')
+                }}</span>
             </div>
             <!-- Metal Color -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Metal Color</label>
-              <select-2
-                class="w-full"
-                name="Metal Color"
-                placeholder="Select Metal Color"
-                :value="form.metal_color"
-                @input="(item) => (form.metal_color = item && item.value)"
-                autocomplete
-                :ssr="true"
-                v-validate="'required'"
-                :options="MetalColorOptions"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Color')">{{ errors.first('Metal Color') }}</span>
+              <select-2 class="w-full" name="Metal Color" placeholder="Select Metal Color" :value="form.metal_color"
+                @input="(item) => (form.metal_color = item && item.value)" autocomplete :ssr="true"
+                v-validate="'required'" :options="MetalColorOptions" />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Color')">{{ errors.first('Metal Color')
+                }}</span>
             </div>
           </div>
         </div>
@@ -51,7 +47,8 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" @click="save_changes()" id="add-user-button" :disabled="!validateForm">Update</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" @click="save_changes()" id="add-user-button"
+                :disabled="!validateForm">Update</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -89,7 +86,8 @@ export default {
       form: {
         name: this.data.name,
         metal_carat: this.data.metal_carat,
-        metal_color: this.data.metal_color
+        metal_color: this.data.metal_color,
+        sort_name: this.data.sort_name,
       },
       zIndex: 0
     }
@@ -102,7 +100,7 @@ export default {
 
   /** Computed */
   computed: {
-    ...mapState('metal', ['updateLoading', 'MetalCaratOptions','MetalColorOptions']),
+    ...mapState('metal', ['updateLoading', 'MetalCaratOptions', 'MetalColorOptions']),
     /** Form Validation Manage */
     validateForm() {
       return !this.errors.any()
@@ -143,8 +141,8 @@ export default {
       try {
         const { message } = await this.updateMetalRecord({
           metalId: this.data._id,
-          data : this.form
-        } );
+          data: this.form
+        });
         this.$emit('update-data', true);
         this.$vs.notify({
           title: "Success",

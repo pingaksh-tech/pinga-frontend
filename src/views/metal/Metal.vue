@@ -48,6 +48,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="category.name">Metal Name</vs-th>
+          <vs-th sort-key="category.sort_name">Sort Name</vs-th>
           <vs-th sort-key="category.name">Metal Carat</vs-th>
           <vs-th sort-key="category.name">Metal Color</vs-th>
           <vs-th>Action</vs-th>
@@ -59,6 +60,7 @@
               {{ page * length - (length - i - 1) }}
             </vs-td>
             <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.sort_name || '-' }} </vs-td>
             <vs-td class="text-left">{{ tr.metal_carat || '-' }} </vs-td>
             <!-- <vs-td class="text-left">{{ tr.metal_color || '-' }}÷ </vs-td> -->
             <vs-td class="text-left"><vs-chip :color="getChipColor(tr.metal_color)"
