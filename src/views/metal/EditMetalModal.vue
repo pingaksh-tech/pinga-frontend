@@ -15,12 +15,20 @@
               <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name')
                 }}</span>
             </div>
-            <!-- Sort Name -->
+            <!-- Short Name -->
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
-                v-model="form.sort_name" label="Sort Name" name="Sort Name" id="Sort Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Sort Name')">{{ errors.first('Sort Name')
+                v-model="form.sort_name" label="Short Name" name="Short Name" id="Short Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Short Name')">{{ errors.first('Short Name')
                 }}</span>
+            </div>
+            <!-- Price Per Gram -->
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-dollar-sign" icon-pack="feather" class="w-full" type="number"
+                v-validate="'required|decimal|min_value:1'" min="1" v-model="form.price_per_gram" label="Price Per Gram"
+                name="Price Per Gram" id="Price Per Gram" />
+              <span class="text-danger text-sm" v-show="errors.has('Price Per Gram')">{{
+                errors.first('Price Per Gram') }}</span>
             </div>
             <!-- Metal Carat -->
             <div class="vx-row mb-2">
@@ -88,6 +96,7 @@ export default {
         metal_carat: this.data.metal_carat,
         metal_color: this.data.metal_color,
         sort_name: this.data.sort_name,
+        price_per_gram: this.data.price_per_gram,
       },
       zIndex: 0
     }
