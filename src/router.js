@@ -23,6 +23,8 @@ import RetailerRoute from '@/views/retailers/routes'
 import BannerRoute from '@/views/banner/routes'
 /** LatestProductRoute Module */
 import LatestProductRoute from '@/views/latest-product/routes'
+/** Collection Module */
+import CollectionRoute from '@/views/collection/routes'
 /** Inventory Module */
 import InventoryRoute from '@/views/inventory/routes'
 /** Setting Module */
@@ -67,6 +69,8 @@ const router = new Router({
         ...BannerRoute,
         // LatestProduct route
         ...LatestProductRoute,
+        // CollectionRoute route
+        ...CollectionRoute,
         // Setting route
         ...SettingRoute,
         // DiamondPricing route

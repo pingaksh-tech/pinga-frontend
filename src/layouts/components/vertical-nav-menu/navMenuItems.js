@@ -157,7 +157,7 @@ export default [
       {
         url: '/diamond-pricing/list',
         name: 'Diamond Pricing List',
-        slug: 'LatestProductList',
+        slug: 'DiamondPricingList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }
@@ -175,6 +175,23 @@ export default [
         url: '/latest-product/list',
         name: 'Latest Product List',
         slug: 'LatestProductList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+  /** Collection List */
+  {
+    url: null,
+    name: 'Collection',
+    slug: 'collection',
+    icon: 'BoxIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/collection/list',
+        name: 'Collection List',
+        slug: 'CollectionList',
         icon: 'ListIcon',
         permissions: [ALLPERMISSIONS]
       }
