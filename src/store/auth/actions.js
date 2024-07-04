@@ -14,13 +14,17 @@ export default {
         action: 'loading',
         data: false
       })
-      console.log(res.data.data.user,'res.data.data.user');
+      console.log(res.data.data.user, 'res.data.data.user')
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.data.tokens.access_token}`
       localStorage.setItem('accessToken', res.data.data.tokens.access_token)
       localStorage.setItem('refreshToken', res.data.data.tokens.refresh_token)
       localStorage.setItem('userName', `${res.data.data.user.first_name} ${res.data.data.user.last_name}`)
       localStorage.setItem('email', res.data.data.user.email)
       commit('SET_USER_INFO', res.data.data.user)
+      commit('SET_STATE', {
+        action: 'user',
+        data: res.data.data.user
+      })
       commit('SET_STATE', {
         action: 'userInfo',
         data: res.data.data.user

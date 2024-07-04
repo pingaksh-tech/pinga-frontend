@@ -9,6 +9,8 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from './axios'
+import store from './store'
 import UserRoute from '@/views/Users/routes'
 import CategoryRoute from '@/views/category/routes'
 /** Product Module */
@@ -49,7 +51,10 @@ const router = new Router({
         {
           path: '/',
           name: 'home',
-          component: () => import('./views/Home.vue')
+          component: () => import('./views/Home.vue'),
+          meta: {
+            allowAnonymous: false
+          }
         },
         // client routes
         ...UserRoute,
@@ -86,7 +91,10 @@ const router = new Router({
         {
           path: '/pages/login',
           name: 'page-login',
-          component: () => import('@/views/pages/Login.vue')
+          component: () => import('@/views/pages/Login.vue'),
+          meta: {
+            allowAnonymous: true
+          }
         },
         {
           path: '/pages/error-404',
@@ -106,6 +114,48 @@ const router = new Router({
       redirect: '/pages/error-404'
     }
   ]
+})
+
+/* ---------------------------------------------------------------------------------------------------------------------------- */
+/*                                                    Authenticatation Check                                                    */
+/* ---------------------------------------------------------------------------------------------------------------------------- */
+const isAuthenticated = async () => {
+  const accessToken = localStorage.getItem('accessToken')
+  if (!accessToken) {
+    localStorage.removeItem('accessToken')
+    return false
+  }
+  if (accessToken && !store.state.auth.user) {
+    try {
+      const res = await axios.get('/auth/profile')
+      store.commit('auth/user', res.data.data)
+      return true
+    } catch (err) {
+      return false
+    }
+  } else if (accessToken && store.state.auth.user) {
+    return true
+  }
+  return false
+}
+
+router.beforeEach(async (to, from, next) => {
+  if (Object(to.meta).hasOwnProperty('allowAnonymous')) {
+    const authed = await isAuthenticated()
+    if (!to.meta.allowAnonymous && !authed) {
+      localStorage.removeItem('accessToken')
+      return next({
+        path: '/pages/login'
+      })
+    } else if (to.meta.allowAnonymous && authed) {
+      return next({
+        path: '/'
+      })
+    } else {
+      return next()
+    }
+  }
+  return next()
 })
 
 router.afterEach(() => {
