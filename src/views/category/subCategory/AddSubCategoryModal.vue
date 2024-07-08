@@ -7,7 +7,7 @@
           <div class="vx-col w-full px-8">
             <!-- Sub Category -->
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Category</label>
+              <label class="vs-input--label">Category *</label>
               <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
                 :value="form.categoryIds" @input="(item) => (form.categoryIds = item && item.value)" autocomplete
                 :ssr="true" :multiple="true" v-validate="'required'" action="common/getCategories" />
@@ -16,13 +16,13 @@
             <!-- Sub Category name -->
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
-                v-model="form.name" label="Category Name" name="Category Name" id="Category Name" />
+                v-model="form.name" label="Category Name *" name="Category Name" id="Category Name" />
               <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
                 }}</span>
             </div>
           </div>
           <div class="vx-col w-full cursor-pointer">
-            <label class="vs-input--label block">Image</label>
+            <label class="vs-input--label block">Image *</label>
             <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
               accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
               v-validate="'required'" />

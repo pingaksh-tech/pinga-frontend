@@ -11,13 +11,13 @@
             <!-- Category name -->
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full"
-                v-model="form.name" label="Category Name" name="Category Name" />
+                v-model="form.name" label="Category Name *" name="Category Name" />
               <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
                 }}</span>
             </div>
           </div>
           <div class="vx-col w-full cursor-pointer">
-            <label class="vs-input--label block">Image</label>
+            <label class="vs-input--label block">Image *</label>
             <input type="file" class="border p-2 rounded w-full" ref="files" accept=".jpg, .png , .jpeg,.pdf"
               @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);" />
             <div class="mt-5">

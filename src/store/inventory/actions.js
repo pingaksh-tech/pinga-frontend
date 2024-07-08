@@ -32,7 +32,7 @@ export default {
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                                List Inventorys                               */
+  /*                                List Inventories                               */
   /* -------------------------------------------------------------------------- */
   async getInventoryList({ commit }, params) {
     commit('SET_STATE', {

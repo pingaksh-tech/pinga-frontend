@@ -5,7 +5,7 @@
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full cursor-pointer">
-            <label class="vs-input--label block">Image</label>
+            <label class="vs-input--label block">Image *</label>
             <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
               accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
               v-validate="'required'" />

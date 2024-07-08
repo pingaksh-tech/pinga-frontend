@@ -6,7 +6,7 @@
       <div class="vx-col w-full px-8">
         <div class="vx-row mb-2">
           <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4|email'"
-            v-model="form.email" label="Email" name="email" id="email" data-vv-as="Email" />
+            v-model="form.email" label="Email *" name="email" id="email" data-vv-as="Email" />
           <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
         </div>
       </div>
@@ -14,7 +14,7 @@
       <div class="vx-col w-full px-8">
         <div class="vx-row mb-2">
           <vs-input type="number" icon="icon icon-package" icon-pack="feather" class="w-full"
-            v-validate="'required|numeric'" v-model="form.phone" label="Phone" name="phone" id="phone"
+            v-validate="'required|numeric'" v-model="form.phone" label="Phone *" name="phone" id="phone"
             data-vv-as="Phone" />
           <span class="text-danger text-sm" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
         </div>

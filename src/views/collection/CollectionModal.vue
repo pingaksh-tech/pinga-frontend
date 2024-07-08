@@ -9,13 +9,13 @@
             <!-- Name -->
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
-                v-model="form.name" label="Name" name="name" data-vv-as="Name" id="Name" />
+                v-model="form.name" label="Name *" name="name" data-vv-as="Name" id="Name" />
               <span class="text-danger text-sm" v-show="errors.has('name')">{{ errors.first('name')
                 }}</span>
             </div>
             <!-- Inventory -->
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Inventory</label>
+              <label class="vs-input--label">Inventory *</label>
               <select-2 class="w-full category-input" name="inventory" placeholder="Select Inventory"
                 :value="form.inventory_ids" @input="(item) => (form.inventory_ids = item && item.value)" autocomplete
                 :ssr="true" :multiple="true" v-validate="'required'" action="common/getInventories"

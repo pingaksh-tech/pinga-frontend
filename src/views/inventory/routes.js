@@ -6,7 +6,7 @@ export default [
     meta: {
       allowAnonymous: false,
       pageTitle: 'Inventories List',
-      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Inventory' }, { title: 'Inventory List', active: true }]
+      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Inventories' }, { title: 'Inventory List', active: true }]
     }
   },
   {
@@ -18,7 +18,7 @@ export default [
       pageTitle: 'Add Inventory',
       breadcrumb: [
         { title: 'Dashboard', url: '/dashboard' },
-        { title: 'Inventorys', url: '/inventory/list' },
+        { title: 'Inventories', url: '/inventory/list' },
         { title: 'Add Inventory', active: true }
       ]
     }
@@ -32,7 +32,7 @@ export default [
       pageTitle: 'Edit Inventory',
       breadcrumb: [
         { title: 'Dashboard', url: '/dashboard' },
-        { title: 'Inventorys', url: '/inventory/list' },
+        { title: 'Inventories', url: '/inventory/list' },
         { title: 'Edit Inventory', active: true }
       ]
     }
