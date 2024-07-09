@@ -22,7 +22,7 @@
                 data-vv-as="Inventory" />
               <span class="text-danger text-sm" v-show="errors.has('inventory')">{{
                 errors.first('inventory')
-              }}</span>
+                }}</span>
             </div>
           </div>
         </div>

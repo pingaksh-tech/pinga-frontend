@@ -6,7 +6,7 @@ export default [
     meta: {
       allowAnonymous: false,
       pageTitle: 'Collection List',
-      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Collection List' }, { title: 'Collection List', active: true }]
+      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Collection' }, { title: 'Collection List', active: true }]
     }
   }
 ]

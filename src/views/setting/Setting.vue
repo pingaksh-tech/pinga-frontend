@@ -7,11 +7,15 @@
             <CustomerSupport />
         </div>
 
+        <div class="vx-col p-6 w-1/2">
+            <ProfileBannerImage />
+        </div>
     </div>
 </template>
 <script>
 import Policy from './Policy.vue';
 import CustomerSupport from './CustomerSupport.vue';
+import ProfileBannerImage from './ProfileBannerImage.vue';
 
 export default {
     name: 'Setting',
@@ -19,7 +23,8 @@ export default {
     /** Components */
     components: {
         Policy,
-        CustomerSupport
+        CustomerSupport,
+        ProfileBannerImage
     },
 }
 </script>

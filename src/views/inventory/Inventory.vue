@@ -2,6 +2,24 @@
   <div>
     <!-- Inventory list -->
     <div class="vx-card p-6">
+      <div class="vx-row ">
+        <div class="vx-col w-1/4 mb-2">
+          <input type="file" class="border p-2 rounded w-full" name="inventory_import" ref="files" accept=".xlsx"
+            style="border: 1px solid rgba(0, 0, 0, 0.2);" data-vv-as="Inventory Import" @change="handleFileUpload" />
+          <span class="text-danger text-xs" v-show="errors.has(`inventory_import`)">{{
+            errors.first(`inventory_import`) }}</span>
+        </div>
+        <div class="vx-col w-1/8 mb-2">
+          <vs-button class="mr-2 vs-con-loading__container" @click="inventoryImport">Import</vs-button>
+        </div>
+        <div class="vx-col w-1/2 mb-2">
+        </div>
+        <div class="vx-col w-1/8 mb-2 ml-8">
+          <vs-button class="mr-2 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
+        </div>
+      </div>
+
+      <vs-divider></vs-divider>
       <vs-table id="inventory-list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
         @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
         :max-items="length" search :data="InventoryRecords">
@@ -111,6 +129,7 @@ export default {
     page: 1,
     search: '',
     module_name: 'Inventory',
+    inventory_import: null
   }),
 
   /** computed */
@@ -118,6 +137,9 @@ export default {
     ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCount', 'listLoading']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
+    },
+    validateForm() {
+      return !this.errors.any()
     }
   },
 
@@ -125,7 +147,8 @@ export default {
   methods: {
     ...mapActions('inventory', {
       getInventoryList: 'getInventoryList',
-      deleteInventoryRecord: 'deleteInventoryRecord'
+      deleteInventoryRecord: 'deleteInventoryRecord',
+      inventoryImportApi: 'inventoryImportApi'
     }),
 
     /** Per Page Limit Change */
@@ -219,7 +242,64 @@ export default {
     formatPrice(value) {
       // Using the numeral library
       return '₹' + new Intl.NumberFormat('en-IN').format(value)
-    }
+    },
+    downloadPDFSample() {
+      const link = document.createElement('a');
+      link.href = "https://pingaksh-storage.s3.ap-south-1.amazonaws.com/profile_banner/1720528981205.jpeg";
+      link.download = 'sample123.pdf'; // you can specify the default file name here
+      link.click();
+    },
+    async inventoryImport() {
+      if (!(await this.$validator.validate())) {
+        return false
+      }
+      try {
+        const data = new FormData();
+        console.log(this.inventory_import)
+        data.append("inventory_import", this.inventory_import);
+
+        const { message } = await this.inventoryImportApi(data)
+        this.$emit('update-data', true)
+        this.$vs.notify({
+          title: 'Success',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: 'Error',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+      }
+    },
+    handleFileUpload(e) {
+      const file = e.target.files[0]
+
+      // Check if a file is selected
+      if (!file) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'No file selected',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+        return
+      }
+      console.log({ file })
+      this.inventory_import = file
+    },
   },
 
   /** Watchers */

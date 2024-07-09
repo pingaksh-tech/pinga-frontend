@@ -1,43 +1,26 @@
 <template lang="html">
-  <div
-    :class="{
-      autocompletex: typeable,
-      activeOptions: active,
-      'input-select-validate-success': success,
-      'input-select-validate-danger': danger,
-      'input-select-validate-warning': warning
-    }"
-    :style="getWidth"
-    class="con-select"
-  >
+  <div :class="{
+    autocompletex: typeable,
+    activeOptions: active,
+    'input-select-validate-success': success,
+    'input-select-validate-danger': danger,
+    'input-select-validate-warning': warning
+  }" :style="getWidth" class="con-select">
     <label v-if="label" ref="inputSelectLabel" class="vs-select--label">{{ label }}</label>
     <div class="input-select-con relative">
       <!-- v-model="valueFilter" -->
-      <input
-        ref="inputselect"
-        v-bind="$attrs"
-        :readonly="!typeable"
-        class="input-select vs-select--input"
-        type="text"
-        @keydown.esc.stop.prevent="closeOptions"
-        autocomplete="nope"
-        v-on="listeners"
-        :disabled="loader || disabled"
-      />
+      <input ref="inputselect" v-bind="$attrs" :readonly="!typeable" class="input-select vs-select--input" type="text"
+        @keydown.esc.stop.prevent="closeOptions" autocomplete="nope" v-on="listeners" :disabled="loader || disabled" />
       <div v-if="loader" class="absolute rounded-full input-loader"></div>
-      
-      <vs-icon
-       v-if="value && !disabled && clearable" 
-       :icon-pack="iconPack"
-        :icon="iconClear" 
-       class="clear_icon vs-select--icon cursor-pointer pointer-events-auto"
-       @click="clearValue"
-       ></vs-icon>
+
+      <vs-icon v-if="value && !disabled && clearable" :icon-pack="iconPack" :icon="iconClear"
+        class="clear_icon vs-select--icon cursor-pointer pointer-events-auto" @click="clearValue"></vs-icon>
 
       <vs-icon v-if="!activeBtnClear" :icon-pack="iconPack" :icon="icon" class="icon-select vs-select--icon"></vs-icon>
 
       <transition name="fadeselect">
-        <div v-show="active" ref="vsSelectOptions" :style="cords" :class="[`vs-select-${color}`, { scrollx: scrollx }]" class="vs-select--options">
+        <div v-show="active" ref="vsSelectOptions" :style="cords" :class="[`vs-select-${color}`, { scrollx: scrollx }]"
+          class="vs-select--options">
           <ul ref="ulx" id="optionContainer">
             <slot />
           </ul>
@@ -397,8 +380,10 @@ export default {
       const inputx = this.$refs.inputselect;
       if (this.typeable && this.multiple) {
         setTimeout(() => {
+          console.log(this.$refs.inputselect.value, "---", inputx.value)
           if (inputx.value) {
-            this.$refs.inputselect.value = inputx.value += ",";
+            const beforeInputValue = inputx.value += ","
+            this.$refs.inputselect.value = beforeInputValue.trim().replace(/,+$/, '');
           }
           inputx.selectionStart = inputx.selectionEnd = 10000;
         }, 10);
@@ -527,6 +512,7 @@ export default {
       opacity: 0.1;
       transform: scale(0.2);
     }
+
     100% {
       opacity: 1;
       transform: scale(1);

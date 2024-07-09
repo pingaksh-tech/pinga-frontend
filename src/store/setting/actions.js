@@ -107,5 +107,40 @@ export default {
         message
       })
     }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Update Profile Banner                              */
+  /* -------------------------------------------------------------------------- */
+  async updateProfileBanner({ commit }, data) {
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
+    try {
+      const res = await this.$http.put(`mobile/setting/profile-banner`, data)
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      console.log(res.data.data.setting_name)
+      commit('SET_STATE', {
+        action: 'settingRecord.' + res.data.data.setting_name,
+        data: res.data.data
+      })
+      return {
+        data: res.data.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
   }
 }

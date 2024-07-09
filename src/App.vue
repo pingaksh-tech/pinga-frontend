@@ -18,21 +18,21 @@
 import themeConfig from '@/../themeConfig.js'
 
 export default {
-  data () {
+  data() {
     return {
       vueAppClasses: []
     }
   },
   watch: {
-    '$store.state.theme' (val) {
+    '$store.state.theme'(val) {
       this.toggleClassInBody(val)
     },
-    '$vs.rtl' (val) {
+    '$vs.rtl'(val) {
       document.documentElement.setAttribute('dir', val ? 'rtl' : 'ltr')
     }
   },
   methods: {
-    toggleClassInBody (className) {
+    toggleClassInBody(className) {
       if (className === 'dark') {
         if (document.body.className.match('theme-semi-dark')) document.body.classList.remove('theme-semi-dark')
         document.body.classList.add('theme-dark')
@@ -40,24 +40,24 @@ export default {
         if (document.body.className.match('theme-dark')) document.body.classList.remove('theme-dark')
         document.body.classList.add('theme-semi-dark')
       } else {
-        if (document.body.className.match('theme-dark'))      document.body.classList.remove('theme-dark')
+        if (document.body.className.match('theme-dark')) document.body.classList.remove('theme-dark')
         if (document.body.className.match('theme-semi-dark')) document.body.classList.remove('theme-semi-dark')
       }
     },
-    setAppClasses (classesStr) {
+    setAppClasses(classesStr) {
       this.vueAppClasses.push(classesStr)
     },
-    handleWindowResize () {
+    handleWindowResize() {
       this.$store.commit('UPDATE_WINDOW_WIDTH', window.innerWidth)
 
       // Set --vh property
       document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`)
     },
-    handleScroll () {
+    handleScroll() {
       this.$store.commit('UPDATE_WINDOW_SCROLL_Y', window.scrollY)
     }
   },
-  mounted () {
+  mounted() {
     this.toggleClassInBody(themeConfig.theme)
     this.$store.commit('UPDATE_WINDOW_WIDTH', window.innerWidth)
 
@@ -65,17 +65,33 @@ export default {
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   },
-  async created () {
+  async created() {
     const dir = this.$vs.rtl ? 'rtl' : 'ltr'
     document.documentElement.setAttribute('dir', dir)
 
     window.addEventListener('resize', this.handleWindowResize)
     window.addEventListener('scroll', this.handleScroll)
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener('resize', this.handleWindowResize)
     window.removeEventListener('scroll', this.handleScroll)
   }
 }
 
 </script>
+
+<style>
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0px 4px 25px 0px rgb(0 0 0 / 10%);
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f8f8f8;
+}
+</style>

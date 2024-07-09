@@ -161,5 +161,36 @@ export default {
         message
       })
     }
+  },
+
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+  /*                                                  import inventory api                                                        */
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+
+  async inventoryImportApi({ commit }, data) {
+    commit('SET_STATE', {
+      action: 'createLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.post('inventory/import-excel', data)
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      return {
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      // Manage Error
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
   }
 }
