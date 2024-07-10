@@ -138,7 +138,7 @@ export default {
       data: true
     })
     try {
-      const res = await this.$http.get(`inventory/${id}`)
+      const res = await this.$http.get(`inventory/admin/${id}`)
       commit('SET_STATE', {
         action: 'listLoading',
         data: false

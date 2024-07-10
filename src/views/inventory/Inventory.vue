@@ -244,10 +244,13 @@ export default {
       return '₹' + new Intl.NumberFormat('en-IN').format(value)
     },
     downloadPDFSample() {
-      const link = document.createElement('a');
-      link.href = "https://pingaksh-storage.s3.ap-south-1.amazonaws.com/profile_banner/1720528981205.jpeg";
-      link.download = 'sample123.pdf'; // you can specify the default file name here
-      link.click();
+      const url = "https://pingaksh-storage.s3.ap-south-1.amazonaws.com/import_sample/Inventory_Sample.xlsx"
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', "sample.xlsx")
+      document.body.appendChild(link)
+      link.click()
+
     },
     async inventoryImport() {
       if (!(await this.$validator.validate())) {
@@ -255,7 +258,6 @@ export default {
       }
       try {
         const data = new FormData();
-        console.log(this.inventory_import)
         data.append("inventory_import", this.inventory_import);
 
         const { message } = await this.inventoryImportApi(data)
@@ -297,7 +299,6 @@ export default {
         })
         return
       }
-      console.log({ file })
       this.inventory_import = file
     },
   },
