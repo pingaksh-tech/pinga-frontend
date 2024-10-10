@@ -10,5 +10,6 @@ export default {
   SubCategoryList: [],
   SizeList: [],
   diamondConstantList: [],
-  DiamondList: []
+  DiamondList: [],
+  RoleList: []
 }

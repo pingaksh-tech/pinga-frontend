@@ -43,6 +43,22 @@ export default [
   // Users
   {
     url: null,
+    name: 'Users',
+    slug: 'users',
+    icon: 'UsersIcon',
+    permissions: [ALLPERMISSIONS],
+    submenu: [
+      {
+        url: '/users/list',
+        name: 'Users List',
+        slug: 'UserList',
+        icon: 'ListIcon',
+        permissions: [ALLPERMISSIONS]
+      }
+    ]
+  },
+  {
+    url: null,
     name: 'Retailers',
     slug: 'retailers',
     icon: 'UsersIcon',

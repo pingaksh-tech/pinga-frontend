@@ -32,6 +32,8 @@ import collection from './collection'
 import setting from './setting'
 /** diamond-pricing API Store */
 import diamondPricing from './diamond-pricing'
+/** user API Store */
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -54,6 +56,7 @@ export default new Vuex.Store({
     latestProduct,
     collection,
     setting,
-    diamondPricing
+    diamondPricing,
+    user
   }
 })

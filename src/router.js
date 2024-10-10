@@ -11,7 +11,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import axios from './axios'
 import store from './store'
-import UserRoute from '@/views/Users/routes'
+import UserRoute from '@/views/users/routes'
 import CategoryRoute from '@/views/category/routes'
 /** Product Module */
 import ProductRoute from '@/views/products/routes'
