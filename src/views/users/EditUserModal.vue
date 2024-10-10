@@ -147,6 +147,9 @@ export default {
         return false
       }
       try {
+        if (!this.form.password) {
+          delete this.form.password
+        }
         const { message } = await this.updateUserRecord({
           UserId: this.data._id,
           data: this.form
