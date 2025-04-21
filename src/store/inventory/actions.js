@@ -186,6 +186,40 @@ export default {
         action: 'createLoading',
         data: false
       })
+      const errData = error.response.data.data.errorData
+      console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥 errData 🔥🔥🔥🔥🔥🔥🔥🔥🔥', errData)
+      // Manage Error
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message,
+        data: errData
+      })
+    }
+  },
+
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+  /*                                                  import inventory api                                                        */
+  /* ---------------------------------------------------------------------------------------------------------------------------- */
+
+  async imageImportApi({ commit }, data) {
+    commit('SET_STATE', {
+      action: 'createLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.post('inventory/image-upload', data)
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
+      return {
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'createLoading',
+        data: false
+      })
       // Manage Error
       const { message } = getMessageFromError(error)
       return Promise.reject({

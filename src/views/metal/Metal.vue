@@ -2,16 +2,26 @@
   <div>
     <!-- Category list -->
     <div class="vx-card p-6">
-      <vs-table id="category_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="MetalRecords">
+      <vs-table
+        id="category_list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="MetalRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) }}
                       -
@@ -37,8 +47,14 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div @click="toggleAddMetalModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
+            <div class="flex items-center mr-4">
+              <vs-input v-model="pricePerGram" type="number" placeholder="Enter Price Per Gram" class="mr-2" />
+              <vs-button @click="updateMetalPrice" :disabled="!pricePerGram">Update Price</vs-button>
+            </div>
+            <div
+              @click="toggleAddMetalModal"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add Metal</span>
             </div>
@@ -65,20 +81,18 @@
             <vs-td class="text-left">{{ tr.price_per_gram || '-' }} </vs-td>
             <vs-td class="text-left">{{ tr.metal_carat || '-' }} </vs-td>
             <!-- <vs-td class="text-left">{{ tr.metal_color || '-' }}÷ </vs-td> -->
-            <vs-td class="text-left"><vs-chip :color="getChipColor(tr.metal_color)"
-                class="mx-auto font-semibold text-sm">
+            <vs-td class="text-left"
+              ><vs-chip :color="getChipColor(tr.metal_color)" class="mx-auto font-semibold text-sm">
                 <p class="fn12 p-2 font-semibold capitalize">{{ tr.metal_color }}</p>
               </vs-chip>
             </vs-td>
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
-                  <feather-icon @click="toggleEditMetalModal(tr)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="toggleEditMetalModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`">
-                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -86,17 +100,14 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination @onchange="handleChangePage" v-if="FilteredCount" v-model="page" :total="totalPages"
-        :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
+      <vs-pagination @onchange="handleChangePage" v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
 
     <!-- Add metal modal -->
-    <AddMetalModal :module_name="module_name" @update-data="getData" v-if="isAddMetalModalMounted"
-      :showModal.sync="isAddMetalModalShow" />
+    <AddMetalModal :module_name="module_name" @update-data="getData" v-if="isAddMetalModalMounted" :showModal.sync="isAddMetalModalShow" />
 
     <!-- Edit metal modal -->
-    <EditMetalModal :module_name="module_name" @update-data="getData" v-if="isEditMetalModalMounted"
-      :data="selectedRecord" :showModal.sync="isEditMetalModalShow" />
+    <EditMetalModal :module_name="module_name" @update-data="getData" v-if="isEditMetalModalMounted" :data="selectedRecord" :showModal.sync="isEditMetalModalShow" />
   </div>
 </template>
 
@@ -117,6 +128,7 @@ export default {
   /** Data */
   data() {
     return {
+      pricePerGram: '',
       order: [],
       records: [1, 2, 3],
       length: 10,
@@ -147,20 +159,21 @@ export default {
   methods: {
     ...mapActions('metal', {
       getMetalList: 'getMetalList',
-      deleteMetalRecord: 'deleteMetalRecord'
+      deleteMetalRecord: 'deleteMetalRecord',
+      updateMetalRecordPrice: 'updateMetalRecordPrice'
     }),
 
     getChipColor(metalColor) {
       // Define your color mapping logic here
       const colorMap = {
-        yellow: 'warning',  // assuming 'warning' is a predefined color in your system
+        yellow: 'warning', // assuming 'warning' is a predefined color in your system
         pink: 'pink',
-        blue: 'primary',    // example
-        red: 'danger',      // example
-        green: 'success',   // example
+        blue: 'primary', // example
+        red: 'danger', // example
+        green: 'success' // example
         // add more color mappings as needed
-      };
-      return colorMap[metalColor] || 'primary'; // default color if metalColor is not in the map
+      }
+      return colorMap[metalColor] || 'primary' // default color if metalColor is not in the map
     },
 
     /** Per Page Limit Change */
@@ -224,6 +237,42 @@ export default {
         accept: () => this.deleteSingleRecord(id),
         acceptText: 'Delete'
       })
+    },
+
+    /** Update Metal Price */
+    async updateMetalPrice() {
+      if (!this.pricePerGram) return
+
+      try {
+        const { message } = await this.updateMetalRecordPrice({
+          data: {
+            price_per_gram: this.pricePerGram
+          }
+        })
+
+        this.$vs.notify({
+          title: 'Success',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+
+        this.pricePerGram = ''
+        this.getData()
+      } catch (error) {
+        this.$vs.notify({
+          title: 'Error',
+          text: error.message || 'Failed to update price',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+      }
     },
 
     /** Delete category API */

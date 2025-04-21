@@ -2,34 +2,91 @@
   <div>
     <!-- Inventory list -->
     <div class="vx-card p-6">
-      <div class="vx-row ">
+      <div class="vx-row">
         <div class="vx-col w-1/4 mb-2">
-          <input type="file" class="border p-2 rounded w-full" name="inventory_import" ref="files" accept=".xlsx"
-            style="border: 1px solid rgba(0, 0, 0, 0.2);" data-vv-as="Inventory Import" @change="handleFileUpload" />
-          <span class="text-danger text-xs" v-show="errors.has(`inventory_import`)">{{
-            errors.first(`inventory_import`) }}</span>
+          <label class="vs-input--label block">Inventory Import</label>
+          <input
+            type="file"
+            class="border p-2 rounded w-full"
+            name="inventory_import"
+            ref="files"
+            accept=".xlsx"
+            style="border: 1px solid rgba(0, 0, 0, 0.2)"
+            data-vv-as="Inventory Import"
+            @change="handleFileUpload"
+          />
+          <span class="text-danger text-xs" v-show="errors.has(`inventory_import`)">{{ errors.first(`inventory_import`) }}</span>
         </div>
         <div class="vx-col w-1/8 mb-2">
+          <label class="vs-input--label block">&nbsp;</label>
           <vs-button class="mr-2 vs-con-loading__container" @click="inventoryImport">Import</vs-button>
         </div>
-        <div class="vx-col w-1/2 mb-2">
-        </div>
-        <div class="vx-col w-1/8 mb-2 ml-8">
+        <!-- <div class="vx-col w-1/2 mb-2"></div> -->
+        <div class="vx-col w-1/2 mb-2x">
+          <label class="vs-input--label block">&nbsp;</label>
           <vs-button class="mr-2 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
-      </div>
 
+        <!-- Category -->
+        <div class="vx-col w-1/8 mb-2 ml-8">
+          <label class="vs-input--label block">&nbsp;</label>
+          <select-2
+            class="w-full category-input"
+            name="Category"
+            placeholder="Filter by Category"
+            autocomplete
+            :ssr="true"
+            :multiple="true"
+            v-model="categoryFilter"
+            :value="categoryFilter"
+            action="common/getCategories"
+            @input="(item) => (categoryFilter = item && item.value)"
+          />
+          <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
+        </div>
+      </div>
+      <div class="vx-row">
+        <div class="vx-col w-1/4 mb-2">
+          <label class="vs-input--label block">Images upload</label>
+          <input
+            type="file"
+            class="border p-2 rounded w-full"
+            name="inventory_images"
+            ref="files"
+            accept=".jpg, .png , .jpeg"
+            style="border: 1px solid rgba(0, 0, 0, 0.2)"
+            data-vv-as="image upload"
+            @change="handleImageUpload"
+            multiple
+          />
+          <span class="text-danger text-xs" v-show="errors.has(`inventory_images`)">{{ errors.first(`inventory_images`) }}</span>
+        </div>
+        <div class="vx-col w-1/8 mb-2">
+          <label class="vs-input--label block">&nbsp;</label>
+          <vs-button class="mr-2 vs-con-loading__container" @click="imageImport">Import</vs-button>
+        </div>
+      </div>
       <vs-divider></vs-divider>
-      <vs-table id="inventory-list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="InventoryRecords">
+      <vs-table
+        id="inventory-list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="InventoryRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) || 0 }}
                       -
@@ -55,8 +112,10 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div @click="toggleAddInventoryModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
+            <div
+              @click="toggleAddInventoryModal"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
@@ -66,6 +125,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="Inventory.name">Inventory Name</vs-th>
+          <vs-th sort-key="Inventory.category_id">Category</vs-th>
           <vs-th sort-key="Inventory.sku">SKU</vs-th>
           <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
           <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
@@ -82,6 +142,9 @@
               <p class="capitalize">{{ tr.name || '-' }}</p>
             </vs-td>
             <vs-td class="text-left">
+              <p class="capitalize">{{ tr.category ? tr.category.name : '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
               <p class="capitalize">{{ tr.sku || '-' }}</p>
             </vs-td>
             <vs-td class="text-left">
@@ -96,12 +159,10 @@
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
-                  <feather-icon @click="toggleEditInventoryModal(tr._id)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="toggleEditInventoryModal(tr._id)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`">
-                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -109,27 +170,33 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-
+import Select2 from '@/components/custom/form-elements/Select2.vue'
 export default {
   name: 'InventoryList',
 
+  /** components */
+  components: {
+    Select2
+  },
+
   /** Data */
   data: () => ({
+    categoryFilter: [],
     order: [],
     records: [1, 2, 3],
     length: 10,
     page: 1,
     search: '',
     module_name: 'Inventory',
-    inventory_import: null
+    inventory_import: null,
+    inventory_images: []
   }),
 
   /** computed */
@@ -140,6 +207,9 @@ export default {
     },
     validateForm() {
       return !this.errors.any()
+    },
+    categoryErrors() {
+      return this.errors.filter((error) => error.message)
     }
   },
 
@@ -148,8 +218,16 @@ export default {
     ...mapActions('inventory', {
       getInventoryList: 'getInventoryList',
       deleteInventoryRecord: 'deleteInventoryRecord',
-      inventoryImportApi: 'inventoryImportApi'
+      inventoryImportApi: 'inventoryImportApi',
+      imageImportApi: 'imageImportApi'
     }),
+
+    // Add this method to handle category filter changes
+    // handleCategoryFilter() {
+    //   // this.categoryFilterValue = this.categoryFilter ? this.categoryFilter.value : null
+    //   this.page = 1 // Reset to first page when filter changes
+    //   this.getData()
+    // },
 
     /** Per Page Limit Change */
     handleChangeLength(length) {
@@ -185,18 +263,19 @@ export default {
         // order: this.order,
         limit: this.length,
         page: this.page,
-        search: this.search
+        search: this.search,
+        categoryId: this.categoryFilter ? this.categoryFilter : null
       })
     },
 
     // Add Inventory modal
     toggleAddInventoryModal() {
-      this.$router.push(`/inventory/add`);
+      this.$router.push(`/inventory/add`)
     },
 
     // Edit Inventory modal
     toggleEditInventoryModal(id) {
-      this.$router.push(`/inventory/${id}/edit`);
+      this.$router.push(`/inventory/${id}/edit`)
     },
 
     /** Delete Inventory Confirmation */
@@ -244,23 +323,57 @@ export default {
       return '₹' + new Intl.NumberFormat('en-IN').format(value)
     },
     downloadPDFSample() {
-      const url = "https://pingaksh-storage.s3.ap-south-1.amazonaws.com/import_sample/Inventory_Sample.xlsx"
+      const url = 'https://pingaksh-storage.s3.ap-south-1.amazonaws.com/import_sample/Inventory_Sample.xlsx'
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', "sample.xlsx")
+      link.setAttribute('download', 'sample.xlsx')
       document.body.appendChild(link)
       link.click()
-
     },
     async inventoryImport() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        const data = new FormData();
-        data.append("inventory_import", this.inventory_import);
+        const data = new FormData()
+        data.append('inventory_import', this.inventory_import)
 
         const { message } = await this.inventoryImportApi(data)
+        this.$emit('update-data', true)
+        this.$vs.notify({
+          title: 'Success',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+      } catch ({ data }) {
+        const message = data.map((item) => item.message).join(', ')
+        this.$vs.notify({
+          title: 'Error',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'primary'
+        })
+      }
+    },
+    async imageImport() {
+      if (!(await this.$validator.validate())) {
+        return false
+      }
+      try {
+        const data = new FormData()
+
+        for (const value of this.inventory_images) {
+          data.append('inventory_images', value)
+        }
+
+        const { message } = await this.imageImportApi(data)
         this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
@@ -283,6 +396,7 @@ export default {
         })
       }
     },
+
     handleFileUpload(e) {
       const file = e.target.files[0]
 
@@ -301,10 +415,35 @@ export default {
       }
       this.inventory_import = file
     },
+    handleImageUpload(e) {
+      this.inventory_images = []
+
+      const files = Array.from(e.target.files) // Convert FileList to array
+      files.forEach((file) => {
+        // Check if a file is selected
+        if (!file) {
+          this.$vs.notify({
+            title: 'Error',
+            text: 'No file selected',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+          return
+        }
+        this.inventory_images.push(file)
+      })
+    }
   },
 
   /** Watchers */
   watch: {
+    categoryFilter() {
+      this.page = 1 // Reset to first page when filter changes
+      this.getData()
+    },
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({

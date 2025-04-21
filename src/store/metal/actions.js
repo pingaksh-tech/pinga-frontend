@@ -1,4 +1,4 @@
-import { getMessageFromError } from "../utils/functions"
+import { getMessageFromError } from '../utils/functions'
 
 export default {
   /* -------------------------------------------------------------------------- */
@@ -136,7 +136,7 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                             Update Metal Record                            */
   /* -------------------------------------------------------------------------- */
-  async updateMetalRecord({ commit }, {metalId, data} ) {
+  async updateMetalRecord({ commit }, { metalId, data }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
@@ -175,6 +175,36 @@ export default {
       const res = await this.$http.put(`/announcement/publish-announcement/${id}`, {
         publish
       })
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      return {
+        data: res.data.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Update Metal Record                            */
+  /* -------------------------------------------------------------------------- */
+  async updateMetalRecordPrice({ commit }, { data }) {
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
+    try {
+      const res = await this.$http.put(`metal/update-price`, data)
       commit('SET_STATE', {
         action: 'loading',
         data: false

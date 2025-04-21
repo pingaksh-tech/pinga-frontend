@@ -1,13 +1,22 @@
 <template lang="html">
   <div class="custom__select center w-full">
-    <VsSelect ref="selectBox" :typeable="autocomplete" :disabled="disabled" @clearValue="clearVal"
-      @input-change="inputChanged" class="w-full" :placeholder="placeholder" v-model="inputVal"
-      @scrollEnd="handleScrollEnd" :loader="processing || loading" :clearable="clearable" :multiple="multiple">
+    <VsSelect
+      ref="selectBox"
+      :typeable="autocomplete"
+      :disabled="disabled"
+      @clearValue="clearVal"
+      @input-change="inputChanged"
+      class="w-full"
+      :placeholder="placeholder"
+      v-model="inputVal"
+      @scrollEnd="handleScrollEnd"
+      :loader="processing || loading"
+      :clearable="clearable"
+      :multiple="multiple"
+    >
       <vs-select-item v-if="newLabel" :text="newLabel" value="newItemAddEvent" class="select-head-btn" />
-      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label"
-        :value="item[val] || item['value']" />
+      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label" :value="item[val] || item['value']" />
     </VsSelect>
-
   </div>
 </template>
 
@@ -113,18 +122,16 @@ export default {
     inputVal: {
       get() {
         if (this.multiple) {
-          const filteredArray = this.vOptions.filter((value) => (this.value || []).includes(value[this.val] || value['value']))
+          const filteredArray = this.vOptions
+            .filter((value) => (this.value || []).includes(value[this.val] || value['value']))
             .reduce((acc, item) => {
               acc.push(item[this.val] || item['value'])
 
               return acc
             }, [])
-
           return filteredArray
         } else {
-          const option = this.vOptions.find(
-            (item) => (item[this.val] || item['value']) === this.value
-          )
+          const option = this.vOptions.find((item) => (item[this.val] || item['value']) === this.value)
           return option ? option[this.val] || option['value'] : ''
         }
       },
@@ -133,9 +140,7 @@ export default {
           this.$emit('addNew')
         } else {
           this.$emit('input', {
-            ...this.vOptions.find(
-              (item) => val === (item[this.val] || item['value'])
-            ),
+            ...this.vOptions.find((item) => val === (item[this.val] || item['value'])),
             value: val
           })
         }
@@ -146,16 +151,11 @@ export default {
       let options = [...this.extra, ...this.options, ...this.sso]
       if (this.autocomplete && this.searchFromStart) {
         options = options.filter((e) => {
-          return (
-            !this.search ||
-            (e.label || '').toLowerCase().startsWith(this.search.toLowerCase())
-          )
+          return !this.search || (e.label || '').toLowerCase().startsWith(this.search.toLowerCase())
         })
 
         if (this.value) {
-          const tIndex = options.findIndex(
-            (x) => (x[this.val] || x['value']) === this.value
-          )
+          const tIndex = options.findIndex((x) => (x[this.val] || x['value']) === this.value)
           if (tIndex > -1) {
             options = this.array_move(options, tIndex, 0)
           }
@@ -163,9 +163,7 @@ export default {
       }
 
       if (this.value) {
-        const tIndex = options.findIndex(
-          (x) => (x[this.val] || x['value']) === this.value
-        )
+        const tIndex = options.findIndex((x) => (x[this.val] || x['value']) === this.value)
         if (tIndex > -1) {
           options = this.array_move(options, tIndex, 0)
         }
@@ -191,12 +189,7 @@ export default {
   methods: {
     async handleScrollEnd() {
       this.$emit('scrollEnd')
-      if (
-        this.ssr &&
-        this.action &&
-        this.processing === false &&
-        !this.nodata
-      ) {
+      if (this.ssr && this.action && this.processing === false && !this.nodata) {
         this.page += 1
         await this.getOptions(false)
       }
@@ -223,14 +216,12 @@ export default {
               this.nodata = response.data.length < 1
               this.sso.push(...response.data)
             })
-            .catch(() => { })
+            .catch(() => {})
             .finally(() => {
               this.processing = false
             })
         } else {
-
         }
-
       }
     },
 
@@ -266,7 +257,7 @@ export default {
     }
 
     &::before {
-      content: "+";
+      content: '+';
       color: #fff;
       font-size: 1.4rem;
       line-height: 0.8;
