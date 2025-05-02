@@ -187,12 +187,15 @@ export default {
         data: false
       })
       const errData = error.response.data.data.errorData
-      console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥 errData 🔥🔥🔥🔥🔥🔥🔥🔥🔥', errData)
-      // Manage Error
-      const { message } = getMessageFromError(error)
+
+      // Return the error data in a consistent format
       return Promise.reject({
-        message,
-        data: errData
+        data: errData || [
+          {
+            message: error.response.data.message || 'Import failed',
+            product: []
+          }
+        ]
       })
     }
   },

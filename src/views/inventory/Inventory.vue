@@ -22,7 +22,7 @@
           <vs-button class="mr-2 vs-con-loading__container" @click="inventoryImport">Import</vs-button>
         </div>
         <!-- <div class="vx-col w-1/2 mb-2"></div> -->
-        <div class="vx-col w-1/2 mb-2x">
+        <div class="vx-col w-1/3 mb-2x">
           <label class="vs-input--label block">&nbsp;</label>
           <vs-button class="mr-2 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
@@ -43,6 +43,24 @@
             @input="(item) => (categoryFilter = item && item.value)"
           />
           <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
+        </div>
+
+        <!-- Sub Category -->
+        <div class="vx-col w-1/8 mb-2 ml-8">
+          <label class="vs-input--label block">&nbsp;</label>
+          <select-2
+            class="w-full category-input"
+            name="Category"
+            placeholder="Filter by Sub Category"
+            autocomplete
+            :ssr="true"
+            :multiple="true"
+            v-model="subCategoryFilter"
+            :value="subCategoryFilter"
+            action="common/getSubCategoryByCategoryId"
+            @input="(item) => (subCategoryFilter = item && item.value)"
+          />
+          <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category') }}</span>
         </div>
       </div>
       <div class="vx-row">
@@ -126,6 +144,7 @@
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="Inventory.name">Inventory Name</vs-th>
           <vs-th sort-key="Inventory.category_id">Category</vs-th>
+          <vs-th sort-key="Inventory.sub_category_id">Sub Category</vs-th>
           <vs-th sort-key="Inventory.sku">SKU</vs-th>
           <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
           <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
@@ -143,6 +162,9 @@
             </vs-td>
             <vs-td class="text-left">
               <p class="capitalize">{{ tr.category ? tr.category.name : '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <p class="capitalize">{{ tr.sub_category ? tr.sub_category.name : '-' }}</p>
             </vs-td>
             <vs-td class="text-left">
               <p class="capitalize">{{ tr.sku || '-' }}</p>
@@ -172,6 +194,19 @@
       <!-- Custom Pagination -->
       <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
     </div>
+    <vs-popup class="holamundo" title="Import Errors" :active.sync="showErrorModal">
+      <div class="p-4">
+        <div v-for="(error, index) in errorList" :key="index" class="mb-6">
+          <p class="mb-2 font-semibold">{{ error.message }}</p>
+          <div class="max-h-64 overflow-y-auto border rounded p-2">
+            <ul class="list-disc pl-5">
+              <li v-for="(product, pIndex) in error.product" :key="pIndex">{{ product }}</li>
+            </ul>
+          </div>
+        </div>
+        <vs-button @click="downloadErrorLog" class="mt-4">Download Error Log</vs-button>
+      </div>
+    </vs-popup>
   </div>
 </template>
 
@@ -189,6 +224,7 @@ export default {
   /** Data */
   data: () => ({
     categoryFilter: [],
+    subCategoryFilter: [],
     order: [],
     records: [1, 2, 3],
     length: 10,
@@ -196,7 +232,9 @@ export default {
     search: '',
     module_name: 'Inventory',
     inventory_import: null,
-    inventory_images: []
+    inventory_images: [],
+    showErrorModal: false,
+    errorList: [] // Changed from errorMessage/errorProducts to errorList
   }),
 
   /** computed */
@@ -264,7 +302,8 @@ export default {
         limit: this.length,
         page: this.page,
         search: this.search,
-        categoryId: this.categoryFilter ? this.categoryFilter : null
+        categoryId: this.categoryFilter ? this.categoryFilter : null,
+        subCategoryId: this.subCategoryFilter ? this.subCategoryFilter : null
       })
     },
 
@@ -350,17 +389,38 @@ export default {
           color: 'success'
         })
       } catch ({ data }) {
-        const message = data.map((item) => item.message).join(', ')
-        this.$vs.notify({
-          title: 'Error',
-          text: message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          position: 'top-center',
-          time: 5000,
-          color: 'primary'
-        })
+        if (data && data.length > 0) {
+          this.errorList = data // Store all error objects
+          this.showErrorModal = true
+        } else {
+          this.$vs.notify({
+            title: 'Error',
+            text: 'Unknown error occurred during import',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        }
       }
+    },
+    downloadErrorLog() {
+      let errorContent = ''
+      this.errorList.forEach((error) => {
+        errorContent += `Error: ${error.message}\n`
+        errorContent += `Affected Products:\n${error.product.join('\n')}\n\n`
+      })
+
+      const blob = new Blob([errorContent], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'inventory_import_errors.txt'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
     },
     async imageImport() {
       if (!(await this.$validator.validate())) {
@@ -444,6 +504,10 @@ export default {
       this.page = 1 // Reset to first page when filter changes
       this.getData()
     },
+    subCategoryFilter() {
+      this.page = 1 // Reset to first page when filter changes
+      this.getData()
+    },
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({
@@ -465,3 +529,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+/* Optional: Add some spacing between error sections */
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+</style>
