@@ -22,7 +22,7 @@
           <vs-button class="mr-2 vs-con-loading__container" @click="inventoryImport">Import</vs-button>
         </div>
         <!-- <div class="vx-col w-1/2 mb-2"></div> -->
-        <div class="vx-col w-1/3 mb-2x">
+        <div class="vx-col w-1/4 mb-2x">
           <label class="vs-input--label block">&nbsp;</label>
           <vs-button class="mr-2 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
