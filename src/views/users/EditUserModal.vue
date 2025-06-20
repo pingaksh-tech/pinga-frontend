@@ -46,12 +46,31 @@
                 @input="(item) => (form.role_id = item && item.value)"
                 autocomplete
                 :ssr="true"
-                :params="{ search: 'Seller' }"
                 :multiple="false"
                 v-validate="'required'"
                 action="common/getRoles"
               />
               <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
+            </div>
+          </div>
+
+          <!-- Manager -->
+          <div class="vx-col w-full px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Manager *</label>
+              <select-2
+                class="w-full role-input"
+                name="Manager"
+                placeholder="Select Manager"
+                :value="form.manager"
+                @input="(item) => (form.manager = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                :options="this.dropDownManagers"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
             </div>
           </div>
 
@@ -80,7 +99,7 @@
 
 <script>
 import Select2 from '@/components/custom/form-elements/Select2.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'AddCategory',
@@ -106,15 +125,18 @@ export default {
         email: this.data.email,
         phone: this.data.phone,
         role_id: this.data.role && this.data.role._id,
-        password: ''
+        password: '',
+        manager: this.data.manager._id
       },
-      zIndex: 0
+      zIndex: 0,
+      dropDownManagers: []
     }
   },
 
   /** Computed */
   computed: {
     /** Form Validation Manage */
+    ...mapState('user', ['createLoading', 'managers']),
     validateForm() {
       return !this.errors.any()
     },
@@ -128,10 +150,15 @@ export default {
     }
   },
 
+  mounted() {
+    this.getManagers(this.form.role_id)
+  },
+
   /** methods */
   methods: {
     ...mapActions('user', {
-      updateUserRecord: 'updateUserRecord'
+      updateUserRecord: 'updateUserRecord',
+      getManagers: 'getManagers'
     }),
     // reset form data
     resetForm() {
@@ -190,6 +217,15 @@ export default {
       } else {
         this.$vs.loading.close('#update_category_modal .vs-popup .vs-popup--content > .con-vs-loading')
       }
+    },
+    'form.role_id'(newVal) {
+      // whenever the value of the form.role_id change that time this function will be called.
+      if (newVal) {
+        this.getManagers(newVal)
+      }
+    },
+    managers(managersArray) {
+      this.dropDownManagers = managersArray
     }
   }
 }

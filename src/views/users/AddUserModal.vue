@@ -46,12 +46,30 @@ span
                 @input="(item) => (form.role_id = item && item.value)"
                 autocomplete
                 :ssr="true"
-                :params="{ search: 'Seller' }"
                 :multiple="false"
                 v-validate="'required'"
                 action="common/getRoles"
               />
               <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
+            </div>
+          </div>
+          <!-- Manager -->
+          <div class="vx-col w-full px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Manager *</label>
+              <select-2
+                class="w-full role-input"
+                name="Manager"
+                placeholder="Select Manager"
+                :value="form.manager"
+                @input="(item) => (form.manager = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                :options="this.dropDownManagers"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
             </div>
           </div>
           <!-- password -->
@@ -115,17 +133,19 @@ export default {
         email: '',
         phone: '',
         role_id: '',
-        password: ''
+        password: '',
+        manager: ''
       },
-      zIndex: 0
+      zIndex: 0,
+      dropDownManagers: []
     }
   },
   /** Mounted */
-  mounted() {},
+  
 
   /** computed */
   computed: {
-    ...mapState('user', ['createLoading']),
+    ...mapState('user', ['createLoading', 'managers']),
     validateForm() {
       return !this.errors.any()
     },
@@ -142,13 +162,15 @@ export default {
   /** methods */
   methods: {
     ...mapActions('user', {
-      createUser: 'createUser'
+      createUser: 'createUser',
+      getManagers: 'getManagers'
     }),
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
+        console.log(this.form, 'this.form')
         const { message } = await this.createUser(this.form)
         this.$emit('update-data', true)
         this.$vs.notify({
@@ -186,6 +208,15 @@ export default {
       } else {
         this.$vs.loading.close('#create-category > .con-vs-loading')
       }
+    },
+    'form.role_id'(newVal) {
+      // whenever the value of the form.role_id change that time this function will be called.
+      if (newVal) {
+        this.getManagers(newVal)
+      }
+    },
+    managers(managersArray) {
+      this.dropDownManagers = managersArray
     }
   }
 }

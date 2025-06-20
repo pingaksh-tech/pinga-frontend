@@ -14,5 +14,10 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                             Edit User State                            */
   /* -------------------------------------------------------------------------- */
-  editLoading: false
+  editLoading: false,
+
+  // for manager
+
+  managersLoading: false,
+  managers: []
 }
