@@ -32,31 +32,34 @@ import collection from './collection'
 import setting from './setting'
 /** diamond-pricing API Store */
 import diamondPricing from './diamond-pricing'
+/** pdf-upload API Store */
+import pdfUpload from './pdf-upload'
 /** user API Store */
 import user from './user'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  getters,
-  mutations,
-  state,
-  actions,
-  strict: process.env.NODE_ENV !== 'production',
-  modules: {
-    category,
-    auth,
-    metal,
-    common,
-    product,
-    diamond,
-    retailer,
-    inventory,
-    banner,
-    latestProduct,
-    collection,
-    setting,
-    diamondPricing,
-    user
-  }
+ getters,
+ mutations,
+ state,
+ actions,
+ strict: process.env.NODE_ENV !== 'production',
+ modules: {
+  category,
+  auth,
+  metal,
+  common,
+  product,
+  diamond,
+  retailer,
+  inventory,
+  banner,
+  latestProduct,
+  collection,
+  setting,
+  diamondPricing,
+  user,
+  pdfUpload
+ }
 })
