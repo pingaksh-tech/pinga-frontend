@@ -25,7 +25,7 @@
                   <h1 class="mb-4">Welcome Back</h1>
                   <p>To access the Pingkash system, please log in with your credentials.</p>
                 </div>
-                <form action="" v-on:keyup.enter="save_changes">
+                <form v-if="!otpPage" action="" v-on:keyup.enter="save_changes">
                   <div class="vx-row pt-5 px-5">
                     <div class="vx-col w-full">
                       <div class="vx-row mb-2">
@@ -70,6 +70,9 @@
                     </div>
                   </div>
                 </form>
+                <div v-else>
+                 <otp-verify :email="email" :otpPage="otpPage" @back-to-login="otpPage = false" />
+               </div>
               </div>
             </div>
           </div>
@@ -81,8 +84,13 @@
 
 <script>
 import { mapActions } from 'vuex'
+import OtpVerify from './OtpVerify.vue' // Adjust path as needed
 
 export default {
+ components: {
+    OtpVerify
+  },
+
   // Form Data
   data() {
     return {
@@ -92,6 +100,7 @@ export default {
       loading: false,
       today_note: null,
       author: null,
+      otpPage: false, // For toggling between login and OTP steps
       motivationNotes: [
         {
           text: 'Jewelry is like the perfect spice – it always complements what’s already there.',
@@ -404,15 +413,22 @@ export default {
       }
       this.loading = true
       try {
-        const { message, data } = await this.login({
+        const { message, success } = await this.login({
           email: this.email,
           password: this.password
         })
+        console.log('🔥🔥🔥🔥🔥🔥🔥🔥 success 🔥🔥🔥🔥🔥🔥🔥🔥', success);
         this.loading = false
-        this.$router.push({
-          name: 'home'
-        })
+        // this.$router.push({
+        //   name: 'home'
+        // })
+        // if (success) {
+          this.otpPage = true // Show OTP verification component
+        // } else {
+        //   this.$router.push({ name: 'home' })
+        // }
       } catch (message) {
+       console.log('🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥',message );
         this.loading = false
         this.$vs.notify({
           title: 'Error',
