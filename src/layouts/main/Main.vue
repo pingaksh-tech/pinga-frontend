@@ -34,9 +34,9 @@
           <div class="router-content">
             <transition :name="routerTransition">
               <div v-if="$route.meta.breadcrumb || $route.meta.pageTitle" class="router-header flex flex-wrap items-center mb-6">
-                <div class="content-area__heading" :class="{ 'pr-4 border-0 md:border-r border-solid border-grey-light': $route.meta.breadcrumb }">
+                <!-- <div class="content-area__heading" :class="{ 'pr-4 border-0 md:border-r border-solid border-grey-light': $route.meta.breadcrumb }">
                   <h2 class="mb-1">{{ routeTitle }}</h2>
-                </div>
+                </div> -->
 
                 <!-- BREADCRUMB -->
                 <vx-breadcrumb class="ml-4 md:block hidden" v-if="$route.meta.breadcrumb" :route="$route" :isRTL="$vs.rtl" />

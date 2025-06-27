@@ -13,6 +13,9 @@
   <div class="relative">
     <div class="vx-navbar-wrapper" :class="classObj">
       <vs-navbar class="vx-navbar navbar-custom navbar-skelton" :color="navbarColorLocal" :class="textColor">
+       <div v-if="$route.meta.breadcrumb || $route.meta.pageTitle" class="flex items-center">
+          <h2>{{ routeTitle }}</h2>
+       </div>
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar" />
 
@@ -38,6 +41,11 @@ import NotificationDropDown from './components/NotificationDropDown.vue'
 import ProfileDropDown from './components/ProfileDropDown.vue'
 
 export default {
+ data() {
+    return {
+      routeTitle: this.$route.meta.pageTitle
+    }
+  },
   name: 'the-navbar-vertical',
   props: {
     navbarColor: {
@@ -76,7 +84,13 @@ export default {
     showSidebar() {
       this.$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', true)
     }
-  }
+  },
+
+  watch: {
+    $route() {
+      this.routeTitle = this.$route.meta.pageTitle
+    },
+   }
 }
 </script>
 
