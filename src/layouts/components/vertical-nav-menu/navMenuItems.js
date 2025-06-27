@@ -250,6 +250,24 @@ export default [
   ]
  },
 
+ /** Latest Product List */
+ {
+  url: null,
+  name: 'Labour Price',
+  slug: 'labour-price',
+  icon: 'DollarSignIcon',
+  permissions: [ALLPERMISSIONS],
+  submenu: [
+   {
+    url: '/labour-price/list',
+    name: 'Labour Price List',
+    slug: 'LabourPriceList',
+    icon: 'ListIcon',
+    permissions: [ALLPERMISSIONS]
+   }
+  ]
+ },
+
  {
   url: '/upload/pdf',
   name: 'Upload PDF ',

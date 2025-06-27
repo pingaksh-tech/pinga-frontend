@@ -25,6 +25,8 @@ import RetailerRoute from '@/views/retailers/routes'
 import BannerRoute from '@/views/banner/routes'
 /** LatestProductRoute Module */
 import LatestProductRoute from '@/views/latest-product/routes'
+/** LabourPriceRoute Module */
+import LabourPriceRoute from '@/views/labour-price/routes'
 /** Collection Module */
 import CollectionRoute from '@/views/collection/routes'
 /** Inventory Module */
@@ -83,7 +85,9 @@ const router = new Router({
     // DiamondPricing route
     ...DiamondPricingRoute,
     // Upload PDF route
-    ...UploadPdfRoute
+    ...UploadPdfRoute,
+    // LabourPrice route
+    ...LabourPriceRoute,
    ]
   },
 
