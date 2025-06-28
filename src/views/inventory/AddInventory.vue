@@ -193,6 +193,33 @@
               <span class="text-danger text-sm" v-show="errors.has('Production Name')"> {{ errors.first('Production Name') }}</span>
             </div>
 
+            <div class="vx-col w-1/2 mb-2">
+             <vs-input
+               icon="icon icon-box"
+               icon-pack="feather"
+               class="w-full"
+               v-validate="'required'"
+               v-model="form.manufacturing_number"
+               label="Manufacturing Number *"
+               name="Manufacturing Number"
+               id="manufacturing_number"
+             />
+             <span class="text-danger text-sm" v-show="errors.has('manufacturing_number')"> {{ errors.first('manufacturing_number') }}</span>
+           </div>
+           <div class="vx-col w-1/2 mb-2">
+            <vs-input
+              icon="icon icon-box"
+              icon-pack="feather"
+              class="w-full"
+              v-validate="'required'"
+              v-model="form.collection"
+              label="Collection *"
+              name="Collection"
+              id="collection"
+            />
+            <span class="text-danger text-sm" v-show="errors.has('collection')"> {{ errors.first('collection') }}</span>
+          </div>
+
             <!-- Family Products -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Family Product</label>
@@ -392,6 +419,8 @@ export default {
         wear_it_item: false,
         delivery: null,
         production_name: null,
+        manufacturing_number: null,
+        collection: null,
         product_tags: [],
         family_products: [],
         manufacturing_price: null,
@@ -441,6 +470,8 @@ export default {
         this.form.wear_it_item = data.wear_it_item
         this.form.delivery = data.delivery
         this.form.production_name = data.production_name
+        this.form.manufacturing_number = data.manufacturing_number
+        this.form.collection = data.collection
         if (data.diamonds) {
           this.form.diamonds = data.diamonds.map((v) => {
             delete v._id
