@@ -15,7 +15,7 @@
                   {{ this.today_note }}
                 </p>
                 <p class="text-white text-center font-bold">-{{ author }}</p>
-                <div class="text-white bottom_text">Powered by <span class="font-bold uppercase">Pingkash</span></div>
+                <div class="text-white bottom_text">Powered by <span class="font-bold uppercase">Pingaksh</span></div>
               </div>
             </div>
 

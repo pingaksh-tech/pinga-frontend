@@ -16,10 +16,22 @@
             <!-- Inventory -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Inventory *</label>
-              <select-2 class="w-full category-input" name="inventory" placeholder="Select Inventory"
-                :value="form.inventory_ids" @input="(item) => (form.inventory_ids = item && item.value)" autocomplete
-                :ssr="true" :multiple="true" v-validate="'required'" action="common/getInventories"
-                data-vv-as="Inventory" />
+                <customInventory-select-2
+            class="w-full category-input"
+            name="inventory"
+            placeholder="Select Inventory"
+            :value="form.inventory_ids"
+       @input="(item) => (form.inventory_ids = item && item.value)"
+            autocomplete
+            :ssr="true"
+            :multiple="true"
+            v-validate="'required'"
+            data-vv-as="User"
+
+            action="common/getInventories"
+          />
+          <!-- :options="UserList" -->
+
               <span class="text-danger text-sm" v-show="errors.has('inventory')">{{
                 errors.first('inventory')
                 }}</span>
@@ -45,6 +57,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
+import CustomInventorySelect2 from '@/components/custom/form-elements/CustomInventorySelect2.vue'
 
 export default {
   /** Page Name */
@@ -52,7 +65,8 @@ export default {
 
   /** components */
   components: {
-    Select2
+    Select2,
+    CustomInventorySelect2
   },
 
   /** Props */

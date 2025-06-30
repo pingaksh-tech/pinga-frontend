@@ -11,7 +11,7 @@ export default [
  {
   url: '/',
   name: 'Dashboard',
-  slug: 'Dashboard',
+  slug: 'dashboard',
   icon: 'HomeIcon',
   permissions: ALLPERMISSIONS,
   roles: ALLROLES
@@ -42,63 +42,34 @@ export default [
  // },
  // Users
  {
-  url: null,
+  url: '/users/list',
   name: 'Users',
   slug: 'users',
   icon: 'UsersIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/users/list',
-    name: 'Users List',
-    slug: 'UserList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
  {
-  url: null,
+  url: '/retailer/list',
   name: 'Retailers',
   slug: 'retailers',
-  icon: 'UsersIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/retailer/list',
-    name: 'Retailers List',
-    slug: 'UserList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  icon: 'ShoppingBagIcon',
+  permissions: [ALLPERMISSIONS]
  },
-
- // Cutsomers
  {
-  url: null,
-  name: 'Category',
-  slug: 'Category',
+  url: '/category/list',
+  name: 'Categories',
+  slug: 'categories',
+  icon: 'LayersIcon',
+  permissions: [ALLPERMISSIONS]
+ },
+ {
+  url: '/category/subcategory/list',
+  name: 'Subcategories',
+  slug: 'subcategories',
   icon: 'SlidersIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/category/list',
-    name: 'List',
-    slug: 'categoryList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   },
-   {
-    url: '/category/subcategory/list',
-    name: 'Sub Category',
-    slug: 'sub-category',
-    icon: 'ListIcon',
-    tag: 'sub',
-    tagColor: 'success',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  tag: 'sub',
+  tagColor: 'success',
+  permissions: [ALLPERMISSIONS]
  },
 
  /** Admin Daimond Setting */
@@ -120,33 +91,24 @@ export default [
  // },
  /** Admin Metal Setting */
  {
-  url: null,
-  name: 'Metal',
-  slug: 'metal',
+  url: '/metal/list',
+  name: 'Metals',
+  slug: 'metals',
   icon: 'ServerIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/metal/list',
-    name: 'List',
-    slug: 'metal-list',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
  /** Admin Inventory Setting */
  {
   url: null,
-  name: 'Inventory',
-  slug: 'inventory',
-  icon: 'DatabaseIcon',
+  name: 'Inventories',
+  slug: 'inventories',
+  icon: 'PackageIcon',
   permissions: [ALLPERMISSIONS],
   submenu: [
    {
     url: '/inventory/list',
     name: 'List',
-    slug: 'inventoryList',
+    slug: 'inventories-list',
     icon: 'ListIcon',
     permissions: [ALLPERMISSIONS]
    },
@@ -164,114 +126,63 @@ export default [
 
  /** Diamond Pricing List */
  {
-  url: null,
-  name: 'Diamond Pricing',
-  slug: 'diamond-pricing',
+  url: '/diamond-pricing/list',
+  name: 'Diamond Pricings',
+  slug: 'DiamondPricings',
   icon: 'CpuIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/diamond-pricing/list',
-    name: 'Diamond Pricing List',
-    slug: 'DiamondPricingList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
- },
- /** Latest Product List */
- {
-  url: null,
-  name: 'Latest Product',
-  slug: 'latest-product',
-  icon: 'BoxIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/latest-product/list',
-    name: 'Latest Product List',
-    slug: 'LatestProductList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
- },
- /** Collection List */
- {
-  url: null,
-  name: 'Collection',
-  slug: 'collection',
-  icon: 'BoxIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/collection/list',
-    name: 'Collection List',
-    slug: 'CollectionList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
 
- /** Setting */
+ /** Latest Product List */
  {
-  url: null,
-  name: 'Setting',
-  slug: 'setting',
+  url: '/latest-product/list',
+  name: 'Latest Products',
+  slug: 'LatestProducts',
+  icon: 'BoxIcon',
+  permissions: [ALLPERMISSIONS]
+ },
+ {
+  url: '/collection/list',
+  name: 'Collections',
+  slug: 'Collections',
+  icon: 'GridIcon',
+  permissions: [ALLPERMISSIONS]
+ },
+
+ /** Ordersg List */
+ {
+  url: '/order/list',
+  name: 'Orders',
+  slug: 'orders',
+  icon: 'ShoppingCartIcon',
+  permissions: [ALLPERMISSIONS]
+ },
+
+ {
+  url: '/setting/list',
+  name: 'Settings',
+  slug: 'Settings',
   icon: 'SettingsIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/setting/list',
-    name: 'Setting List',
-    slug: 'LatestProductList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
-
- /** Admin Banner Setting */
  {
-  url: null,
-  name: 'Banner',
-  slug: 'banner',
+  url: '/banner/list',
+  name: 'Banners',
+  slug: 'banners',
   icon: 'ImageIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/banner/list',
-    name: 'List',
-    slug: 'productsList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
-
- /** Latest Product List */
  {
-  url: null,
-  name: 'Labour Price',
-  slug: 'labour-price',
+  url: '/labour-price/list',
+  name: 'Labor Prices',
+  slug: 'labor-prices',
   icon: 'DollarSignIcon',
-  permissions: [ALLPERMISSIONS],
-  submenu: [
-   {
-    url: '/labour-price/list',
-    name: 'Labour Price List',
-    slug: 'LabourPriceList',
-    icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
-   }
-  ]
+  permissions: [ALLPERMISSIONS]
  },
-
  {
   url: '/upload/pdf',
-  name: 'Upload PDF ',
-  slug: 'uploadPdfList',
+  name: 'PDF Uploads',
+  slug: 'pdf-uploads',
   icon: 'FileTextIcon',
   permissions: [ALLPERMISSIONS]
  }

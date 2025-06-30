@@ -451,11 +451,15 @@ export default {
     action: 'listLoading',
     data: false
    })
+   const result = res.data.data.inventories.map((v) => ({
+    value: v._id,
+    label: v.name,
+    avatar: v.inventory_images.length > 0 ? v.inventory_images[0] : '',
+    sub_category: v.sub_category ? v.sub_category.name : '',
+    category: v.category ? v.category.name : ''
+   }))
    return {
-    data: res.data.data.inventories.map((c) => ({
-     value: c._id,
-     label: c.name
-    })),
+    data: result,
     message: res.data.message
    }
   } catch (error) {

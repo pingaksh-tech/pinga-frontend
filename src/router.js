@@ -37,6 +37,8 @@ import SettingRoute from '@/views/setting/routes'
 import DiamondPricingRoute from '@/views/diamond-pricing/routes'
 /** Upload PDF Module */
 import UploadPdfRoute from '@/views/upload-pdf/routes'
+/** Order Module */
+import orderRoute from '@/views/order/routes'
 Vue.use(Router)
 
 const router = new Router({
@@ -84,6 +86,8 @@ const router = new Router({
     ...SettingRoute,
     // DiamondPricing route
     ...DiamondPricingRoute,
+    // order route
+    ...orderRoute,
     // Upload PDF route
     ...UploadPdfRoute,
     // LabourPrice route

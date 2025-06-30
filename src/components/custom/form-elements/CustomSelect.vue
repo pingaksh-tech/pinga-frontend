@@ -149,6 +149,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    module_type: {
+      type: String,
+      default: null,
+    },
   },
 
   data: () => ({
@@ -362,7 +366,7 @@ export default {
         values.forEach((item) => {
           options.forEach((item_option) => {
             if (item_option.value === item) {
-              let text = item_option.text;
+              let text = this.module_type == 'inventory' ? item_option.label : item_option.text;
               text = text.replace("check_circle", "");
               optionsValues.push(text.trim());
             }

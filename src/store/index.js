@@ -34,6 +34,8 @@ import collection from './collection'
 import setting from './setting'
 /** diamond-pricing API Store */
 import diamondPricing from './diamond-pricing'
+/** order API Store */
+import order from './order'
 /** pdf-upload API Store */
 import pdfUpload from './pdf-upload'
 /** user API Store */
@@ -63,6 +65,7 @@ export default new Vuex.Store({
   diamondPricing,
   user,
   pdfUpload,
-  labourPrice
+  labourPrice,
+  order
  }
 })
