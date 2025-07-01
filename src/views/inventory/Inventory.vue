@@ -98,7 +98,6 @@
      <vs-th sort-key="Inventory.name">Inventory Name</vs-th>
      <vs-th sort-key="Inventory.category_id">Category</vs-th>
      <vs-th sort-key="Inventory.sub_category_id">Sub Category</vs-th>
-     <vs-th sort-key="Inventory.sku">SKU</vs-th>
      <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
      <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
      <vs-th sort-key="Inventory.gender">Gender</vs-th>
@@ -118,9 +117,6 @@
       </vs-td>
       <vs-td class="text-left">
        <p class="capitalize">{{ tr.sub_category ? tr.sub_category.name : '-' }}</p>
-      </vs-td>
-      <vs-td class="text-left">
-       <p class="capitalize">{{ tr.sku || '-' }}</p>
       </vs-td>
       <vs-td class="text-left">
        <p class="capitalize">{{ tr.production_name || '-' }}</p>

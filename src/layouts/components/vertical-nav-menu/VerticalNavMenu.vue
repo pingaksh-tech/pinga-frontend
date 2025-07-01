@@ -28,7 +28,7 @@
         <div class="header-sidebar flex items-end justify-between" slot="header">
           <!-- Logo -->
           <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
-            <img style="width: 140px" key="onlineImg" src="@/assets/images/pingaksh_logo_white.svg" alt="user-img" />
+            <img v-if="!verticalNavMenuItemsMin" style="width: 140px" key="onlineImg" src="@/assets/images/pingaksh_logo_white.svg" alt="user-img" />
             <!-- <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">Pingaksh</span> -->
           </router-link>
           <!-- /Logo -->
