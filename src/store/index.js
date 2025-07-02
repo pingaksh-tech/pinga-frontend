@@ -40,6 +40,8 @@ import order from './order'
 import pdfUpload from './pdf-upload'
 /** user API Store */
 import user from './user'
+import role from '@/store/role'
+
 
 Vue.use(Vuex)
 
@@ -66,6 +68,7 @@ export default new Vuex.Store({
   user,
   pdfUpload,
   labourPrice,
+  role,
   order
  }
 })

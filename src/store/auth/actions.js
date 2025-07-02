@@ -84,12 +84,13 @@ export default {
     action: 'userInfo',
     data: loginResponse.user
    })
-   console.log('🔥🔥🔥🔥🔥🔥🔥🔥 loginResponse 🔥🔥🔥🔥🔥🔥🔥🔥', loginResponse);
    axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.tokens.access_token}`
    localStorage.setItem('accessToken', loginResponse.tokens.access_token)
    localStorage.setItem('refreshToken', loginResponse.tokens.refresh_token)
    localStorage.setItem('userName', `${loginResponse.user.first_name} ${loginResponse.user.last_name}`)
    localStorage.setItem('email', loginResponse.user.email)
+   commit('SET_BEARER', loginResponse.tokens.access_token)
+   commit('SET_PERMISSIONS', loginResponse.data.permission)
    commit('SET_USER_INFO', loginResponse.user)
    commit('SET_STATE', {
     action: 'user',

@@ -8,14 +8,15 @@
         <!-- Form Content -->
         <div class="vx-row">
           <div class="vx-col w-full cursor-pointer">
-            <label class="vs-input--label block">Image *</label>
+            <label class="vs-input--label block">Image * (Recommended banner size: 16:7)</label>
             <input type="file" class="border p-2 rounded w-full" ref="files" accept=".jpg, .png , .jpeg,.pdf"
               @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);" />
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
-                <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
-                  <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
-                </div>
+               <div class="aspect-[16/7] w-full mt-5 rounded-lg overflow-hidden bg-gray-100">
+                <img :src="preview_image" alt="Image Preview" class="w-full h-full object-cover" />
+              </div>
+
               </div>
             </div>
           </div>

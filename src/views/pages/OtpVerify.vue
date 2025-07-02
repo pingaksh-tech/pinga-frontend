@@ -48,7 +48,6 @@ export default {
     }
   },
   mounted() {
-   console.log('🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥', );
     this.canResend = false
     this.timer = 30 // 30 seconds timer
     this.startTimer()

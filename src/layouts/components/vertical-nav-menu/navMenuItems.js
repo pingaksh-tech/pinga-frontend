@@ -64,13 +64,14 @@ export default [
  },
  {
   url: '/category/subcategory/list',
-  name: 'Subcategories',
+  name: 'Sub Categories',
   slug: 'subcategories',
   icon: 'SlidersIcon',
   tag: 'sub',
   tagColor: 'success',
   permissions: [ALLPERMISSIONS]
  },
+
 
  /** Admin Daimond Setting */
  // {
@@ -185,5 +186,12 @@ export default [
   slug: 'pdf-uploads',
   icon: 'FileTextIcon',
   permissions: [ALLPERMISSIONS]
- }
+ },
+ {
+  url: '/roles-list',
+  name: 'Role & Permission',
+  slug: 'RolesList',
+  icon: 'UserCheckIcon',
+  permissions: [ALLPERMISSIONS]
+ },
 ]

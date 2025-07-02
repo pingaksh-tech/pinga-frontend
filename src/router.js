@@ -37,6 +37,8 @@ import SettingRoute from '@/views/setting/routes'
 import DiamondPricingRoute from '@/views/diamond-pricing/routes'
 /** Upload PDF Module */
 import UploadPdfRoute from '@/views/upload-pdf/routes'
+/** Role Module */
+import roleRoute from '@/views/roles/routes'
 /** Order Module */
 import orderRoute from '@/views/order/routes'
 Vue.use(Router)
@@ -92,6 +94,8 @@ const router = new Router({
     ...UploadPdfRoute,
     // LabourPrice route
     ...LabourPriceRoute,
+    // Role route
+    ...roleRoute,
    ]
   },
 
@@ -139,8 +143,12 @@ const isAuthenticated = async () => {
  }
  if (accessToken && !store.state.auth.user) {
   try {
-   const res = await axios.get('/auth/profile')
-   store.commit('auth/user', res.data.data)
+   const res = await axios.get('/auth/verify-token')
+   await store.dispatch('auth/fetchAllRoles')
+   await store.dispatch('auth/fetchAllPermissions')
+   store.commit('auth/SET_USER_INFO', res.data.data.user)
+   store.commit('auth/SET_PERMISSIONS', res.data.access_permissions)
+   store.commit('auth/SET_USER_ROLE', res.data.data.user.role.role)
    return true
   } catch (err) {
    return false

@@ -8,7 +8,7 @@
             <div class="md:col-span-2 left_sidebox hidden lg:block">
               <div class="flex justify-center items-center flex-col h-full p-8">
                 <div class="flex justify-center items-center mb-8">
-                  <img src="@/assets/images/pingaksh_logo_white.svg" alt="login" class="mx-auto img_wrapper w-[168px] h-[100px]" />
+                  <img src="@/assets/images/pingaksh_logo_white_new.png" alt="login" class="mx-auto img_wrapper" />
                 </div>
                 <h2 class="text-white mb-4">Hello! {{ tempName }}</h2>
                 <p class="text-white text-center">
@@ -417,7 +417,6 @@ export default {
           email: this.email,
           password: this.password
         })
-        console.log('🔥🔥🔥🔥🔥🔥🔥🔥 success 🔥🔥🔥🔥🔥🔥🔥🔥', success);
         this.loading = false
         // this.$router.push({
         //   name: 'home'
@@ -428,7 +427,6 @@ export default {
         //   this.$router.push({ name: 'home' })
         // }
       } catch (message) {
-       console.log('🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥',message );
         this.loading = false
         this.$vs.notify({
           title: 'Error',
@@ -472,7 +470,7 @@ export default {
 <style lang="scss">
 .vx-card .vx-card__collapsible-content img {
   height: 100px;
-  width: 168px;
+  width: 200px;
 }
 .bg_image {
   position: absolute;

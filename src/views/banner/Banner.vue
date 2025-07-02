@@ -26,8 +26,10 @@
               {{ page * length - (length - i - 1) }}
             </vs-td>
             <vs-td>
-              <img :src="tr.banner_image" height="140" width="160" alt="" srcset="">
-            </vs-td>
+             <div style="aspect-ratio: 16 / 7; width: 200px; max-width: 100%; overflow: hidden; border-radius: 6px; background: #f3f3f3;">
+               <img :src="tr.banner_image" alt="Banner" class="w-full h-full object-cover" />
+             </div>
+           </vs-td>
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
