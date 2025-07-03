@@ -26,18 +26,18 @@ export default {
   //   return per
   // }, [])
 
-  state.permissionSlugs = permissions.map((value) => value.slug)
-  console.log('✨✨✨✨✨✨ state.permissionSlugs ✨✨✨✨✨✨', state.permissionSlugs);
+  // state.permissionSlugs = permissions.map((value) => value.slug)
+  // console.log('✨✨✨✨✨✨ state.permissionSlugs ✨✨✨✨✨✨', state.permissionSlugs);
 
-  // state.permissionSlugs = Object.values(permissions).reduce((per, module) => {
-  //  const ids = Object.values(module)
-  //   .filter((per) => {
-  //    return !!per.status
-  //   })
-  //   .map((per) => per.slug)
-  //  per.push(...ids)
-  //  return per
-  // }, [])
+  state.permissionSlugs = Object.values(permissions).reduce((per, module) => {
+   const ids = Object.values(module)
+    .filter((per) => {
+     return !!per.status
+    })
+    .map((per) => per.slug)
+   per.push(...ids)
+   return per
+  }, [])
  },
 
  SET_ROLE(state, roles) {

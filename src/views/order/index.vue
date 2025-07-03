@@ -66,7 +66,7 @@
           <vs-th sort-key="discount">Discount</vs-th>
           <vs-th sort-key="grand_total">Grand Total</vs-th>
           <vs-th sort-key="date">Date</vs-th>
-          <vs-th>Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['orders_edit'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }">
@@ -100,7 +100,7 @@
            <p>{{ formatDate(tr.createdAt) }}</p>
 
          </vs-td>
-           <vs-td>
+           <vs-td v-if="checkPermissionSlug(['orders_edit'])">
               <div class="inline-flex">
                 <vx-tooltip :text="tr.edit ? `Save ${module_name}` : `Edit ${module_name}`">
                   <feather-icon @click="tr.edit ? saveEdit(tr) : toggleEdit(tr)"
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'Order',
@@ -143,6 +143,7 @@ export default {
   /** computed */
   computed: {
     ...mapState('order', ['OrderRecords', 'total', 'FilteredCount', 'listLoading','OrderAnalytics']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }

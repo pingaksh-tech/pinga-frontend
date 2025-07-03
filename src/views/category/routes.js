@@ -6,7 +6,9 @@ export default [
   meta: {
    allowAnonymous: false,
    pageTitle: 'Categories List',
-   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Category' }, { title: 'Category List', active: true }]
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Category' }, { title: 'Category List', active: true }],
+   permissions: ['categories_list']
+
   }
  },
  {
@@ -20,7 +22,8 @@ export default [
     { title: 'Dashboard', url: '/dashboard' },
     { title: 'Category', url: '/category/create' },
     { title: 'Add Category', active: true }
-   ]
+   ],
+   permissions: ['categories_create']
   }
  },
  /* -------------------------------------------------------------------------- */
@@ -37,7 +40,8 @@ export default [
     { title: 'Dashboard', url: '/dashboard' },
     { title: 'Category List', url: '/category/list' },
     { title: 'Sub Category List', active: true }
-   ]
+   ],
+   permissions: ['subcategories_list']
   }
  }
 ]

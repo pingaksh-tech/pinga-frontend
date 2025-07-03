@@ -79,7 +79,7 @@ export default {
   try {
    const res = await this.$http.post('/auth/verify-otp', data)
    const loginResponse = res.data.data
-
+   console.log(loginResponse.user, "=loginResponse.user")
    commit('SET_STATE', {
     action: 'userInfo',
     data: loginResponse.user
@@ -90,7 +90,7 @@ export default {
    localStorage.setItem('userName', `${loginResponse.user.first_name} ${loginResponse.user.last_name}`)
    localStorage.setItem('email', loginResponse.user.email)
    commit('SET_BEARER', loginResponse.tokens.access_token)
-   commit('SET_PERMISSIONS', loginResponse.data.permission)
+   commit('SET_PERMISSIONS', loginResponse.access_permissions)
    commit('SET_USER_INFO', loginResponse.user)
    commit('SET_STATE', {
     action: 'user',
@@ -195,40 +195,40 @@ export default {
  },
 
  // get admin profile action.
- async getUserProfile({ commit }) {
-  commit('SET_STATE', {
-   action: 'loading',
-   data: true
-  })
-  try {
-   const res = await this.$http.get('/auth/verify-token')
+ // async getUserProfile({ commit }) {
+ //  commit('SET_STATE', {
+ //   action: 'loading',
+ //   data: true
+ //  })
+ //  try {
+ //   const res = await this.$http.get('/auth/verify-token')
 
-   commit('SET_PERMISSIONS', res.data.data.permission)
-   commit('SET_COMPANY_INFO', res.data.data.company._id)
-   // commit('SET_COMPANY_ID', res.data.data.company._id)
-   // localStorage.setItem('companyName', res.data.data.company.name)
-   commit('SET_STATE', {
-    action: 'loading',
-    data: false
-   })
-   commit('SET_STATE', {
-    action: 'userInfo',
-    data: res.data.data.user
-   })
-   commit('SET_USER_ROLE', res.data.data.user.role.role_name)
-   return {
-    data: res.data.data.user,
-    message: res.data.message
-   }
-  } catch (error) {
-   commit('SET_STATE', {
-    action: 'loading',
-    data: false
-   })
-   const { message } = getMessageFromError(error)
-   return Promise.reject({
-    message
-   })
-  }
- }
+ //   commit('SET_PERMISSIONS', res.data.data.permission)
+ //   commit('SET_COMPANY_INFO', res.data.data.company._id)
+ //   // commit('SET_COMPANY_ID', res.data.data.company._id)
+ //   // localStorage.setItem('companyName', res.data.data.company.name)
+ //   commit('SET_STATE', {
+ //    action: 'loading',
+ //    data: false
+ //   })
+ //   commit('SET_STATE', {
+ //    action: 'userInfo',
+ //    data: res.data.data.user
+ //   })
+ //   commit('SET_USER_ROLE', res.data.data.user.role.role_name)
+ //   return {
+ //    data: res.data.data.user,
+ //    message: res.data.message
+ //   }
+ //  } catch (error) {
+ //   commit('SET_STATE', {
+ //    action: 'loading',
+ //    data: false
+ //   })
+ //   const { message } = getMessageFromError(error)
+ //   return Promise.reject({
+ //    message
+ //   })
+ //  }
+ // }
 }

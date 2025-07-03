@@ -13,8 +13,7 @@ export default [
   name: 'Dashboard',
   slug: 'dashboard',
   icon: 'HomeIcon',
-  permissions: ALLPERMISSIONS,
-  roles: ALLROLES
+  permissions: ['dashboard_view'],
  },
  // // Users
  // {
@@ -46,21 +45,21 @@ export default [
   name: 'Users',
   slug: 'users',
   icon: 'UsersIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['users_list']
  },
  {
   url: '/retailer/list',
   name: 'Retailers',
   slug: 'retailers',
   icon: 'ShoppingBagIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['retailers_list']
  },
  {
   url: '/category/list',
   name: 'Categories',
   slug: 'categories',
   icon: 'LayersIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['categories_list']
  },
  {
   url: '/category/subcategory/list',
@@ -69,7 +68,7 @@ export default [
   icon: 'SlidersIcon',
   tag: 'sub',
   tagColor: 'success',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['subcategories_list']
  },
 
 
@@ -96,7 +95,7 @@ export default [
   name: 'Metals',
   slug: 'metals',
   icon: 'ServerIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['metals_list']
  },
  /** Admin Inventory Setting */
  {
@@ -104,14 +103,14 @@ export default [
   name: 'Inventories',
   slug: 'inventories',
   icon: 'PackageIcon',
-  permissions: [ALLPERMISSIONS],
+  permissions: ['inventories_list', 'product_tags_list'],
   submenu: [
    {
     url: '/inventory/list',
     name: 'List',
     slug: 'inventories-list',
     icon: 'ListIcon',
-    permissions: [ALLPERMISSIONS]
+    permissions: ['inventories_list']
    },
    {
     url: '/tag/list',
@@ -120,7 +119,7 @@ export default [
     icon: 'BarChartIcon',
     tag: 'Tag',
     tagColor: 'warning',
-    permissions: [ALLPERMISSIONS]
+    permissions: ['product_tags_list']
    }
   ]
  },
@@ -131,7 +130,7 @@ export default [
   name: 'Diamond Pricings',
   slug: 'DiamondPricings',
   icon: 'CpuIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['diamond_Pricings_list']
  },
 
  /** Latest Product List */
@@ -140,14 +139,14 @@ export default [
   name: 'Latest Products',
   slug: 'LatestProducts',
   icon: 'BoxIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['latest_Products_list']
  },
  {
   url: '/collection/list',
   name: 'Collections',
   slug: 'Collections',
   icon: 'GridIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['collections_list']
  },
 
  /** Ordersg List */
@@ -156,7 +155,7 @@ export default [
   name: 'Orders',
   slug: 'orders',
   icon: 'ShoppingCartIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['orders_list']
  },
 
  {
@@ -164,34 +163,34 @@ export default [
   name: 'Settings',
   slug: 'Settings',
   icon: 'SettingsIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['settings_list']
  },
  {
   url: '/banner/list',
   name: 'Banners',
   slug: 'banners',
   icon: 'ImageIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['banners_list']
  },
  {
   url: '/labour-price/list',
   name: 'Labor Prices',
   slug: 'labor-prices',
   icon: 'DollarSignIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['labour_Prices_list']
  },
  {
   url: '/upload/pdf',
   name: 'PDF Uploads',
   slug: 'pdf-uploads',
   icon: 'FileTextIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['PDF_Uploads_list']
  },
  {
   url: '/roles-list',
   name: 'Role & Permission',
   slug: 'RolesList',
   icon: 'UserCheckIcon',
-  permissions: [ALLPERMISSIONS]
+  permissions: ['roles_list']
  },
 ]

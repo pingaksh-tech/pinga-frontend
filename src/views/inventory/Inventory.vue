@@ -86,6 +86,7 @@
        </div>
       </div>
       <div @click="toggleAddInventoryModal"
+       v-if="checkPermissionSlug(['inventories_create'])"
        class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
        <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
        <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
@@ -101,7 +102,7 @@
      <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
      <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
      <vs-th sort-key="Inventory.gender">Gender</vs-th>
-     <vs-th>Action</vs-th>
+     <vs-th v-if="checkPermissionSlug(['inventories_edit','inventories_delete'])">Action</vs-th>
     </template>
 
     <template slot-scope="{ data }">
@@ -127,13 +128,13 @@
       <vs-td class="text-left">
        <p class="capitalize">{{ tr.gender }}</p>
       </vs-td>
-      <vs-td>
+      <vs-td v-if="checkPermissionSlug(['inventories_edit','inventories_delete'])">
        <div class="inline-flex">
-        <vx-tooltip :text="`Edit ${module_name}`">
+        <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['inventories_edit'])">
          <feather-icon @click="toggleEditInventoryModal(tr._id)" icon="EditIcon"
           svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
         </vx-tooltip>
-        <vx-tooltip :text="`Delete ${module_name}`">
+        <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['inventories_delete'])">
          <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
           svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
         </vx-tooltip>
@@ -163,7 +164,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
 export default {
  name: 'InventoryList',
@@ -192,6 +193,7 @@ export default {
  /** computed */
  computed: {
   ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCount', 'listLoading']),
+  ...mapGetters('auth', ['checkPermissionSlug']),
   totalPages() {
    return Math.ceil(this.FilteredCount / this.length)
   },

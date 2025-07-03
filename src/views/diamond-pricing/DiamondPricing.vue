@@ -50,7 +50,7 @@
           <vs-th sort-key="vs_si_gh">VS-SI-GH</vs-th>
           <vs-th sort-key="vs_si_hi">VS-SI-HI</vs-th>
           <vs-th sort-key="si_hi">SI-HI</vs-th>
-          <vs-th>Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['diamond_pricing_edit'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }">
@@ -86,7 +86,7 @@
               <vs-input v-if="tr.edit" v-model="tr.si_hi" type="number" />
               <p v-else class="capitalize">{{ formatPrice(tr.si_hi) }}</p>
             </vs-td>
-            <vs-td>
+            <vs-td v-if="checkPermissionSlug(['diamond_pricing_edit'])">
               <div class="inline-flex">
                 <vx-tooltip :text="tr.edit ? `Save ${module_name}` : `Edit ${module_name}`">
                   <feather-icon @click="tr.edit ? saveEdit(tr) : toggleEdit(tr)"
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'DiamondPricing',
@@ -129,6 +129,7 @@ export default {
   /** computed */
   computed: {
     ...mapState('diamondPricing', ['DiamondPricingRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }

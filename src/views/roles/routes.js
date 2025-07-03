@@ -11,7 +11,7 @@ export default [
     { title: 'Dashboard', url: '/' },
     { title: 'Roles List', active: true }
    ],
-   permissions: ['role_list']
+   permissions: ['roles_list']
   }
  },
 
@@ -28,7 +28,7 @@ export default [
     { title: 'Roles List', url: '/roles-list' },
     { title: 'Edit Role Permission', active: true }
    ],
-   permissions: ['role_edit']
+   permissions: ['roles_edit']
   }
  },
 ]

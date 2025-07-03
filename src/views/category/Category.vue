@@ -48,6 +48,7 @@
             </div>
             <div
               @click="toggleAddCategoryModal"
+              v-if="checkPermissionSlug(['categories_create'])"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
             >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
@@ -116,7 +117,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import AddCategoryModal from '@/views/category/AddCategoryModal'
 import EditCategoryModal from '@/views/category/EditCategoryModal'
 
@@ -151,6 +152,7 @@ export default {
   /** computed */
   computed: {
     ...mapState('category', ['CategoryRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }

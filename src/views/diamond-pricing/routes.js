@@ -6,7 +6,8 @@ export default [
   meta: {
    allowAnonymous: false,
    pageTitle: 'Diamond Pricing List',
-   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Diamond Pricing' }, { title: 'Diamond Pricing List', active: true }]
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Diamond Pricing' }, { title: 'Diamond Pricing List', active: true }],
+   permissions: ['diamond_Pricings_list']
   }
  }
 ]

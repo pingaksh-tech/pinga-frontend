@@ -6,7 +6,8 @@ export default [
   meta: {
    allowAnonymous: false,
    pageTitle: 'Labour Price List',
-   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Labour Price' }, { title: 'Labour Price List', active: true }]
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Labour Price' }, { title: 'Labour Price List', active: true }],
+   permissions: ['labour_Prices_list']
   }
  }
 ]

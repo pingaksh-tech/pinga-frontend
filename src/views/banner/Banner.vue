@@ -7,6 +7,7 @@
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div @click="toggleAddBannerModal"
+              v-if="checkPermissionSlug(['banners_create'])"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
@@ -17,7 +18,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="category.name">{{ module_name }} Name</vs-th>
-          <vs-th>Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['banners_edit','banners_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -30,13 +31,13 @@
                <img :src="tr.banner_image" alt="Banner" class="w-full h-full object-cover" />
              </div>
            </vs-td>
-            <vs-td>
+            <vs-td v-if="checkPermissionSlug(['banners_edit','banners_delete'])">
               <div class="inline-flex">
-                <vx-tooltip :text="`Edit ${module_name}`">
+                <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['banners_edit'])">
                   <feather-icon @click="toggleEditBannerModal(tr)" icon="EditIcon"
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip :text="`Delete ${module_name}`">
+                <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['banners_delete'])">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import AddBannerModal from '@/views/banner/AddBannerModal'
 import EditBannerModal from '@/views/banner/EditBannerModal'
 
@@ -96,6 +97,7 @@ export default {
   /** computed */
   computed: {
     ...mapState('banner', ['BannerRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }

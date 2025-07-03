@@ -6,7 +6,8 @@ export default [
   meta: {
    allowAnonymous: false,
    pageTitle: 'Retailer List',
-   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Retailer' }, { title: 'Retailer List', active: true }]
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Retailer' }, { title: 'Retailer List', active: true }],
+   permissions: ['retailers_list']
   }
  },
 ]

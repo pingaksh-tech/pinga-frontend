@@ -53,6 +53,7 @@
             </div>
             <div
               @click="toggleAddMetalModal"
+              v-if="checkPermissionSlug(['metals_create'])"
               class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
             >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
@@ -68,7 +69,7 @@
           <vs-th sort-key="category.price_per_gram">Price Per Gram</vs-th>
           <vs-th sort-key="category.name">Metal Carat</vs-th>
           <vs-th sort-key="category.name">Metal Color</vs-th>
-          <vs-th>Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['metals_edit','metals_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -86,12 +87,12 @@
                 <p class="fn12 p-2 font-semibold capitalize">{{ tr.metal_color }}</p>
               </vs-chip>
             </vs-td>
-            <vs-td>
+            <vs-td v-if="checkPermissionSlug(['metals_edit','metals_delete'])">
               <div class="inline-flex">
-                <vx-tooltip :text="`Edit ${module_name}`">
+                <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['metals_edit'])">
                   <feather-icon @click="toggleEditMetalModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip :text="`Delete ${module_name}`">
+                <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['metals_delete'])">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
@@ -112,7 +113,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import EditMetalModal from './EditMetalModal.vue'
 import AddMetalModal from './AddMetalModal.vue'
 
@@ -150,6 +151,7 @@ export default {
   /** computed */
   computed: {
     ...mapState('metal', ['MetalRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     }

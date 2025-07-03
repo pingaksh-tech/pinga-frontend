@@ -107,6 +107,7 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import VNavMenuGroup from './VerticalNavMenuGroup.vue'
 import VNavMenuItem from './VerticalNavMenuItem.vue'
+import { mapGetters, mapState } from 'vuex'
 
 import Logo from '../Logo.vue'
 
@@ -140,6 +141,8 @@ export default {
     showShadowBottom: false
   }),
   computed: {
+    ...mapState('auth', ['user']),
+    ...mapGetters('auth', ['checkPermissionSlug', 'checkRolesByIds']),
     isGroupActive() {
       return (item) => {
         const path = this.$route.fullPath
@@ -163,16 +166,27 @@ export default {
     },
     menuItemsUpdated() {
       const clone = this.navMenuItems.slice()
-
       for (const [index, item] of this.navMenuItems.entries()) {
+        // check user role has permission to access
+        if (!(this.checkRolesByIds(item.roles || []) || this.checkPermissionSlug(item.permissions || []))) {
+          const i = clone.findIndex((ix) => ix.slug === item.slug)
+          clone.splice(i, 1)
+        }
+
         if (item.header && item.items.length && (index || 1)) {
           const i = clone.findIndex((ix) => ix.header === item.header)
-          for (const [subIndex, subItem] of item.items.entries()) {
-            clone.splice(i + 1 + subIndex, 0, subItem)
+          let itemIndex = 1
+          // eslint-disable-next-line no-unused-vars
+          for (const [_, subItem] of item.items.entries()) {
+            if (!(this.checkRolesByIds(subItem.roles || []) || this.checkPermissionSlug(subItem.permissions || []))) {
+              continue
+            }
+
+            clone.splice(i + itemIndex, 0, subItem)
+            itemIndex++
           }
         }
       }
-
       return clone
     },
     isVerticalNavMenuActive: {

@@ -38,6 +38,7 @@
        </div>
       </div>
       <div @click="toggleAddRetailerModal"
+       v-if="checkPermissionSlug(['retailers_create'])"
        class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
        <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
        <span class="ml-2 text-base text-primary">Add Retailer</span>
@@ -56,7 +57,7 @@
      <vs-th sort-key="Retailer.name">Address</vs-th>
      <vs-th sort-key="Retailer.name">City</vs-th>
      <vs-th sort-key="Retailer.name">State</vs-th>
-     <vs-th>Action</vs-th>
+     <vs-th v-if="checkPermissionSlug(['retailers_edit','retailers_delete'])">Action</vs-th>
     </template>
 
     <template slot-scope="{ data }" ref="tableBody">
@@ -73,13 +74,13 @@
       <vs-td class="text-left" :title="tr.address || '-'"> {{ truncateText(tr.address, 50) }} </vs-td>
       <vs-td class="text-left">{{ tr.city || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.state || '-' }} </vs-td>
-      <vs-td>
+      <vs-td v-if="checkPermissionSlug(['retailers_edit','retailers_delete'])">
        <div class="inline-flex">
-        <vx-tooltip text="Edit Retailer">
+        <vx-tooltip text="Edit Retailer" v-if="checkPermissionSlug(['retailers_edit'])">
          <feather-icon @click="toggleEditRetailerModal(tr)" icon="EditIcon"
           svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
         </vx-tooltip>
-        <vx-tooltip text="Delete Retailer">
+        <vx-tooltip text="Delete Retailer" v-if="checkPermissionSlug(['retailers_delete'])">
          <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
           svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
         </vx-tooltip>
@@ -117,7 +118,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import AddRetailerModal from '@/views/retailers/AddRetailerModal'
 import EditRetailerModal from '@/views/retailers/EditRetailerModal'
 
@@ -152,6 +153,7 @@ export default {
  /** computed */
  computed: {
   ...mapState('retailer', ['RetailerRecords', 'total', 'FilteredCount', 'listLoading']),
+  ...mapGetters('auth', ['checkPermissionSlug']),
   totalPages() {
    return Math.ceil(this.FilteredCount / this.length)
   }

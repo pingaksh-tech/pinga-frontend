@@ -1,12 +1,13 @@
 export default [
-  {
-    path: '/collection/list',
-    name: 'collection-list',
-    component: () => import('@/views/collection/Collection.vue'),
-    meta: {
-      allowAnonymous: false,
-      pageTitle: 'Collection List',
-      breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Collection' }, { title: 'Collection List', active: true }]
-    }
+ {
+  path: '/collection/list',
+  name: 'collection-list',
+  component: () => import('@/views/collection/Collection.vue'),
+  meta: {
+   allowAnonymous: false,
+   pageTitle: 'Collection List',
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Collection' }, { title: 'Collection List', active: true }],
+   permissions: ['collections_list']
   }
+ }
 ]

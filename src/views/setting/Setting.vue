@@ -1,6 +1,6 @@
 <template>
-    <div class="p-6 vx-row">
-        <div class="vx-col p-6 w-1/2">
+    <div class="p-6 vx-row"  v-if="checkPermissionSlug(['settings_list'])">
+        <div class="vx-col p-6 w-1/2" >
             <Policy />
         </div>
         <div class="vx-col p-6 w-1/2">
@@ -16,6 +16,7 @@
 import Policy from './Policy.vue';
 import CustomerSupport from './CustomerSupport.vue';
 import ProfileBannerImage from './ProfileBannerImage.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'Setting',
@@ -25,6 +26,11 @@ export default {
         Policy,
         CustomerSupport,
         ProfileBannerImage
+    },
+
+    /** computed */
+    computed: {
+        ...mapGetters('auth', ['checkPermissionSlug']),
     },
 }
 </script>

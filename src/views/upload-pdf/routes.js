@@ -6,7 +6,8 @@ export default [
   meta: {
    allowAnonymous: false,
    pageTitle: 'Upload PDF',
-   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Upload PDF' }, { title: 'Upload PDF List', active: true }]
+   breadcrumb: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'Upload PDF' }, { title: 'Upload PDF List', active: true }],
+   permissions: ['PDF_Uploads_list']
   }
  }
 ]
