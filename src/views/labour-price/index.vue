@@ -51,7 +51,7 @@
           <vs-th sort-key="category_name">Category Name</vs-th>
           <vs-th sort-key="sub_category_name">Sub Category Name</vs-th>
           <vs-th sort-key="collection_name">Collection Name</vs-th>
-          <vs-th>Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['labour_Prices_edit','labour_Prices_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -63,13 +63,13 @@
             <vs-td class="text-left">{{ tr.category_name || '-' }} </vs-td>
             <vs-td class="text-left">{{ tr.sub_category_name || '-' }} </vs-td>
             <vs-td class="text-left">{{ tr.collection_name || '-' }} </vs-td>
-            <vs-td>
+            <vs-td v-if="checkPermissionSlug(['labour_Prices_edit','labour_Prices_delete'])">
               <div class="inline-flex">
-                <vx-tooltip :text="`Edit ${module_name}`">
+                <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_edit'])">
                   <feather-icon @click.stop="toggleEditLabourPriceModal(tr)" icon="EditIcon"
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip :text="`Delete ${module_name}`">
+                <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_delete'])">
                   <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon"
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
@@ -96,7 +96,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import actionModal from '@/views/labour-price/action'
-
+import { mapGetters } from 'vuex';
 export default {
   name: 'LabourPriceList',
 
@@ -129,7 +129,8 @@ export default {
     ...mapState('labourPrice', ['LabourPriceRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
-    }
+    },
+    ...mapGetters('auth', ['checkPermissionSlug']),
   },
 
   /** Functions */

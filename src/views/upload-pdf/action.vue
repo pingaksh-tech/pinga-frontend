@@ -1,5 +1,5 @@
 <template>
- <div class="vx-card p-6 upload-card">
+ <div class="vx-card p-6 upload-card" v-if="checkPermissionSlug(['PDF_Uploads_create'])">
    <h2 class="upload-title mb-6">Upload Document</h2>
 
    <!-- File Upload Area -->
@@ -66,7 +66,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-
+import { mapGetters } from 'vuex';
 export default {
  name: 'UploadPdf',
 
@@ -83,6 +83,7 @@ export default {
  },
 
  computed: {
+  ...mapGetters('auth', ['checkPermissionSlug']),
    isFormValid() {
      return this.selectedFile && this.duration > 0
    },
