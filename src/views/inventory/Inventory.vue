@@ -16,21 +16,20 @@
      <vs-button class="mr-2 vs-con-loading__container" @click="imageImport">Import</vs-button>
     </div>
     <!-- Category -->
-    <div class="vx-col w-1/7">
+    <!-- <div class="vx-col w-1/7">
      <label class="vs-input--label block">&nbsp;</label>
      <select-2 class="w-full category-input" name="Category" placeholder="Filter by Category" autocomplete :ssr="true"
       :multiple="true" v-model="categoryFilter" :value="categoryFilter" action="common/getCategories"
       @input="(item) => (categoryFilter = item && item.value)" />
      <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
     </div>
-    <!-- Sub Category -->
     <div class="vx-col w-1/7">
      <label class="vs-input--label block">&nbsp;</label>
-     <select-2 class="w-full category-input" name="Category" placeholder="Filter by Sub Category" autocomplete
+     <select-2 class="w-full category-input"="Category" placeholder="Filter by Sub Category" autocomplete
       :ssr="true" :multiple="true" v-model="subCategoryFilter" :value="subCategoryFilter"
       action="common/getSubCategoryByCategoryId" @input="(item) => (subCategoryFilter = item && item.value)" />
      <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category') }}</span>
-    </div>
+    </div> -->
 
     <div class="vx-col w-1/7">
      <label class="vs-input--label block">Inventory Import</label>
@@ -97,11 +96,146 @@
     <template slot="thead">
      <vs-th>Sr#</vs-th>
      <vs-th sort-key="Inventory.name">Inventory Name</vs-th>
-     <vs-th sort-key="Inventory.category_id">Category</vs-th>
-     <vs-th sort-key="Inventory.sub_category_id">Sub Category</vs-th>
+     <vs-th sort-key="Inventory.category_id" class="relative">
+      <div class="flex items-start cursor-pointer" @click.stop="toggleCategoryFilter">
+        <span>Category</span>
+        <feather-icon
+          icon="FilterIcon"
+          svgClasses="h-4 w-4 ml-1"
+        />
+        <vs-dropdown
+          vs-custom-content
+          class="filter-dropdown"
+          :class="{ 'active': showCategoryFilter }"
+          v-model="showCategoryFilter"
+        >
+          <div style="padding: 0.5rem; width: 200px;">
+            <div class="flex flex-col" @click.stop>
+              <vs-checkbox
+                v-for="(option, index) in categoryOptions"
+                :key="index"
+                v-model="categoryFilter"
+                :vs-value="option.value"
+                class="mb-1 flex"
+                @click.native.stop
+              >
+                {{ option.label }}
+              </vs-checkbox>
+              <div class="flex justify-between mt-2">
+                <vs-button
+                  size="small"
+                  @click="applyCategoryFilter"
+                  class="mr-1"
+                >
+                  Apply
+                </vs-button>
+                <vs-button
+                  size="small"
+                  type="flat"
+                  @click="clearCategoryFilter"
+                >
+                  Clear
+                </vs-button>
+              </div>
+            </div>
+          </div>
+        </vs-dropdown>
+      </div>
+    </vs-th>
+    <vs-th sort-key="Inventory.sub_category_id" class="relative">
+     <div class="flex items-start cursor-pointer" @click.stop="toggleSubCategoryFilter">
+       <span>Sub Category</span>
+       <feather-icon
+         icon="FilterIcon"
+         svgClasses="h-4 w-4 ml-1"
+       />
+       <vs-dropdown
+         vs-custom-content
+         class="filter-dropdown"
+         :class="{ 'active': showSubCategoryFilter }"
+         v-model="showSubCategoryFilter"
+       >
+         <div style="padding: 0.5rem; width: 200px;">
+           <div class="flex flex-col" @click.stop>
+             <vs-checkbox
+               v-for="(option, index) in subCategoryOptions"
+               :key="index"
+               v-model="subCategoryFilter"
+               :vs-value="option.value"
+               class="mb-1 flex"
+               @click.native.stop
+             >
+               {{ option.label }}
+             </vs-checkbox>
+             <div class="flex justify-between mt-2">
+               <vs-button
+                 size="small"
+                 @click="applySubCategoryFilter"
+                 class="mr-1"
+               >
+                 Apply
+               </vs-button>
+               <vs-button
+                 size="small"
+                 type="flat"
+                 @click="clearSubCategoryFilter"
+               >
+                 Clear
+               </vs-button>
+             </div>
+           </div>
+         </div>
+       </vs-dropdown>
+     </div>
+   </vs-th>
      <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
      <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
-     <vs-th sort-key="Inventory.gender">Gender</vs-th>
+     <vs-th sort-key="Inventory.gender" class="relative">
+      <div class="flex items-start cursor-pointer" @click.stop="toggleGenderFilter">
+        <span>Gender </span>
+        <feather-icon
+          icon="FilterIcon"
+          svgClasses="h-4 w-4 ml-1"
+        />
+        <vs-dropdown
+          vs-custom-content
+          class="gender-filter-dropdown"
+          :class="{ 'active': showGenderFilter }"
+          v-model="showGenderFilter"
+        >
+          <div style="padding: 0.5rem; width: 150px;">
+            <div class="flex flex-col" @click.stop>
+             <vs-checkbox
+             v-for="(option, index) in genderOptions"
+             :key="index"
+             v-model="genderFilter"
+             :vs-value="option.value"
+             class="mb-1 flex"
+             @click.native.stop
+           >
+             {{ option.label }}
+           </vs-checkbox>
+              <div class="flex justify-between mt-2">
+                <vs-button
+                  size="small"
+                  @click="applyGenderFilter"
+                  class="mr-1"
+                >
+                  Apply
+                </vs-button>
+                <vs-button
+                  size="small"
+                  type="flat"
+                  @click="clearGenderFilter"
+                >
+                  Clear
+                </vs-button>
+              </div>
+            </div>
+          </div>
+        </vs-dropdown>
+      </div>
+    </vs-th>
      <vs-th v-if="checkPermissionSlug(['inventories_edit','inventories_delete'])">Action</vs-th>
     </template>
 
@@ -187,7 +321,19 @@ export default {
   inventory_import: null,
   inventory_images: [],
   showErrorModal: false,
-  errorList: [] // Changed from errorMessage/errorProducts to errorList
+  errorList: [], // Changed from errorMessage/errorProducts to errorList
+genderFilter: [], // Changed from null to array for multiple selections
+  genderOptions: [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+    { label: 'Unisex', value: 'unisex' },
+  ],
+  showGenderFilter: false,
+  showCategoryFilter: false,
+  showSubCategoryFilter: false,
+  categoryOptions: [],
+  subCategoryOptions: [],
+
  }),
 
  /** computed */
@@ -207,6 +353,89 @@ export default {
 
  /** Functions */
  methods: {
+  toggleCategoryFilter() {
+    this.showCategoryFilter = !this.showCategoryFilter;
+    if (this.showCategoryFilter && this.categoryOptions.length === 0) {
+      this.fetchCategories();
+    }
+  },
+
+  toggleSubCategoryFilter() {
+    this.showSubCategoryFilter = !this.showSubCategoryFilter;
+    if (this.showSubCategoryFilter && this.subCategoryOptions.length === 0) {
+      this.fetchSubCategories();
+    }
+  },
+
+  applyCategoryFilter() {
+    this.showCategoryFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+  clearCategoryFilter() {
+    this.categoryFilter = [];
+    this.showCategoryFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+  applySubCategoryFilter() {
+    this.showSubCategoryFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+  clearSubCategoryFilter() {
+    this.subCategoryFilter = [];
+    this.showSubCategoryFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+  async fetchCategories() {
+    try {
+      // Replace with your actual API call to get categories
+      const response = await this.$store.dispatch('common/getCategories',{
+       page:1,
+       limit:1000
+      });
+      this.categoryOptions = response.data;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  },
+
+  async fetchSubCategories() {
+    try {
+      // Replace with your actual API call to get subcategories
+      const response = await this.$store.dispatch('common/getSubCategoryByCategoryId',{
+       page:1,
+       limit:1000
+      });
+      this.subCategoryOptions = response.data;
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+    }
+  },
+
+  toggleGenderFilter() {
+    this.showGenderFilter = !this.showGenderFilter;
+  },
+  applyGenderFilter() {
+    this.showGenderFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+  clearGenderFilter() {
+    this.genderFilter = [];
+    this.showGenderFilter = false;
+    this.page = 1;
+    this.getData();
+  },
+
+
   ...mapActions('inventory', {
    getInventoryList: 'getInventoryList',
    deleteInventoryRecord: 'deleteInventoryRecord',
@@ -256,8 +485,9 @@ export default {
     limit: this.length,
     page: this.page,
     search: this.search,
-    categoryId: this.categoryFilter ? this.categoryFilter : null,
-    subCategoryId: this.subCategoryFilter ? this.subCategoryFilter : null
+    categoryId: this.categoryFilter.length ? this.categoryFilter : null,
+    subCategoryId: this.subCategoryFilter.length ? this.subCategoryFilter : null,
+    gender: this.genderFilter.length ? this.genderFilter : null
    })
   },
 
@@ -454,14 +684,14 @@ export default {
 
  /** Watchers */
  watch: {
-  categoryFilter() {
-   this.page = 1 // Reset to first page when filter changes
-   this.getData()
-  },
-  subCategoryFilter() {
-   this.page = 1 // Reset to first page when filter changes
-   this.getData()
-  },
+  // categoryFilter() {
+  //  this.page = 1 // Reset to first page when filter changes
+  //  this.getData()
+  // },
+  // subCategoryFilter() {
+  //  this.page = 1 // Reset to first page when filter changes
+  //  this.getData()
+  // },
   listLoading() {
    if (this.listLoading) {
     this.$vs.loading({
@@ -487,5 +717,65 @@ export default {
 /* Optional: Add some spacing between error sections */
 .mb-6 {
  margin-bottom: 1.5rem;
+}
+.gender-filter-dropdown {
+ position: absolute;
+ right: 0;
+ top: 100%;
+ z-index: 100;
+ background: white;
+ border: 1px solid rgba(0, 0, 0, 0.1);
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ display: none;
+}
+
+.gender-filter-dropdown.active {
+ display: block;
+}
+
+.vs-th {
+ position: relative;
+}
+
+.vs-checkbox-con {
+ padding: 4px 0;
+}
+
+/* Prevent clicks inside dropdown from closing it */
+.gender-filter-dropdown >>> * {
+ pointer-events: auto;
+}
+.vs-con-table .vs-con-tbody .con-vs-checkbox{
+ justify-content: start !important;
+}
+.filter-dropdown {
+ position: absolute;
+ right: 0;
+ top: 100%;
+ z-index: 100;
+ background: white;
+ border: 1px solid rgba(0, 0, 0, 0.1);
+ border-radius: 4px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ display: none;
+}
+
+.filter-dropdown.active {
+ display: block;
+}
+
+.vs-th {
+ position: relative;
+}
+
+.vs-checkbox-con {
+ padding: 4px 0;
+ justify-content: start !important;
+}
+
+/* Prevent clicks inside dropdown from closing it */
+.filter-dropdown >>> * {
+ pointer-events: auto;
 }
 </style>
