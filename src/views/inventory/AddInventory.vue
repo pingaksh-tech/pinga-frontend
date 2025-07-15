@@ -207,15 +207,20 @@
              <span class="text-danger text-sm" v-show="errors.has('manufacturing_number')"> {{ errors.first('manufacturing_number') }}</span>
            </div>
            <div class="vx-col w-1/2 mb-2">
-            <vs-input
-              icon="icon icon-box"
-              icon-pack="feather"
-              class="w-full"
-              v-validate="'required'"
-              v-model="form.collection"
-              label="Collection *"
-              name="Collection"
-              id="collection"
+            <!-- Collection dropdown -->
+            <label class="vs-input--label">Collection</label>
+              <select-2
+                class="w-full category-input"
+                name="Collection"
+                placeholder="Select Collection"
+                :value="form.collection"
+                @input="(item) => (form.collection = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                :options="collectionOption"
+                data-vv-as="Inventory Type"
+                v-validate="'required'"
             />
             <span class="text-danger text-sm" v-show="errors.has('collection')"> {{ errors.first('collection') }}</span>
           </div>
@@ -407,6 +412,7 @@ export default {
       DIAMOND_SIZES: [],
       DIAMOND_SHAPES: [],
       SizeList: [],
+      collectionOption: [],
       form: {
         name: null,
         category_id: null,
@@ -433,6 +439,7 @@ export default {
   },
   /** Mounted */
   async mounted() {
+    this.fetchCollection()
     await this.diamondConstant()
     this.DIAMOND_CLARITY = Object.entries(this.diamondConstantList.DIAMOND_CLARITY).map(([value, label]) => ({ value: label, label }))
     this.DIAMOND_SHAPES = Object.entries(this.diamondConstantList.DIAMOND_SHAPES).map(([value, label]) => ({ value: label, label }))
@@ -443,6 +450,8 @@ export default {
   computed: {
     ...mapState('inventory', ['createLoading']),
     ...mapState('common', ['diamondConstantList']),
+    ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
+
 
     validateForm() {
       return !this.errors.any()
@@ -512,12 +521,29 @@ export default {
       createInventory: 'createInventory',
       updateInventoryRecord: 'updateInventoryRecord'
     }),
+     ...mapActions('collection', {
+      getCollectionList: 'getCollectionList'
+      // deleteCollectionRecord: 'deleteCollectionRecord'
+    }),
     ...mapActions('common', {
       getSubCategory: 'getSubCategoryByCategoryId',
       getSize: 'getSizeBySubCategoryId',
       diamondConstant: 'diamondConstant',
       getCategories: 'getCategories'
     }),
+    async fetchCollection() {
+      try {
+        // Replace with your actual API call to get categories
+        const response = await this.$store.dispatch('common/getCollections', {
+          page: 1,
+          limit: 25,
+          type: 'dropdown'
+        })
+        this.collectionOption = response.data
+      } catch (error) {
+        console.error('Error fetching collections:', error)
+      }
+    },
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false

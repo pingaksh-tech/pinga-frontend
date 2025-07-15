@@ -65,6 +65,7 @@
           <vs-th sort-key="user.name">Email</vs-th>
           <vs-th sort-key="user.name">Phone</vs-th>
           <vs-th sort-key="user.name">Role</vs-th>
+          <vs-th sort-key="user.name">Status</vs-th>
           <vs-th v-if="checkPermissionSlug(['users_edit','users_delete'])">Action</vs-th>
         </template>
 
@@ -78,6 +79,12 @@
             <vs-td class="text-left">{{ tr.email || '-' }} </vs-td>
             <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
             <vs-td class="text-left">{{ (tr.role && tr.role.name) || '-' }} </vs-td>
+            <vs-td class="text-left">
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id,tr.status)">
+               <span slot="on"></span>
+               <span slot="off"></span>
+             </vs-switch>
+            </vs-td>
             <vs-td v-if="checkPermissionSlug(['users_edit','users_delete'])">
               <div class="inline-flex">
                 <vx-tooltip text="Edit User" v-if="checkPermissionSlug(['users_edit'])">
@@ -253,7 +260,43 @@ export default {
           color: 'primary'
         })
       }
-    }
+    },
+    updateStatus(id,status) {
+      console.log(status,"status")
+      this.$store
+        .dispatch('user/updateUserStatus', {
+         type:'users',
+          id,
+          status : !status
+        })
+        .then((Success) => {
+          this.getData()
+          const { message } = Success
+          this.$vs.notify({
+            title: 'Success',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'success'
+          })
+        })
+        .catch((err) => {
+          const { message } = err
+          this.$vs.notify({
+            title: 'Error',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        })
+    },
+
+
   },
 
   /** Watchers */

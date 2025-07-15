@@ -219,5 +219,35 @@ export default {
         data: false
       })
     }
-  }
+  },
+  /* -------------------------------------------------------------------------- */
+  /*                             Update User Status                            */
+  /* -------------------------------------------------------------------------- */
+
+  async updateUserStatus({ commit }, { id, status }) {
+    commit('SET_STATE', {
+      action: 'loading',
+      data: true
+    })
+    try {
+      const res = await this.$http.put(`/users/status/${id}`, { status })
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      return {
+        data: res.data.data,
+        message: res.data.message
+      }
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'loading',
+        data: false
+      })
+      const { message } = getMessageFromError(error)
+      return Promise.reject({
+        message
+      })
+    }
+  },
 }

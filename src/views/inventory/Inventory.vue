@@ -4,27 +4,25 @@
     <div class="vx-card p-6">
       <div class="vx-row">
         <div class="flex align-center items-center justify-items-center pl-4 gap-8">
-          
-            <div class="vx-col w-1/7">
-              <label class="vs-input--label block">Images upload</label>
-                <input
-                  type="file"
-                  class="border p-2 rounded w-full"
-                  name="inventory_images"
-                  ref="files"
-                  accept=".jpg, .png , .jpeg"
-                  style="border: 1px solid rgba(0, 0, 0, 0.2)"
-                  data-vv-as="image upload"
-                  @change="handleImageUpload"
-                  multiple
-                />
-              <span class="text-danger text-xs" v-show="errors.has(`inventory_images`)">{{ errors.first(`inventory_images`) }}</span>
-            </div>
+          <div class="vx-col w-1/7">
+            <label class="vs-input--label block">Images upload</label>
+            <input
+              type="file"
+              class="border p-2 rounded w-full"
+              name="inventory_images"
+              ref="files"
+              accept=".jpg, .png , .jpeg"
+              style="border: 1px solid rgba(0, 0, 0, 0.2)"
+              data-vv-as="image upload"
+              @change="handleImageUpload"
+              multiple
+            />
+            <span class="text-danger text-xs" v-show="errors.has(`inventory_images`)">{{ errors.first(`inventory_images`) }}</span>
+          </div>
 
-            <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
+          <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
 
-            <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
-         
+          <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
       </div>
       <div class="vx-row">
@@ -33,7 +31,7 @@
           <div class="w-[269px] p-1">
             <input
               type="file"
-              class="border p-2 rounded w-full "
+              class="border p-2 rounded w-full"
               name="inventory_import"
               ref="files"
               accept=".xlsx"
@@ -47,7 +45,7 @@
         </div>
 
         <div class="vx-col w-1/7 pt-2">
-          <label class="vs-input--label">Category *</label>
+          <label class="vs-input--label">Category </label>
           <select-2
             class="w-full category-input"
             name="Category"
@@ -58,22 +56,20 @@
             :ssr="true"
             :multiple="false"
             v-model="categoryID"
-            v-validate="'required'"
             action="common/getCategories"
             data-vv-as="Category"
           />
-          <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
+          <!-- <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span> -->
         </div>
 
         <!-- Sub Category -->
         <div class="vx-col w-1/7 pt-2">
-          <label class="vs-input--label">Sub Category *</label>
+          <label class="vs-input--label">Sub Category </label>
           <select-2
             class="w-full category-input"
             name="Sub Category"
             placeholder="Select Sub Category"
             :value="form.subCategoryId"
-            v-model="subCategoryID"
             @input="(item) => (form.subCategoryId = item && item.value)"
             :options="SubCategoryList"
             action="common/getSubCategoryByCategoryId"
@@ -81,10 +77,9 @@
             autocomplete
             :ssr="true"
             :multiple="false"
-            v-validate="'required'"
             data-vv-as="Sub Category"
           />
-          <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category') }}</span>
+          <!-- <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category') }}</span> -->
         </div>
 
         <!-- Collection List -->
@@ -101,7 +96,6 @@
             autocomplete
             :ssr="true"
             :multiple="false"
-            v-model="inventoryType"
             :options="collectionOption"
             data-vv-as="Inventory Type"
           />
@@ -374,7 +368,24 @@ export default {
         this.fetchSubCategories()
       }
     },
+   resetImportForm() {
+      this.form = {
+        categoryId: null,
+        subCategoryId: null,
+        collectionId: null
+      }
+      this.categoryID = null
+      this.subCategoryID = null
+      this.inventoryType = null
+      this.SubCategoryList = []
+      this.inventory_import = null
 
+      if (this.$refs.files) {
+        this.$refs.files.value = ''
+      }
+
+      this.$validator.reset('inventory_import')
+    },
     applyCategoryFilter() {
       this.showCategoryFilter = false
       this.page = 1
@@ -576,7 +587,7 @@ export default {
     },
     async inventoryImport() {
       // First validate the form fields
-      const isValid = await this.$validator.validateAll()
+      const isValid = await this.$validator.validate('inventory_import')
       if (!isValid) {
         this.$vs.notify({
           title: 'Error',
@@ -638,6 +649,14 @@ export default {
         // Clear file input
         this.$refs.files.value = ''
       } catch ({ data }) {
+
+        this.form.categoryId = null
+        this.form.subCategoryId = null
+        this.categoryID = null
+        this.subCategoryID = null
+        this.SubCategoryList = []
+        this.inventory_import = null
+
         if (data && data.length > 0) {
           this.errorList = data
           this.showErrorModal = true
@@ -652,6 +671,8 @@ export default {
             color: 'primary'
           })
         }
+      } finally {
+          this.resetImportForm() //  Always reset form...
       }
     },
     downloadErrorLog() {
