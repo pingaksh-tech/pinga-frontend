@@ -21,7 +21,6 @@
           </div>
 
           <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
-
           <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
       </div>
@@ -118,7 +117,7 @@
         @search="updateSearchQuery"
         @change-page="handleChangePage"
         @sort="handleSort"
-        :total="FilteredCount"
+        :total="FilteredCountInventory"
         :max-items="length"
         search
         :data="InventoryRecords"
@@ -130,9 +129,9 @@
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
                   <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
-                      {{ page * length - (length - (FilteredCount && 1)) || 0 }}
+                      {{ page * length - (length - (FilteredCountInventory && 1)) || 0 }}
                       -
-                      {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
+                      {{ FilteredCountInventory - page * length > 0 ? page * length : FilteredCountInventory }}
                       of {{ total || 0 }}
                     </span>
                     <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
@@ -267,7 +266,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
+      <vs-pagination v-if="FilteredCountInventory" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
     <vs-popup class="holamundo" title="Import Errors" :active.sync="showErrorModal">
       <div class="p-4">
@@ -335,11 +334,11 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCountInventory', 'listLoading']),
     ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
-      return Math.ceil(this.FilteredCount / this.length)
+      return Math.ceil(this.FilteredCountInventory / this.length)
     },
     validateForm() {
       return !this.errors.any()

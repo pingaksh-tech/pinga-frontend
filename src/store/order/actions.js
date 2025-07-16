@@ -29,7 +29,7 @@ export default {
    })
    commit('SET_STATE', {
     action: 'FilteredCount',
-    data: res.data.data.totalCount
+    data: res.data.data.filteredCount
    })
   } catch (error) {
    commit('SET_STATE', {

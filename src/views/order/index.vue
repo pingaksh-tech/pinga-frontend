@@ -2,9 +2,20 @@
   <div>
     <!-- Order list -->
     <div class="vx-card p-6">
-      <vs-table id="order-list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="OrderRecords">
+      <vs-table 
+          id="order-list"
+          class="vs-con-loading__container"
+          stripe
+          :sst="true"
+          maxHeight="800px"
+          @search="updateSearchQuery"
+          @change-page="handleChangePage"
+          @sort="handleSort"
+          :total="FilteredCount"
+          :max-items="length" 
+          search
+          :data="OrderRecords"
+        >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
@@ -118,8 +129,7 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" @onchange="handleChangePage" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"class="mt-8"></vs-pagination>
     </div>
   </div>
 </template>

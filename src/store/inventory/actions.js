@@ -54,7 +54,7 @@ export default {
         data: res.data.data.totalCount
       })
       commit('SET_STATE', {
-        action: 'FilteredCount',
+        action: 'FilteredCountInventory',
         data: res.data.data.filteredCount
       })
     } catch (error) {

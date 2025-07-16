@@ -6,7 +6,7 @@ export default {
   listLoading: false,
   InventoryRecords: [],
   total: 0,
-  FilteredCount: 0,
+  FilteredCountInventory: 0,
   /* -------------------------------------------------------------------------- */
   /*                            Create Category State                           */
   /* -------------------------------------------------------------------------- */
