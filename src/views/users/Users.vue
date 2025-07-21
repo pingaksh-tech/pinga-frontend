@@ -218,6 +218,7 @@ export default {
 
     // Edit User modal
     toggleEditUserModal(data) {
+      // console.log(data, "data in edit user modal")
       this.isEditUserModalMounted = true
       this.isEditUserModalShow = true
       this.selectedRecord = data
@@ -331,7 +332,7 @@ export default {
         if (!newVal) {
           setTimeout(() => {
             this.isEditUserModalMounted = false
-          }, 0)
+          }, 300)
         }
       }
     },

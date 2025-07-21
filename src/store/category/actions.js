@@ -224,7 +224,7 @@ export default {
    data: true
   })
   try {
-   const res = await this.$http.get('sub-category/', { params })
+   const res = await this.$http.get('sub-category/', {  params: { ...params, status: true } })
    commit('SET_STATE', {
     action: 'listLoading',
     data: false

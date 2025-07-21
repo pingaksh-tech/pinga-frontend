@@ -390,6 +390,33 @@ export default {
    return Promise.reject(messages)
   }
  },
+ async resetPassword({ commit }, data) {
+//   console.log(id,"id................")
+  console.log(data)
+  commit('SET_STATE', {
+   action: 'loading',
+   data: true
+  })
+  try {
+   const res = await this.$http.put(`auth/change-password/${data.token}`, {password: data.password})
+   commit('SET_STATE', {
+    action: 'loading',
+    data: false
+   })
+   return {
+    message: res.data.message
+   }
+  } catch (error) {
+   commit('SET_STATE', {
+    action: 'loading',
+    data: false
+   })
+   const messages = getMessageFromError(error)
+   return Promise.reject(messages)
+  }
+ },
+
+
 
  /* ---------------------------------------------------------------------------------------------------------------------------- */
  /*                                               Get Diamond constant For Dropdown API                                          */
