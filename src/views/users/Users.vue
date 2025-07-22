@@ -64,7 +64,31 @@
           <vs-th sort-key="user.name">Last Name</vs-th>
           <vs-th sort-key="user.name">Email</vs-th>
           <vs-th sort-key="user.name">Phone</vs-th>
-          <vs-th sort-key="user.name">Role</vs-th>
+          <vs-th sort-key="user.name" class="relative">
+            <div class="flex items-start cursor-pointer" @click.stop="toggleRoleFilter">
+              <span>Role</span>
+              <feather-icon icon="FilterIcon" svgClasses="h-4 w-4 ml-1" />
+              <vs-dropdown vs-custom-content class="filter-dropdown" :class="{ active: showRoleFilter }" v-model="showRoleFilter">
+                <div style="padding: 0.5rem; width: 200px">
+                  <div class="flex flex-col" @click.stop>
+                    <vs-radio
+                      v-for="(option, index) in rollOption"
+                      :key="index"
+                      v-model="selectedRole"
+                      :vs-value="option.value"
+                      class="mb-1 flex items-start"
+                    >
+                      {{ option.label }}
+                    </vs-radio>
+                    <div class="flex justify-between mt-2">
+                       <vs-button size="small" @click="applyRoleFilter">Apply</vs-button>
+                      <vs-button size="small" type="flat" @click="clearRoleFilter">Clear</vs-button>
+                    </div>
+                  </div>
+                </div>
+              </vs-dropdown>
+            </div>
+          </vs-th>
           <vs-th sort-key="user.name">Status</vs-th>
           <vs-th v-if="checkPermissionSlug(['users_edit','users_delete'])">Action</vs-th>
         </template>
@@ -95,19 +119,6 @@
                 </vx-tooltip>
               </div>
             </vs-td>
-            <!-- <vs-td>
-                <vs-dropdown vs-trigger-click class="cursor-pointer">
-                  <div class="p-4 border border-solid d-theme-border-grey-light cursor-pointer flex items-center justify-between font-medium">
-                    Actions
-                    <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                  </div>
-                  <vs-dropdown-menu class="locations__actions">
-                    <vs-dropdown-item @click="sendToEditPage()"> <feather-icon icon="Edit3Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" /> Edit User </vs-dropdown-item>
-                    <vs-dropdown-item @click="deleteRecord()"> <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-danger cursor-pointer" /> Delete User </vs-dropdown-item>
-                  </vs-dropdown-menu>
-                </vs-dropdown>
-                <div>-</div>
-              </vs-td> -->
           </vs-tr>
         </template>
       </vs-table>
@@ -119,7 +130,7 @@
     <add-user-modal :module_name="module_name" @update-data="getData" v-if="isAddUserModalMounted" :showModal.sync="isAddUserModalShow" />
 
     <!-- Edit User modal -->
-    <Edit-user-modal :module_name="module_name" @update-data="getData" v-if="isEditUserModalMounted" :data="selectedRecord" :showModal.sync="isEditUserModalShow" />
+    <edit-user-modal :module_name="module_name" @update-data="getData" v-if="isEditUserModalMounted" :data="selectedRecord" :showModal.sync="isEditUserModalShow" />
   </div>
 </template>
 
@@ -127,24 +138,26 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import AddUserModal from '@/views/users/AddUserModal'
 import EditUserModal from '@/views/users/EditUserModal'
+import Select2 from '@/components/custom/form-elements/Select2.vue'
 
 export default {
   name: 'UserList',
 
-  /** Components */
   components: {
     AddUserModal,
-    EditUserModal
+    EditUserModal,
+    Select2
   },
 
-  /** Data */
   data: () => ({
+    selectedRole: null,
     order: [],
     records: [1, 2, 3],
     length: 10,
     page: 1,
     search: '',
     module_name: 'User',
+    showRoleFilter: false,
 
     // add User modal
     isAddUserModalMounted: false,
@@ -153,10 +166,10 @@ export default {
     // Edit User modal
     isEditUserModalMounted: false,
     isEditUserModalShow: false,
-    selectedRecord: null
+    selectedRecord: null,
+    rollOption: []
   }),
 
-  /** computed */
   computed: {
     ...mapState('user', ['UserRecords', 'total', 'FilteredCount', 'listLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
@@ -165,27 +178,56 @@ export default {
     }
   },
 
-  /** Functions */
   methods: {
     ...mapActions('user', {
       getUserList: 'getUserList',
       deleteUserRecord: 'deleteUserRecord'
     }),
 
-    /** Per Page Limit Change */
+    toggleRoleFilter() {
+      this.showRoleFilter = !this.showRoleFilter
+      if (this.showRoleFilter && this.rollOption.length === 0) {
+        this.fetchRoles()
+      }
+    },
+
+    applyRoleFilter() {
+      this.showRoleFilter = false
+      this.page = 1
+      this.getData()
+    },
+
+    clearRoleFilter() {
+      this.selectedRole = null
+      this.showRoleFilter = false
+      this.page = 1
+      this.getData()
+    },
+
+    async fetchRoles() {
+      try {
+        const response = await this.$store.dispatch('common/getRoles', {
+          page: 1,
+          limit: 1000,
+          type: "dropdown"
+        })
+        this.rollOption = response.data
+      } catch (error) {
+        console.error('Error fetching roles:', error)
+      }
+    },
+
     handleChangeLength(length) {
       this.page = 1
       this.length = length
       this.getData()
     },
 
-    /** Page Change */
     handleChangePage(page) {
       this.page = page
       this.getData()
     },
 
-    /** Sorting Table Data */
     handleSort(key, active) {
       if (!key) return
       this.page = 1
@@ -193,38 +235,32 @@ export default {
       this.getData()
     },
 
-    /** Search Query */
     updateSearchQuery(val) {
       this.page = 1
       this.search = val
       this.getData()
     },
 
-    /** User List API */
     getData() {
       this.getUserList({
-        // order: this.order,
         limit: this.length,
         page: this.page,
-        search: this.search
+        search: this.search,
+        role_id: this.selectedRole || null
       })
     },
 
-    // Add User modal
     toggleAddUserModal() {
       this.isAddUserModalMounted = true
       this.isAddUserModalShow = true
     },
 
-    // Edit User modal
     toggleEditUserModal(data) {
-      // console.log(data, "data in edit user modal")
       this.isEditUserModalMounted = true
       this.isEditUserModalShow = true
       this.selectedRecord = data
     },
 
-    /** Delete User Confirmation */
     deleteRecord(id) {
       this.$vs.dialog({
         type: 'confirm',
@@ -236,7 +272,6 @@ export default {
       })
     },
 
-    /** Delete User API */
     async deleteSingleRecord(id) {
       try {
         const { message } = await this.deleteUserRecord(id)
@@ -262,13 +297,13 @@ export default {
         })
       }
     },
-    updateStatus(id,status) {
-      console.log(status,"status")
+
+    updateStatus(id, status) {
       this.$store
         .dispatch('user/updateUserStatus', {
-         type:'users',
+          type: 'users',
           id,
-          status : !status
+          status: !status
         })
         .then((Success) => {
           this.getData()
@@ -295,12 +330,9 @@ export default {
             color: 'primary'
           })
         })
-    },
-
-
+    }
   },
 
-  /** Watchers */
   watch: {
     listLoading() {
       if (this.listLoading) {
@@ -313,7 +345,6 @@ export default {
       }
     },
 
-    // add User modal
     isAddUserModalShow: {
       immediate: true,
       handler(newVal) {
@@ -325,7 +356,6 @@ export default {
       }
     },
 
-    // edit User modal
     isEditUserModalShow: {
       immediate: true,
       handler(newVal) {
@@ -341,9 +371,54 @@ export default {
     }
   },
 
-  /** On Rendering */
   mounted() {
     this.getData()
   }
 }
 </script>
+
+<style scoped>
+.vs-th {
+  position: relative;
+}
+
+.filter-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 100;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.filter-dropdown.active {
+  display: block;
+}
+
+.vs-radio {
+  justify-content: flex-start !important;
+  padding: 4px 0;
+}
+
+.filter-dropdown >>> * {
+  pointer-events: auto;
+}
+
+/* Button styling */
+.filter-dropdown .flex.justify-between {
+  margin-top: 10px;
+}
+
+.filter-dropdown .vs-button {
+  margin: 0 2px;
+  padding: 0.3rem 0.6rem;
+}
+
+.filter-dropdown .vs-button--flat {
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+</style>

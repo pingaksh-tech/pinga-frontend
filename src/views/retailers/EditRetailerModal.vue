@@ -74,6 +74,12 @@
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.website" label="Website" name="Website" id="Website" />
             </div>
           </div>
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-validate="'required|max:3'" v-model="form.code" label="Code" name="Code" id="Code" />
+              <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span>
+            </div>
+          </div>
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -218,7 +224,8 @@ export default {
         birth_date: this.data.birth_date,
         anniversary_date: this.data.anniversary_date,
         manager: this.data.manager ? this.data.manager._id : null,
-
+        website:this.data.website ||'',
+        code: this.data.code || ''
 
       },
       dropDownManagers:[],
