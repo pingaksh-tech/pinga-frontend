@@ -146,7 +146,6 @@ span
                 autocomplete
                 :ssr="true"
                 :multiple="false"
-                v-validate="'required'"
                 :options="[
                   { label: 'Married', value: 'married' },
                   { label: 'Unmarried', value: 'unmarried' }
@@ -239,7 +238,6 @@ export default {
         employee_id:"",
         designation:"",
         gender:"",
-        employee_id:"",
         date_of_joining:""
       },
       zIndex: 0,
@@ -275,7 +273,6 @@ export default {
         return false
       }
       try {
-        console.log(this.form, 'this.form')
         const { message } = await this.createUser(this.form)
         this.$emit('update-data', true)
         this.$vs.notify({
