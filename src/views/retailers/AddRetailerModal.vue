@@ -7,15 +7,15 @@
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
-              <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full"  v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span> -->
             </div>
           </div>
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full"  v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span> -->
             </div>
           </div>
           <!-- date of birth -->
@@ -45,26 +45,25 @@
                 icon="icon icon-package"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required|min:4'"
                 v-model="form.business_name"
                 label="Business Name"
                 name="Business Name"
                 id="Business Name"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span> -->
             </div>
           </div>
           <!-- Legal name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.legal_name" label="Legal  Name" name="Legal Name" id="Legal Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.legal_name" label="Legal  Name" name="Legal Name" id="Legal Name" />
             </div>
           </div>
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email" name="Email" id="Email" />
-              <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.email" label="Email" name="Email" id="Email" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span> -->
             </div>
           </div>
           <!-- website -->
@@ -76,15 +75,15 @@
            <!--  code -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-validate="'required|max:3'" v-model="form.code" label="Code" name="Code" id="Code" />
-              <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span>
+              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span> -->
             </div>
           </div>
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
-              <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
             </div>
           </div>
           <!-- whatsapp_number -->
@@ -96,13 +95,13 @@
           <!-- landline -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.landline" label="Landline " name="Landline" id="Landline" />
-              <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.landline" label="Landline " name="Landline" id="Landline" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Manager *</label>
+              <label class="vs-input--label">Manager</label>
               <select-2
                 class="w-1/2 role-input"
                 name="Manager"
@@ -112,31 +111,30 @@
                 autocomplete
                 :ssr="true"
                 :multiple="false"
-                v-validate="'required'"
                 :options="this.dropDownManagers"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
           <!-- country  -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.country" label="Country" name="Country" id="Country" />
-              <span class="text-danger text-sm" v-show="errors.has('Country')">{{ errors.first('Country') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.country" label="Country" name="Country" id="Country" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Country')">{{ errors.first('Country') }}</span> -->
             </div>
           </div>
           <!-- state -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input v-validate="'required|min:4'" icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
-              <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span>
+              <vs-input  icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span> -->
             </div>
           </div>
           <!-- city -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.city" label="City" name="City" id="City" />
-              <span class="text-danger text-sm" v-show="errors.has('City')">{{ errors.first('City') }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.city" label="City" name="City" id="City" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('City')">{{ errors.first('City') }}</span> -->
             </div>
           </div>
           <!-- street   -->
@@ -154,8 +152,8 @@
           <!-- address -->
           <div class="vx-col w-1/2 mt-5">
             <div class="">
-              <vs-textarea icon="icon icon-package" icon-pack="feather" v-validate="'required|min:4'" v-model="form.address" label="Address" name="Address" id="Address" />
-              <span class="text-danger text-sm" v-show="errors.has('Address')">{{ errors.first('Address') }}</span>
+              <vs-textarea icon="icon icon-package" icon-pack="feather" v-model="form.address" label="Address" name="Address" id="Address" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Address')">{{ errors.first('Address') }}</span> -->
             </div>
           </div>
         </div>
@@ -170,7 +168,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -240,9 +238,9 @@ export default {
   computed: {
     ...mapState('retailer', ['createLoading']),
     ...mapState('user', ['createLoading', 'managers']),
-    validateForm() {
-      return !this.errors.any()
-    },
+    // validateForm() {
+    //   return !this.errors.any()
+    // },
     isActive: {
       get() {
         return this.showModal
@@ -271,9 +269,9 @@ export default {
     },
     ...mapState('user', { getManagers: 'managers' }),
     async save_changes() {
-      if (!(await this.$validator.validate())) {
-        return false
-      }
+     // if (!(await this.$validator.validate())) {
+     // return false
+     //}
       try {
         const { message } = await this.createRetailer(this.form)
         this.$emit('update-data', true)
