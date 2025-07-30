@@ -127,14 +127,13 @@
                 icon-pack="feather"
                 class="w-full"
                 type="number"
-                v-validate="'required|decimal|min_value:1'"
                 min="1"
                 v-model="form.manufacturing_price"
-                label="Manufacturing Price *"
+                label="Manufacturing Price"
                 name="Manufacturing Price"
                 id="Manufacturing Price"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{ errors.first('Manufacturing Price') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{ errors.first('Manufacturing Price') }}</span> -->
             </div>
 
             <div class="vx-col w-1/2 mb-2">
@@ -208,7 +207,7 @@
            </div>
            <div class="vx-col w-1/2 mb-2">
             <!-- Collection dropdown -->
-            <label class="vs-input--label">Collection</label>
+            <label class="vs-input--label">Collection *</label>
               <select-2
                 class="w-full category-input"
                 name="Collection"
@@ -239,7 +238,7 @@
                 :multiple="true"
                 action="common/getFamilyProducts"
               />
-              <span class="text-primary text-sm" v-show="errors.has('Family Product')">{{ errors.first('Family Product') }}</span>
+              <!-- <span class="text-primary text-sm" v-show="errors.has('Family Product')">{{ errors.first('Family Product') }}</span> -->
             </div>
 
             <div class="vx-col w-full">
