@@ -183,13 +183,11 @@
                 icon="icon icon-box"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required'"
                 v-model="form.production_name"
-                label="Production Name *"
+                label="Production Name"
                 name="Production Name"
                 id="Production Name"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Production Name')"> {{ errors.first('Production Name') }}</span>
             </div>
 
             <div class="vx-col w-1/2 mb-2">
@@ -197,17 +195,17 @@
                icon="icon icon-box"
                icon-pack="feather"
                class="w-full"
-               v-validate="'required'"
+               
                v-model="form.manufacturing_number"
-               label="Manufacturing Number *"
+               label="Manufacturing Number"
                name="Manufacturing Number"
                id="manufacturing_number"
              />
-             <span class="text-danger text-sm" v-show="errors.has('manufacturing_number')"> {{ errors.first('manufacturing_number') }}</span>
+            
            </div>
            <div class="vx-col w-1/2 mb-2">
             <!-- Collection dropdown -->
-            <label class="vs-input--label">Collection *</label>
+            <label class="vs-input--label">Collection</label>
               <select-2
                 class="w-full category-input"
                 name="Collection"
@@ -219,9 +217,7 @@
                 :multiple="false"
                 :options="collectionOption"
                 data-vv-as="Inventory Type"
-                v-validate="'required'"
             />
-            <span class="text-danger text-sm" v-show="errors.has('collection')"> {{ errors.first('collection') }}</span>
           </div>
 
             <!-- Family Products -->
@@ -566,7 +562,11 @@ export default {
               }
             }
           } else {
-            data.append(key, this.form[key])
+             if (key === 'manufacturing_price') {
+                  data.append(key, this.form[key] === undefined ? '' : this.form[key])
+            } else {
+                 data.append(key, this.form[key])
+              }
           }
         }
         if (this.$route.params.id) {
