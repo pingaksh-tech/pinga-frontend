@@ -20,8 +20,8 @@
             <span class="text-danger text-xs" v-show="errors.has(`inventory_images`)">{{ errors.first(`inventory_images`) }}</span>
           </div>
 
-          <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
-          <vs-button class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
+          <vs-button :disabled="createLoading" class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
+          <vs-button :disabled='importLoading' id="import-loading" class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
       </div>
       <div class="vx-row">
@@ -339,7 +339,7 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCountInventory', 'listLoading']),
+    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCountInventory', 'listLoading','createLoading','importLoading']),
     ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
@@ -885,6 +885,26 @@ export default {
         })
       } else {
         this.$vs.loading.close('#inventory-list > .con-vs-loading')
+      }
+    },
+    importLoading(){
+      if (this.importLoading) {
+        this.$vs.loading({
+          container: '#import-loading',
+          scale: 0.45
+        })
+      } else {
+        this.$vs.loading.close('#import-loading > .con-vs-loading')
+      }
+    },
+    createLoading(){
+      if (this.createLoading) {
+        this.$vs.loading({
+          container: '#image-loading',
+          scale: 0.45
+        })
+      } else {
+        this.$vs.loading.close('#image-loading > .con-vs-loading')
       }
     },
     page() {

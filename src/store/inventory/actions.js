@@ -169,22 +169,22 @@ export default {
 
   async inventoryImportApi({ commit }, data) {
     commit('SET_STATE', {
-      action: 'createLoading',
+      action: 'importLoading',
       data: true
     })
     try {
       const res = await this.$http.post('inventory/import-excel', data)
       commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
+        action: 'importLoading',
+        data: true
       })
       return {
         message: res.data.message
       }
     } catch (error) {
       commit('SET_STATE', {
-        action: 'createLoading',
-        data: false
+        action: 'importLoading',
+        data: true
       })
       const errData = error.response.data.data.errorData
 
