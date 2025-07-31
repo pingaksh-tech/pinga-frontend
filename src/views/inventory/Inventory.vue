@@ -193,7 +193,7 @@
               <vs-dropdown vs-custom-content class="filter-dropdown" :class="{ active: showSubCategoryFilter }" v-model="showSubCategoryFilter">
                 <div style="padding: 0.5rem; width: 200px">
                   <div class="flex flex-col" @click.stop>
-                    <vs-checkbox v-for="(option, index) in subCategoryOptions" :key="index" v-model="subCategoryFilter" :vs-value="option.value" class="mb-1 flex" @click.native.stop>
+                    <vs-checkbox v-for="(option, index) in subCategoryOptionList" :key="index" v-model="subCategoryFilter" :vs-value="option.value" class="mb-1 flex" @click.native.stop>
                       {{ option.label }}
                     </vs-checkbox>
                     <div class="flex justify-between mt-2">
@@ -228,7 +228,6 @@
           </vs-th>
           <vs-th v-if="checkPermissionSlug(['inventories_edit', 'inventories_delete'])">Action</vs-th>
         </template>
-
         <template slot-scope="{ data }">
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
@@ -264,6 +263,11 @@
             </vs-td>
           </vs-tr>
         </template>
+        <!-- <template v-slot:noData>
+          <div class="text-center p-4">
+            <p>No data available</p>
+          </div>
+        </template> -->
       </vs-table>
       <!-- Custom Pagination -->
       <vs-pagination v-if="FilteredCountInventory" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
@@ -325,6 +329,7 @@ export default {
     categoryID: null,
     subCategoryID: null,
     SubCategoryList: [],
+    subCategoryOptionList:[],
     form: {
       categoryId: null,
       subCategoryId: null,
@@ -433,6 +438,19 @@ export default {
           type: 'dropdown'
         })
         this.collectionOption = response.data
+      } catch (error) {
+        console.error('Error fetching collections:', error)
+      }
+    },
+    async fetchSubCategory() {
+      try {
+        // Replace with your actual API call to get categories
+        const response = await this.$store.dispatch('common/getSubCategoryByCategoryId', {
+          page: 1,
+          limit: 1000,
+          type: 'dropdown'
+        })
+        this.subCategoryOptionList = response.data
       } catch (error) {
         console.error('Error fetching collections:', error)
       }
@@ -890,11 +908,15 @@ export default {
   mounted() {
     this.getData()
     this.fetchCollection()
+    this.fetchSubCategory()
   }
 }
 </script>
 <style scoped>
 /* Optional: Add some spacing between error sections */
+#inventory-list .vs-con-tbody {
+  min-height: 240px; /* 48px per row * 5 rows */
+}
 .mb-6 {
   margin-bottom: 1.5rem;
 }
@@ -943,10 +965,6 @@ export default {
 
 .filter-dropdown.active {
   display: block;
-}
-
-.vs-th {
-  position: relative;
 }
 
 .vs-checkbox-con {

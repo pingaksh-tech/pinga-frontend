@@ -90,7 +90,7 @@ span
           <!-- Manager -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Manager *</label>
+              <label class="vs-input--label">Manager</label>
               <select-2
                 class="w-1/2 role-input"
                 name="Manager"
@@ -100,10 +100,9 @@ span
                 autocomplete
                 :ssr="true"
                 :multiple="false"
-                v-validate="'required'"
                 :options="this.dropDownManagers"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
 
@@ -174,13 +173,12 @@ span
                 icon="icon icon-lock"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required|min:8'"
                 v-model="form.password"
-                label="Password *"
+                label="Password"
                 name="Password"
                 id="Password"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span> -->
             </div>
           </div>
         </div>
