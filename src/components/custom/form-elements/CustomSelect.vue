@@ -1,26 +1,61 @@
 <template lang="html">
-  <div :class="{
-    autocompletex: typeable,
-    activeOptions: active,
-    'input-select-validate-success': success,
-    'input-select-validate-danger': danger,
-    'input-select-validate-warning': warning
-  }" :style="getWidth" class="con-select">
+  <div
+    :class="{
+      autocompletex: typeable,
+      activeOptions: active,
+      'input-select-validate-success': success,
+      'input-select-validate-danger': danger,
+      'input-select-validate-warning': warning
+    }"
+    :style="getWidth"
+    class="con-select"
+  >
     <label v-if="label" ref="inputSelectLabel" class="vs-select--label">{{ label }}</label>
     <div class="input-select-con relative">
-      <!-- v-model="valueFilter" -->
-      <input ref="inputselect" v-bind="$attrs" :readonly="!typeable" class="input-select vs-select--input" type="text"
-        @keydown.esc.stop.prevent="closeOptions" autocomplete="nope" v-on="listeners" :disabled="loader || disabled" />
+      <input
+        ref="inputselect"
+        v-bind="$attrs"
+        :readonly="!typeable"
+        class="input-select vs-select--input"
+        type="text"
+        @keydown.esc.stop.prevent="closeOptions"
+        autocomplete="nope"
+        v-on="listeners"
+        :disabled="loader || disabled"
+      />
       <div v-if="loader" class="absolute rounded-full input-loader"></div>
-
-      <vs-icon v-if="value && !disabled && clearable" :icon-pack="iconPack" :icon="iconClear"
-        class="clear_icon vs-select--icon cursor-pointer pointer-events-auto" @click="clearValue"></vs-icon>
-
-      <vs-icon v-if="!activeBtnClear" :icon-pack="iconPack" :icon="icon" class="icon-select vs-select--icon"></vs-icon>
-
+      <vs-icon
+        v-if="value && !disabled && clearable"
+        :icon-pack="iconPack"
+        :icon="iconClear"
+        class="clear_icon vs-select--icon cursor-pointer pointer-events-auto"
+        @click="clearValue"
+      ></vs-icon>
+      <vs-icon
+        v-if="!activeBtnClear"
+        :icon-pack="iconPack"
+        :icon="icon"
+        class="icon-select vs-select--icon"
+      ></vs-icon>
       <transition name="fadeselect">
-        <div v-show="active" ref="vsSelectOptions" :style="cords" :class="[`vs-select-${color}`, { scrollx: scrollx }]"
-          class="vs-select--options">
+        <div
+          v-show="active"
+          ref="vsSelectOptions"
+          :style="cords"
+          :class="[`vs-select-${color}`, { scrollx: scrollx }]"
+          class="vs-select--options"
+        >
+          <div v-if="typeable" class="search-container" style="padding: 8px;">
+            <input
+              ref="searchInput"
+              type="text"
+              class="search-input"
+              placeholder="Search..."
+              v-model="searchValue"
+              @keyup="handleSearchInput"
+              style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+            />
+          </div>
           <ul ref="ulx" id="optionContainer">
             <slot />
           </ul>
@@ -32,7 +67,6 @@
         </div>
       </transition>
     </div>
-
     <transition-group @before-enter="beforeEnter" @enter="enter" @leave="leave">
       <div v-if="success" key="success" class="con-text-validation">
         <span class="span-text-validation span-text-validation-success">
@@ -60,101 +94,34 @@
 
 <script>
 import _ from "lodash";
+
 export default {
   name: "VsSelect",
-
   props: {
     value: {},
-    noData: {
-      default: "No data available",
-      type: String,
-    },
-    maxSelected: {
-      default: null,
-      type: [Number, String],
-    },
-    typeable: {
-      default: false,
-      type: Boolean,
-    },
-    color: {
-      default: "primary",
-      type: String,
-    },
-    multiple: {
-      default: false,
-      type: Boolean,
-    },
-    label: {
-      default: null,
-      type: [String],
-    },
-    success: {
-      default: false,
-      type: Boolean,
-    },
-    danger: {
-      default: false,
-      type: Boolean,
-    },
-    warning: {
-      default: false,
-      type: Boolean,
-    },
-    successText: {
-      default: null,
-      type: String,
-    },
-    dangerText: {
-      default: null,
-      type: String,
-    },
-    warningText: {
-      default: null,
-      type: String,
-    },
-    descriptionText: {
-      default: null,
-      type: String,
-    },
-    iconPack: {
-      default: "material-icons",
-      type: String,
-    },
-    icon: {
-      default: "keyboard_arrow_down",
-      type: String,
-    },
-    iconClear: {
-      default: "close",
-      type: String,
-    },
-    width: {
-      default: null,
-      type: String,
-    },
-    loader: {
-      default: false,
-      type: Boolean,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    ssr: {
-      type: Boolean,
-      default: false,
-    },
-    module_type: {
-      type: String,
-      default: null,
-    },
+    noData: { default: "No data available", type: String },
+    maxSelected: { default: null, type: [Number, String] },
+    typeable: { default: false, type: Boolean },
+    color: { default: "primary", type: String },
+    multiple: { default: false, type: Boolean },
+    label: { default: null, type: [String] },
+    success: { default: false, type: Boolean },
+    danger: { default: false, type: Boolean },
+    warning: { default: false, type: Boolean },
+    successText: { default: null, type: String },
+    dangerText: { default: null, type: String },
+    warningText: { default: null, type: String },
+    descriptionText: { default: null, type: String },
+    iconPack: { default: "material-icons", type: String },
+    icon: { default: "keyboard_arrow_down", type: String },
+    iconClear: { default: "close", type: String },
+    width: { default: null, type: String },
+    loader: { default: false, type: Boolean },
+    disabled: { default: false, type: Boolean },
+    clearable: { default: true, type: Boolean },
+    ssr: { default: false, type: Boolean },
+    module_type: { default: null, type: String }
   },
-
   data: () => ({
     valueFilter: "",
     active: false,
@@ -164,8 +131,8 @@ export default {
     cords: {},
     filterx: false,
     timerState: null,
+    searchValue: "" // New data property for search input
   }),
-
   computed: {
     activeBtnClear() {
       return this.typeable && this.filterx;
@@ -176,15 +143,14 @@ export default {
     parent() {
       return this;
     },
-
     listeners() {
       return {
         ...this.$listeners,
         blur: (event) => {
           if (
-            this.typeable && event.relatedTarget
-              ? !event.relatedTarget.closest(".vs-select--options")
-              : false
+            this.typeable &&
+            event.relatedTarget &&
+            !event.relatedTarget.closest(".vs-select--options")
           ) {
             this.closeOptions();
           }
@@ -192,36 +158,30 @@ export default {
         },
         focus: (event) => {
           this.$emit("focus", event);
-          if (event.keyCode ? event.keyCode : event.which) {
+          if (event.keyCode || event.which) {
             this.focus();
           }
         },
         mouseup: () => {
           this.focus();
         },
-        input: _.debounce((event) => {
-          if (this.typeable && this.ssr) {
-            this.$emit("input-change", event);
-          }
-        }, 600),
         keyup: (event) => {
           if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
-            const childrens = this.$children.filter((item) => {
-              return item.visible;
-            });
-            childrens[0].$el.querySelector(".vs-select--item").focus();
+            const childrens = this.$children.filter((item) => item.visible);
+            if (childrens[0]) {
+              childrens[0].$el.querySelector(".vs-select--item").focus();
+            }
           } else if (this.typeable) {
             this.filterItems(event.target.value);
           }
           this.$children.map((item) => {
             item.valueInputx = this.$refs.inputselect.value;
           });
-        },
+        }
       };
-    },
+    }
   },
-
   watch: {
     value(event) {
       this.valuex = this.value;
@@ -238,29 +198,30 @@ export default {
               }
             });
             if (this.$refs.ulx.scrollHeight >= 260) this.scrollx = true;
+            // Focus the search input when dropdown opens
+            if (this.typeable && this.$refs.searchInput) {
+              this.$refs.searchInput.focus();
+            }
           }, 100);
         } else {
           const [parent] = document.getElementsByTagName("body");
           parent.removeChild(this.$refs.vsSelectOptions);
+          this.searchValue = ""; // Clear search input when dropdown closes
         }
       });
-    },
+    }
   },
-
   mounted() {
-    // this.$refs.inputselect.value = this.value
     this.changeValue();
     if (this.active) {
       this.insertBody(this.$refs.vsSelectOptions);
     }
-
     const optionElement = this.$refs.ulx;
     optionElement.addEventListener(
       "scroll",
       _.debounce((e) => this.fireScrollEnd(e), 300)
     );
   },
-
   beforeDestroy() {
     const [parent] = document.getElementsByTagName("body");
     if (this.active) {
@@ -274,19 +235,18 @@ export default {
       parent.removeChild(this.$refs.vsSelectOptions);
     }
   },
-
   updated() {
     if (!this.active) {
       this.changeValue();
     }
   },
-
   methods: {
     clearValue() {
       this.focus();
       this.filterItems("");
       this.changeValue();
       this.$emit("clearValue", null);
+      this.searchValue = "";
     },
     addMultiple(value) {
       const currentValues = this.value ? this.value : [];
@@ -302,7 +262,6 @@ export default {
         this.$emit("input", currentValues);
         this.filterItems("");
         this.changeValue();
-        // this.$refs.inputselect.value += ','
         this.$refs.inputselect.focus();
       } else {
         currentValues.push(value);
@@ -340,14 +299,8 @@ export default {
           item.visible = false;
         }
       });
-      const lengthx = items.filter((item) => {
-        return item.visible;
-      });
-      if (lengthx.length === 0) {
-        this.clear = true;
-      } else {
-        this.clear = false;
-      }
+      const lengthx = items.filter((item) => item.visible);
+      this.clear = lengthx.length === 0;
       this.$nextTick(() => {
         this.cords = this.changePosition();
       });
@@ -366,7 +319,7 @@ export default {
         values.forEach((item) => {
           options.forEach((item_option) => {
             if (item_option.value === item) {
-              let text = this.module_type == 'inventory' ? item_option.label : item_option.text;
+              let text = this.module_type == "inventory" ? item_option.label : item_option.text;
               text = text.replace("check_circle", "");
               optionsValues.push(text.trim());
             }
@@ -384,10 +337,9 @@ export default {
       const inputx = this.$refs.inputselect;
       if (this.typeable && this.multiple) {
         setTimeout(() => {
-          console.log(this.$refs.inputselect.value, "---", inputx.value)
           if (inputx.value) {
-            const beforeInputValue = inputx.value += ","
-            this.$refs.inputselect.value = beforeInputValue.trim().replace(/,+$/, '');
+            const beforeInputValue = inputx.value + ",";
+            this.$refs.inputselect.value = beforeInputValue.trim().replace(/,+$/, "");
           }
           inputx.selectionStart = inputx.selectionEnd = 10000;
         }, 10);
@@ -395,9 +347,7 @@ export default {
         this.$refs.inputselect.select();
       }
       if (!this.typeable) {
-        if (
-          this.multiple ? this.value.length === 0 : !this.value || this.multiple
-        ) {
+        if (this.multiple ? this.value.length === 0 : !this.value || this.multiple) {
           setTimeout(() => {
             const el = this.$children[0].$el.querySelector(".vs-select--item");
             if (el) el.focus();
@@ -409,10 +359,10 @@ export default {
       });
     },
     clickBlur(event) {
-      if (event.target === this.$refs.inputselect) {
+      if (event.target === this.$refs.inputselect || event.target === this.$refs.searchInput) {
         return;
       }
-      const closestx = event.target.closest(".vs-select--option");
+      const closestx = event.target.closest(".vs-select--options");
       if (!closestx) {
         this.closeOptions();
         if (this.typeable) {
@@ -425,6 +375,7 @@ export default {
       this.active = false;
       this.setLabelClass(this.$refs.inputSelectLabel, false);
       document.removeEventListener("click", this.clickBlur);
+      this.searchValue = "";
     },
     changePosition() {
       const elx = this.$refs.inputselect;
@@ -433,17 +384,9 @@ export default {
       let topx = 0;
       let leftx = 0;
       let widthx = 0;
-      const scrollTopx =
-        window.pageYOffset || document.documentElement.scrollTop;
-      if (
-        elx.getBoundingClientRect().top + content.scrollHeight + 20 >=
-        window.innerHeight
-      ) {
-        topx =
-          elx.getBoundingClientRect().top +
-          elx.clientHeight +
-          scrollTopx -
-          content.scrollHeight;
+      const scrollTopx = window.pageYOffset || document.documentElement.scrollTop;
+      if (elx.getBoundingClientRect().top + content.scrollHeight + 20 >= window.innerHeight) {
+        topx = elx.getBoundingClientRect().top + elx.clientHeight + scrollTopx - content.scrollHeight;
         if (conditional) {
           topx = topx - elx.clientHeight - 5;
         }
@@ -454,12 +397,11 @@ export default {
       }
       leftx = elx.getBoundingClientRect().left;
       widthx = elx.offsetWidth;
-      const cords = {
+      return {
         left: `${leftx}px`,
         top: `${topx}px`,
-        width: `${widthx}px`,
+        width: `${widthx}px`
       };
-      return cords;
     },
     beforeEnter(el) {
       el.style.height = 0;
@@ -473,14 +415,12 @@ export default {
       el.style.height = "0px";
     },
     setLabelClass(label, focusing) {
-      if (!label) {
-        return;
-      }
+      if (!label) return;
       if (focusing) {
         label.classList.add(`input-select-label-${this.color}--active`);
-        return;
+      } else {
+        label.classList.remove(`input-select-label-${this.color}--active`);
       }
-      label.classList.remove(`input-select-label-${this.color}--active`);
     },
     insertBody(elx, parent) {
       const bodyx = parent ? parent : document.body;
@@ -491,7 +431,11 @@ export default {
         this.$emit("scrollEnd");
       }
     },
-  },
+    handleSearchInput(event) {
+      console.log('Search input in dropdown:', event.target.value);
+      this.$emit("search-input", event);
+    }
+  }
 };
 </script>
 
@@ -501,7 +445,6 @@ export default {
   transition: 0.5s;
   z-index: 998;
 }
-
 .input-loader {
   top: 25%;
   right: 1.4rem;
@@ -510,17 +453,19 @@ export default {
   background-color: #0096dc;
   animation: animate 1s infinite;
   transition: 0.5s;
-
   @keyframes animate {
-    0% {
-      opacity: 0.1;
-      transform: scale(0.2);
-    }
-
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
+    0% { opacity: 0.1; transform: scale(0.2); }
+    100% { opacity: 1; transform: scale(1); }
   }
+}
+.search-container {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1000;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #0096dc;
 }
 </style>
