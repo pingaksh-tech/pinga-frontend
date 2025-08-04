@@ -8,14 +8,14 @@
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
               <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
             </div>
           </div>
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
               <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
             </div>
           </div>
@@ -56,14 +56,14 @@
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email" name="Email" id="Email" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email *" name="Email" id="Email" />
               <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
             </div>
           </div>
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone *" name="Phone" id="Phone" />
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@
           <!-- Manager -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Manager *</label>
+              <label class="vs-input--label">Manager</label>
               <select-2
                 class="w-full role-input"
                 name="Manager"
@@ -101,10 +101,9 @@
                 autocomplete
                 :ssr="true"
                 :multiple="false"
-                v-validate="'required'"
                 :options="this.dropDownManagers"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
            <!-- Pan Number -->
@@ -146,7 +145,6 @@
                 autocomplete
                 :ssr="true"
                 :multiple="false"
-                v-validate="'required'"
                 :options="[
                   { label: 'Married', value: 'married' },
                   { label: 'Unmarried', value: 'unmarried' }
@@ -171,7 +169,7 @@
           <!-- password -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-validate="'min:8'" v-model="form.password" label="Password *" name="Password" id="Password" />
+              <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-model="form.password" label="Password *" name="Password" id="Password" />
               <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span>
             </div>
           </div>
