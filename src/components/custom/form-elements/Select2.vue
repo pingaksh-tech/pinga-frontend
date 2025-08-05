@@ -2,7 +2,7 @@
   <div class="custom__select center w-full">
     <VsSelect
       ref="selectBox"
-      :typeable="autocomplete"
+      :typeable="typeable"
       :disabled="disabled"
       @clearValue="clearVal"
       @input-change="inputChanged"

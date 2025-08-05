@@ -71,5 +71,36 @@ export default {
     message
    })
   }
- }
+ },
+ /* -------------------------------------------------------------------------- */
+ /*                                Order Details                          */
+ /* -------------------------------------------------------------------------- */
+ async getOrderDetails({ commit }, id) {
+    commit('SET_STATE', {
+      action: 'orderLoading',
+      data: true
+    })
+    try {
+      const res = await this.$http.get(`/order/details/${id}`)
+      console.log("Order Details: ", res.data.data);
+    //   const formattedManagers = (res.data.data || []).map((manager) => ({
+    //     value: manager._id,
+    //     label: `${manager.first_name} ${manager.last_name}`
+    //   }))
+      commit('SET_STATE', {
+        action: 'orderLoading',
+        data: false
+      })
+      commit('SET_STATE', {
+        action: 'orderList',
+        data: res.data.data
+      })
+    } catch (error) {
+      commit('SET_STATE', {
+        action: 'orderLoading',
+        data: false
+      })
+    }
+  },
 }
+

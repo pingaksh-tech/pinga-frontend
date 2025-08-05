@@ -82,7 +82,7 @@
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
+              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
             </div>
           </div>
@@ -95,7 +95,7 @@
           <!-- landline -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.landline" label="Landline " name="Landline" id="Landline" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.landline" label="Landline (with area code)" name="Landline" id="Landline" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
@@ -112,6 +112,7 @@
                 :ssr="true"
                 :multiple="false"
                 :options="this.dropDownManagers"
+                
               />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
@@ -207,7 +208,7 @@ export default {
         last_name: '',
         business_name: '',
         email: '',
-        phone: '',
+        phone: '+91',
         code: '',
         landline: '',
         address: '',

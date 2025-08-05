@@ -17,7 +17,7 @@
             <!-- Category -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Category *</label>
-              <select-2 class="w-full category-input" name="Category" placeholder="Select Category"
+              <select-2 class="w-full category-input" name="Category"  placeholder="Select Category"
                 :value="form.categoryId" @input="(item) => (form.categoryId = item && item.value)" autocomplete
                 :ssr="true" v-validate="'required'" action="common/getCategories" />
               <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
@@ -37,6 +37,7 @@
                 v-validate="'required'"
                 data-vv-as="Inventory"
                 action="common/getInventories"
+                :showSearch="true"
               />
               <span class="text-danger text-sm" v-show="errors.has('inventory')">
                 {{ errors.first('inventory') }}

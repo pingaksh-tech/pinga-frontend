@@ -96,7 +96,7 @@
                 v-validate="'required|decimal|min_value:0'"
                 min="0"
                 v-model="form.metal_weight"
-                label="Metal Weight *"
+                label="Metal Weight (in grams)*"
                 name="Metal Weight"
                 id="Metal Weight"
               />
@@ -123,7 +123,7 @@
             <!-- Manufacturing Price -->
             <div class="vx-col w-1/2 mb-2">
               <vs-input
-                icon="icon icon-dollar-sign"
+                icon="icon icon-box"
                 icon-pack="feather"
                 class="w-full"
                 type="number"

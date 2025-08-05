@@ -8,14 +8,14 @@ span
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter first name" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
               <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
             </div>
           </div>
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" placeholder="Enter last name" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
               <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
             </div>
           </div>
@@ -50,6 +50,7 @@ span
                   { label: 'Female', value: 'female' },
                   { label: 'Other', value: 'other' }
                 ]"
+                 :typeable="false"
               />
             </div>
           </div>
@@ -57,14 +58,14 @@ span
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email *" name="Email" id="Email" />
+              <vs-input icon="icon icon-package" placeholder="Enter email e.g.,jo@example.co" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email *" name="Email" id="Email" />
               <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
             </div>
           </div>
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone *" name="Phone" id="Phone" />
+              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" placeholder="Enter number e.g.,9999900000" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone *" name="Phone" id="Phone" />
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
@@ -109,19 +110,20 @@ span
           <!-- Pan Number -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.pan_number" label="PAN Number" name="pan_number" id="pan_number" />
+              <vs-input icon="icon icon-credit-card" placeholder="e.g., AAAPA1234A" icon-pack="feather" class="w-full" v-model="form.pan_number" label="PAN Number" name="pan_number" id="pan_number" />
             </div>
           </div>
           <!-- adhaar card -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.aadhar_number" label="Aadhar Number" name="aadhar_number" id="aadhar_number" />
+              <vs-input icon="icon icon-credit-card" placeholder="e.g., 0000 0000 0000" icon-pack="feather" class="w-full" type="number"  v-model="form.aadhar_number" label="Aadhar Number" name="aadhar_number" id="aadhar_number" />
             </div>
           </div>
           <!-- Bank account details -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
+                type="number"
                 icon="icon icon-credit-card"
                 icon-pack="feather"
                 class="w-full"
@@ -129,6 +131,7 @@ span
                 label="Bank Account Details"
                 name="bank_account_details"
                 id="bank_account_details"
+                placeholder="Enter bank detail"
               />
             </div>
           </div>
@@ -155,13 +158,15 @@ span
           <!-- Designation -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.designation" label="Designation" name="designation" id="designation" />
+              <vs-input icon="icon icon-credit-card" 
+                placeholder="Enter designation"
+               icon-pack="feather" class="w-full" v-model="form.designation" label="Designation" name="designation" id="designation" />
             </div>
           </div>
           <!-- employee Id -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.employee_id" label="Employee Id" name="employee_id" id="employee_id" />
+              <vs-input placeholder="Enter employee id" icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.employee_id" label="Employee Id" name="employee_id" id="employee_id" />
             </div>
           </div>
 
@@ -177,6 +182,7 @@ span
                 label="Password"
                 name="Password"
                 id="Password"
+                placeholder="Enter password"
               />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span> -->
             </div>
@@ -225,7 +231,7 @@ export default {
         first_name: '',
         last_name: '',
         email: '',
-        phone: '',
+        phone: '+91',
         role_id: '',
         password: '',
         manager: '',

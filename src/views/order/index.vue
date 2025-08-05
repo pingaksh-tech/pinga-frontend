@@ -113,6 +113,13 @@
          </vs-td>
            <vs-td v-if="checkPermissionSlug(['orders_edit'])">
               <div class="inline-flex">
+                <vx-tooltip text="Order Details" v-if="checkPermissionSlug(['users_edit'])">
+                  <feather-icon 
+                    @click="handleOrderDetails(tr)" 
+                    icon="BookIcon" 
+                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" 
+                  />
+                </vx-tooltip>
                 <vx-tooltip :text="tr.edit ? `Save ${module_name}` : `Edit ${module_name}`">
                   <feather-icon @click="tr.edit ? saveEdit(tr) : toggleEdit(tr)"
                     :icon="tr.edit ? 'CheckIcon' : 'EditIcon'"
@@ -130,16 +137,25 @@
       </vs-table>
       <!-- Custom Pagination -->
       <vs-pagination v-if="FilteredCount" @onchange="handleChangePage" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"class="mt-8"></vs-pagination>
+
+      <order-details-modal 
+        :showModal="isEditUserModalShow"
+        :data="selectedRecord"
+        :module_name="module_name"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import OrderDetailsModal from "./OrderDetailsModal.vue"
 
 export default {
   name: 'Order',
-
+  components: {
+    OrderDetailsModal
+  },
   /** Data */
   data: () => ({
     order: [],
@@ -148,11 +164,17 @@ export default {
     page: 1,
     search: '',
     module_name: 'Order',
+
+    // Order Details modal
+    isOrderDetailsModalMounted: false,
+    selectedRecord : null,
+    isEditUserModalShow: false,
   }),
 
   /** computed */
   computed: {
-    ...mapState('order', ['OrderRecords', 'total', 'FilteredCount', 'listLoading','OrderAnalytics']),
+     ...mapState('user', ['createLoading', 'managers']),
+    ...mapState('order', ['OrderRecords', 'total', 'FilteredCount', 'listLoading','OrderAnalytics','orderList','orderLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
@@ -164,8 +186,17 @@ export default {
     ...mapActions('order', {
       getOrderList: 'getOrderList',
       updateOrder: 'updateOrder',
+      getOrderDetails:"getOrderDetails",
     }),
-
+   async handleOrderDetails(data) {
+      console.log(data,"data....");
+      this.$router.push(`/order/list/${data._id}`)
+      // this.selectedRecord = null;
+      // this.isOrderDetailsModalMounted = true;
+      // this.isEditUserModalShow = true;
+      // await this.getOrderDetails(data._id); // call the API to get the order details and pass to modal
+      // this.selectedRecord = this.orderList
+    },
     /** Per Page Limit Change */
     handleChangeLength(length) {
       this.page = 1

@@ -468,4 +468,18 @@ export default {
   outline: none;
   border-color: #0096dc;
 }
+.fadeselect-enter-active,
+.fadeselect-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fadeselect-enter,
+.fadeselect-leave-to {
+  opacity: 0;
+  transform: translateY(-10px); /* Slight upward shift for smooth appearance */
+}
+.fadeselect-enter-to,
+.fadeselect-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>

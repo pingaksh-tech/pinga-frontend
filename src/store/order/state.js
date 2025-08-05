@@ -4,6 +4,8 @@ export default {
  /* -------------------------------------------------------------------------- */
  loading: false,
  listLoading: false,
+ orderLoading:false,
+ orderList: {},
  OrderRecords: [],
  total: 0,
  FilteredCount: 0,
