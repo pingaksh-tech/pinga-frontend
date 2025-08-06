@@ -69,9 +69,9 @@
                 <vs-td>{{ i + 1 }}</vs-td>
                 <vs-td class="text-left">
                   <img 
-                    :src="`https://pingaksh-storage.s3.ap-south-1.amazonaws.com/${tr.inventory_images[0]}`"
+                    :src="tr.inventory_images[0]"
                     alt="Product Image" 
-                    class="h-5 w-5 object-cover rounded" 
+                    class="h-12 w-12 object-cover rounded" 
                   />
                 </vs-td>
                 <vs-td class="text-left">
