@@ -331,6 +331,95 @@ export default {
    })
   }
  },
+// ---------------------------- Retailers Options For Dropdown API  --------------------------
+async getRetailer({ commit }, params) {
+  commit('SET_STATE', {
+   action: 'listLoading',
+   data: true
+  })
+  try {
+   const res = await this.$http.get('retailer/', { params })
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   const data = res.data.data.retailers
+   let retailer = data.map((item) => ({ value: item._id, label: `${item.first_name} ${item.last_name}`}))
+   return {
+    data: retailer, 
+    message: res.data.message
+   }
+  } catch (error) {
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   const { message } = getMessageFromError(error)
+   return Promise.reject({
+    message
+   })
+  }
+ },
+//  ----------------------------- Get User List for dropdown API  --------------------------
+ async getUserDropdownList({ commit }, params) {
+  commit('SET_STATE', {
+   action: 'listLoading',
+   data: true
+  })
+  try {
+   const res = await this.$http.get('users/', { params })
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   let retailer = (res.data.data.users || []).map((customer) => ({ value: customer._id,label: `${customer.first_name} ${customer.last_name}`}));
+   return {
+    data: retailer, 
+    message: res.data.message
+   }
+  } catch (error) {
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   const { message } = getMessageFromError(error)
+   return Promise.reject({
+    message
+   })
+  }
+ },
+async getRoles({ commit }, params) {
+  commit('SET_STATE', {
+   action: 'listLoading',
+   data: true
+  })
+  try {
+   const res = await this.$http.get('roles/', { params })
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   const data = res.data.data
+   let roles = data.map((c) => ({
+    value: c._id,
+    label: c.name
+   }))
+   return {
+    data: roles,
+    message: res.data.message
+   }
+  } catch (error) {
+   commit('SET_STATE', {
+    action: 'listLoading',
+    data: false
+   })
+   const { message } = getMessageFromError(error)
+   return Promise.reject({
+    message
+   })
+  }
+ },
+
 
  /* -------------------------------------------------------------------------- */
  /*                             Upload Single File                             */

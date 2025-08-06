@@ -1,3 +1,5 @@
+import { create } from "core-js/core/object";
+
 export default {
   /* -------------------------------------------------------------------------- */
   /*                                 List State                                 */
@@ -6,5 +8,7 @@ export default {
   listLoading: false,
   DiamondPricingRecords: [],
   total: 0,
-  FilteredCount: 0
+  FilteredCount: 0,
+  createLoading: false,
+  updateLoading: false,
 }
