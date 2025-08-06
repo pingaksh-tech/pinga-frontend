@@ -52,6 +52,7 @@
      <vs-th sort-key="Retailer.name">First Name</vs-th>
      <vs-th>Last Name</vs-th>
      <vs-th>Legal Name</vs-th>
+     <vs-th>Manager</vs-th>
      <vs-th>Phone</vs-th>
      <vs-th>Address</vs-th>
      <vs-th>City</vs-th>
@@ -69,6 +70,9 @@
       <vs-td class="text-left">{{ tr.first_name || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.last_name || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.legal_name || '-' }} </vs-td>
+      <vs-td class="text-left">
+        {{ tr.manager ? (tr.manager.first_name + ' ' + tr.manager.last_name) : '-' }}
+      </vs-td>
       <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
       <vs-td class="text-left" :title="tr.address || '-'"> {{ truncateText(tr.address, 50) }} </vs-td>
       <!-- <vs-td class="text-left" :title="tr.address || '-'"> {{ truncateText(tr.address, 50) }} </vs-td> -->

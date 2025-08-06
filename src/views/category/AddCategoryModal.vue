@@ -16,7 +16,7 @@
           <div class="vx-col w-full cursor-pointer">
             <label class="vs-input--label block">Image (Recommended banner size: 16:7) *</label>
             <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
-              accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
+              accept=".jpg, .png , .jpeg" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
               v-validate="'required'" />
             <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image')
               }}</span>
@@ -25,10 +25,10 @@
                 <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
                   <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
                 </div>
-                <!-- <div class="absolute close_icon bg-danger w-8 h-8 flex items-center justify-center rounded-full">
-                  <feather-icon icon="Trash2Icon" @click="deleteImage()"
-                    svgClasses="h-5 w-5 font-semibold text-black hover:text-primary cursor-pointer" />
-                </div> -->
+                <div style="left:214px;" class="absolute top-0 left-[214px]  bg-danger w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
+                  @click="deleteImage()">
+                  <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 text-white" />
+                </div>
               </div>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default {
     return {
       form: {
         name: '',
-        category_image: '',
+        category_image: null,
       },
       preview_image: null,
       zIndex: 0
@@ -105,11 +105,21 @@ export default {
       createCategory: 'createCategory'
     }),
 
-    // deleteImage() {
-    //   this.preview_image = this.form.category_image = null
-    // },
+    deleteImage() {
+      // Revoke the existing object URL if it exists
+      if (this.preview_image) {
+        URL.revokeObjectURL(this.preview_image)
+      }
+      // Reset all image-related data
+      this.preview_image = null
+      this.form.category_image = null
+      // Fully reset the file input
+      if (this.$refs.files) {
+        this.$refs.files.value = ''
+      }
+    },
 
-    /** file upload  */
+    /** file upload */
     handleFileUpload(e) {
       const file = e.target.files[0]
 
@@ -127,14 +137,14 @@ export default {
         return
       }
 
-      // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
-      if (this.form.category_image.src) {
-        URL.revokeObjectURL(this.form.category_image.src);
+      // Revoke the previous object URL if it exists
+      if (this.preview_image) {
+        URL.revokeObjectURL(this.preview_image)
       }
-      // 2. Create the image link to the file to optimize performance:
-      this.preview_image = URL.createObjectURL(file);
-      this.form.category_image = file
 
+      // Create new preview URL and store file
+      this.preview_image = URL.createObjectURL(file)
+      this.form.category_image = file
     },
 
     async save_changes() {
@@ -142,9 +152,9 @@ export default {
         return false
       }
       try {
-        const data = new FormData();
-        data.append("name", this.form.name);
-        data.append("category_image", this.form.category_image);
+        const data = new FormData()
+        data.append("name", this.form.name)
+        data.append("category_image", this.form.category_image)
         const { message } = await this.createCategory(data)
         this.$emit('update-data', true)
         this.$vs.notify({
@@ -158,7 +168,7 @@ export default {
         })
         this.isActive = false
       } catch ({ message }) {
-        console.log(message, 'message catch error Category');
+        console.log(message, 'message catch error Category')
         this.$vs.notify({
           title: 'Error',
           text: message,

@@ -216,7 +216,7 @@ export default {
         country: this.data.country,
         street: this.data.street,
         zip_code: this.data.zip_code,
-        send_sms: this.data.send_sms,
+        send_sms: this.data.send_sms || false,
         whatsapp_number: this.data.whatsapp_number,
         legal_name: this.data.legal_name,
         birth_date: this.data.birth_date,

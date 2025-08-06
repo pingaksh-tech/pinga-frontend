@@ -72,9 +72,11 @@
           <vs-th sort-key="order_no">Order No</vs-th>
           <vs-th sort-key="order_type">Order Type</vs-th>
           <vs-th sort-key="retailer.business_name">Retailer</vs-th>
+          <vs-th sort-key="retailer.business_name">Phone Number</vs-th>
+           <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
           <vs-th sort-key="qty">Quantity</vs-th>
-          <vs-th sort-key="sub_total">Sub Total</vs-th>
-          <vs-th sort-key="discount">Discount</vs-th>
+          <!-- <vs-th sort-key="sub_total">Sub Total</vs-th>
+          <vs-th sort-key="discount">Discount</vs-th> -->
           <vs-th sort-key="grand_total">Grand Total</vs-th>
           <vs-th sort-key="date">Date</vs-th>
           <vs-th v-if="checkPermissionSlug(['orders_edit'])">Action</vs-th>
@@ -96,14 +98,20 @@
             <p>{{ tr.retailer ? tr.retailer.business_name : '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
-            <p>{{ tr.qty || '-' }}</p>
+            <p>{{ tr.retailer ? tr.retailer.phone : '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
+            <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
+          </vs-td>
+          <vs-td class="text-left">
+            <p>{{ tr.qty || '-' }}</p>
+          </vs-td>
+          <!-- <vs-td class="text-left">
             <p>{{ formatPrice(tr.sub_total) }}</p>
           </vs-td>
           <vs-td class="text-left">
             <p>{{ formatPrice(tr.discount) }}</p>
-          </vs-td>
+          </vs-td> -->
           <vs-td class="text-left">
             <p>{{ formatPrice(tr.grand_total) }}</p>
           </vs-td>
@@ -115,7 +123,7 @@
               <div class="inline-flex">
                 <vx-tooltip text="Order Details" v-if="checkPermissionSlug(['users_edit'])">
                   <feather-icon 
-                    @click="handleOrderDetails(tr)" 
+                    @click="handleOrderDetails(tr._id)" 
                     icon="BookIcon" 
                     svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" 
                   />
@@ -188,14 +196,8 @@ export default {
       updateOrder: 'updateOrder',
       getOrderDetails:"getOrderDetails",
     }),
-   async handleOrderDetails(data) {
-      console.log(data,"data....");
-      this.$router.push(`/order/list/${data._id}`)
-      // this.selectedRecord = null;
-      // this.isOrderDetailsModalMounted = true;
-      // this.isEditUserModalShow = true;
-      // await this.getOrderDetails(data._id); // call the API to get the order details and pass to modal
-      // this.selectedRecord = this.orderList
+   async handleOrderDetails(id) {
+      this.$router.push(`/order/list/${id}`)
     },
     /** Per Page Limit Change */
     handleChangeLength(length) {

@@ -4,47 +4,82 @@
       <div class="vx-col w-full px-8">
         <div class="space-y-3">
           <div class="bg-white shadow rounded-lg p-3">
-            <!-- Heading -->
-            <h5 class="text-2xl font-bold text-gray-800 border-b pb-3">Retailer Details</h5>
-
             <!-- Details Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <!-- Business Name -->
-              <div class="flex flex-col">
-                <label class="text-lg font-semibold text-gray-700">Business Name</label>
-                <p class="text-xl font-medium text-gray-900 mt-1">
-                  {{ orderList.order.retailer_id.business_name }}
-                </p>
+            <div class="grid grid-cols-2 gap-5 md:grid-cols-3">
+               <div class="col-span-1 bg-white shadow-md rounded-lg p-4">
+                <!-- Heading -->
+                <h5 class="text-2xl font-bold text-gray-800 border-b pb-3">Retailer Details</h5>
+                <!-- Business Name -->
+                <div class="flex flex-col gap-2">
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Business Name : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                     {{ orderList.order.retailer_id.business_name }}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Retailer Name : </label>
+                    <p class="text-lg font-medium text-gray-900 capitalize">
+                      {{ orderList.order.retailer_id.first_name }} {{ orderList.order.retailer_id.last_name }}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Phone : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                     {{ orderList.order.retailer_id.phone }}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Email : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                      {{ orderList.order.retailer_id.email }}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700 capitalize">Address : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                       {{ orderList.order.retailer_id.address }},{{ orderList.order.retailer_id.city }},{{ orderList.order.retailer_id.state }},{{ orderList.order.retailer_id.country }}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <!-- Retailer Name -->
-              <div class="flex flex-col">
-                <label class="text-lg font-semibold text-gray-700">Retailer Name</label>
-                <p class="text-xl font-medium text-gray-900 mt-1">{{ orderList.order.retailer_id.first_name }} {{ orderList.order.retailer_id.last_name }}</p>
-              </div>
+              <div class="col-span-1 bg-white shadow-md rounded-lg p-4">
+                <!-- Heading -->
+                <h5 class="text-2xl font-bold text-gray-800 border-b pb-3">Order Details</h5>
+                <!-- Business Name -->
+                <div class="flex flex-col gap-2">
+                  <div class="flex flex-row w-1/3 md:w-1/3 gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Order No : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                      {{ orderList.order.order_no }}
+                    </p>
+                  </div>
 
-              <!-- Email -->
-              <div class="flex flex-col">
-                <label class="text-lg font-semibold text-gray-700">Email</label>
-                <p class="text-xl font-medium text-gray-900 mt-1">
-                  {{ orderList.order.retailer_id.email }}
-                </p>
-              </div>
+                  <!-- Retailer Name -->
+                  <!-- <div class="flex flex-col w-full md:w-1/3">
+                    <label class="text-lg font-semibold text-gray-700">Retailer Date</label>
+                    <p class="text-xl font-medium text-gray-900 mt-1">{{formatDate(orderList.order.createdAt)}}</p>
+                  </div> -->
 
-              <!-- Phone -->
-              <div class="flex flex-col">
-                <label class="text-lg font-semibold text-gray-700">Phone</label>
-                <p class="text-xl font-medium text-gray-900 mt-1">
-                  {{ orderList.order.retailer_id.phone }}
-                </p>
-              </div>
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Order Date : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                      {{ formatDate(orderList.order.createdAt) }}
+                    </p>
+                  </div>
 
-              <!-- Address -->
-              <div class="flex flex-col">
-                <label class="text-lg font-semibold text-gray-700">Address</label>
-                <p class="text-xl font-medium text-gray-900 mt-1">
-                  {{ orderList.order.retailer_id.address }},{{ orderList.order.retailer_id.city }},{{ orderList.order.retailer_id.state }},{{ orderList.order.retailer_id.country }}
-                </p>
+                  <div class="flex flex-row w-full gap-1">
+                    <label class="text-lg font-semibold text-gray-700">Order Type : </label>
+                    <p class="text-lg font-medium text-gray-900">
+                      {{ orderList.order.order_type }}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -54,12 +89,9 @@
             <template slot="thead">
               <vs-th>Sr#</vs-th>
               <vs-th>Product Image</vs-th>
-              <vs-th>Metal Weight(in Gm)</vs-th>
-              <vs-th>Metal Per Gm</vs-th>
-              <vs-th>Metal Price</vs-th>
-              <vs-th>Diamond Weight</vs-th>
-              <vs-th>Diamond Price</vs-th>
-              <vs-th>Manufacturer Price</vs-th>
+              <vs-th>Name</vs-th>
+              <vs-th>Metal</vs-th>
+              <vs-th>Diamond Clarity</vs-th>
               <vs-th>Total Price</vs-th>
             </template>
 
@@ -68,25 +100,18 @@
               <vs-tr v-for="(tr, i) in data" :key="i">
                 <vs-td>{{ i + 1 }}</vs-td>
                 <vs-td class="text-left">
-                  <img 
-                    :src="tr.inventory_images[0]"
-                    alt="Product Image" 
-                    class="h-12 w-12 object-cover rounded" 
-                  />
+                  <img :src="tr.inventory_images[0]" alt="Product Image" class="h-12 w-12 object-cover rounded" />
                 </vs-td>
                 <vs-td class="text-left">
-                  {{tr.price_breaking.metal.metal_weight || '-'}}
+                  {{ tr.name || '-' }}
                 </vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.metal.price_per_gram || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.metal.metal_price.toFixed(2) || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.diamond.diamond_weight || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.diamond.diamond_price.toFixed(2) || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.other.manufacturing_price.toFixed(2) || '-' }}</vs-td>
+                <vs-td class="text-left">{{ tr.product_info.Metal || '-' }}</vs-td>
+                <vs-td class="text-left">{{ tr.diamonds[0].diamond_clarity || '-' }}</vs-td>
                 <vs-td class="text-left">{{ tr.price_breaking.total.toFixed(2) || '-' }}</vs-td>
               </vs-tr>
             </template>
           </vs-table>
-        </div>      
+        </div>
       </div>
     </div>
   </vs-card>
@@ -126,7 +151,27 @@ export default {
       getOrderList: 'getOrderList',
       updateOrder: 'updateOrder',
       getOrderDetails: 'getOrderDetails'
-    })
+    }),
+    formatDate(dateString) {
+      if (!dateString) return '-'
+      const date = new Date(dateString)
+
+      const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }
+
+      // Format as DD-MM-YYYY HH:mm:ss
+      return date
+        .toLocaleString('en-IN', options)
+        .replace(/\//g, '-') // Replace slashes with dashes
+        .replace(',', '') // Remove comma between date and time
+    }
   },
 
   /** created */

@@ -216,7 +216,7 @@ export default {
         state: '',
         country: '',
         zip_code: '',
-        send_sms: '',
+        send_sms: false,
         website: '',
         street: '',
         anniversary_date: '',
