@@ -48,15 +48,15 @@
 
     <template slot="thead">
      <vs-th>Sr#</vs-th>
+     <vs-th>Code</vs-th>
      <vs-th sort-key="Retailer.name">First Name</vs-th>
-     <vs-th sort-key="Retailer.name">Last Name</vs-th>
-     <vs-th sort-key="Retailer.name">Business Name</vs-th>
-     <vs-th sort-key="Retailer.name">Email</vs-th>
-     <vs-th sort-key="Retailer.name">Phone</vs-th>
-     <vs-th sort-key="Retailer.name">Landline</vs-th>
-     <vs-th sort-key="Retailer.name">Address</vs-th>
-     <vs-th sort-key="Retailer.name">City</vs-th>
-     <vs-th sort-key="Retailer.name">State</vs-th>
+     <vs-th>Last Name</vs-th>
+     <vs-th>Legal Name</vs-th>
+     <vs-th>Phone</vs-th>
+     <vs-th>Address</vs-th>
+     <vs-th>City</vs-th>
+     <vs-th>State</vs-th>
+     <!-- <vs-th sort-key="Retailer.name">State</vs-th> -->
      <vs-th v-if="checkPermissionSlug(['retailers_edit','retailers_delete'])">Action</vs-th>
     </template>
 
@@ -65,13 +65,13 @@
       <vs-td>
        {{ page * length - (length - i - 1) }}
       </vs-td>
+      <vs-td class="text-left">{{ tr.code || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.first_name || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.last_name || '-' }} </vs-td>
-      <vs-td class="text-left">{{ tr.business_name || '-' }} </vs-td>
-      <vs-td class="text-left">{{ tr.email || '-' }} </vs-td>
+      <vs-td class="text-left">{{ tr.legal_name || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
-      <vs-td class="text-left">{{ tr.landline || '-' }} </vs-td>
       <vs-td class="text-left" :title="tr.address || '-'"> {{ truncateText(tr.address, 50) }} </vs-td>
+      <!-- <vs-td class="text-left" :title="tr.address || '-'"> {{ truncateText(tr.address, 50) }} </vs-td> -->
       <vs-td class="text-left">{{ tr.city || '-' }} </vs-td>
       <vs-td class="text-left">{{ tr.state || '-' }} </vs-td>
       <vs-td v-if="checkPermissionSlug(['retailers_edit','retailers_delete'])">

@@ -200,7 +200,7 @@ export default {
       data: true
     })
     try {
-      const res = await this.$http.get('/users/role-wise-users', { params: { role: roleId } })
+      const res = await this.$http.get('/users/role-wise-users', { params: { role: roleId,type:"Retailer" } })
       const formattedManagers = (res.data.data || []).map((manager) => ({
         value: manager._id,
         label: `${manager.first_name} ${manager.last_name}`
