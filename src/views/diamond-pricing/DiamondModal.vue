@@ -78,11 +78,12 @@
               <span class="text-danger text-sm" v-show="errors.has('price_type')">{{ errors.first('price_type') }}</span>
             </div> -->
 
+            <!-- Price Type -->
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Price type *</label>
+              <label class="vs-input--label">Price Type *</label>
               <select-2
                 class="w-full role-input"
-                name="MaterialStatus"
+                name="price_type"
                 placeholder="Select Price Type"
                 :value="form.price_type"
                 @input="(item) => (form.price_type = item && item.value)"
@@ -94,7 +95,10 @@
                   { label: 'Retailer Price', value: 'Retailer Price' },
                 ]"
                 :typeable="false"
+                v-validate="'required'"
+                data-vv-as="Price Type"
               />
+              <span class="text-danger text-sm" v-show="errors.has('price_type')">{{ errors.first('price_type') }}</span>
             </div>
 
             <!-- Retailer -->
