@@ -14,35 +14,35 @@
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Business Name : </label>
                     <p class="text-lg font-medium text-gray-900">
-                     {{ orderList.order.retailer_id.business_name }}
+                     {{ orderList.order.retailer_id.business_name ||"-" }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Retailer Name : </label>
                     <p class="text-lg font-medium text-gray-900 capitalize">
-                      {{ orderList.order.retailer_id.first_name }} {{ orderList.order.retailer_id.last_name }}
+                      {{ orderList.order.retailer_id.first_name || "" }} {{ orderList.order.retailer_id.last_name || "-" }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Phone : </label>
                     <p class="text-lg font-medium text-gray-900">
-                     {{ orderList.order.retailer_id.phone }}
+                     {{ orderList.order.retailer_id.phone || "-" }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Email : </label>
                     <p class="text-lg font-medium text-gray-900">
-                      {{ orderList.order.retailer_id.email }}
+                      {{ orderList.order.retailer_id.email || '-' }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700 capitalize">Address : </label>
                     <p class="text-lg font-medium text-gray-900">
-                       {{ orderList.order.retailer_id.address }},{{ orderList.order.retailer_id.city }},{{ orderList.order.retailer_id.state }},{{ orderList.order.retailer_id.country }}
+                       {{ orderList.order.retailer_id.address || "" }},{{ orderList.order.retailer_id.city || "" }},{{ orderList.order.retailer_id.state || ""}},{{ orderList.order.retailer_id.country || "" }}
                     </p>
                   </div>
                 </div>
@@ -107,7 +107,9 @@
                 </vs-td>
                 <vs-td class="text-left">{{ tr.product_info.Metal || '-' }}</vs-td>
                 <vs-td class="text-left">{{ tr.diamonds[0].diamond_clarity || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.price_breaking.total.toFixed(2) || '-' }}</vs-td>
+                <vs-td class="text-left">
+                   {{ tr.price_breaking.total != null ? tr.price_breaking.total.toFixed(2) : '-' }}
+                </vs-td>
               </vs-tr>
             </template>
           </vs-table>
