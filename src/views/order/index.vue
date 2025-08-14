@@ -95,7 +95,7 @@
             <p>{{ tr.order_type || '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
-            <p>{{ tr.retailer ? tr.retailer.business_name : '-' }}</p>
+            <p>{{ tr.retailer ? tr.retailer.code : '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
             <p>{{ tr.retailer ? tr.retailer.phone : '-' }}</p>
