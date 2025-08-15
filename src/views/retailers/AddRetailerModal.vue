@@ -4,6 +4,14 @@
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
+
+          <!--  code -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span> -->
+            </div>
+          </div>
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -11,6 +19,76 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span> -->
             </div>
           </div>
+          <!-- Legal name -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.legal_name" label="Legal  Name" name="Legal Name" id="Legal Name" />
+            </div>
+          </div>
+          <!-- Manager -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Manager</label>
+              <select-2
+                class="w-1/2 role-input"
+                name="Manager"
+                placeholder="Select Manager"
+                :value="form.manager"
+                @input="(item) => (form.manager = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                :options="this.dropDownManagers"
+                
+              />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
+            </div>
+          </div>
+          <!-- phone -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
+            </div>
+          </div>
+          <!-- address -->
+          <div class="vx-col w-1/2 mt-5">
+            <div class="">
+              <vs-textarea icon="icon icon-package" icon-pack="feather" v-model="form.address" label="Address" name="Address" id="Address" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Address')">{{ errors.first('Address') }}</span> -->
+            </div>
+          </div>
+          <!-- zip_code -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.zip_code" label="Zip Code" name="Zip Code" id="zip_code" />
+            </div>
+          </div>
+          <!-- city -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.city" label="City" name="City" id="City" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('City')">{{ errors.first('City') }}</span> -->
+            </div>
+          </div>
+          <!-- state -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input  icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span> -->
+            </div>
+          </div>
+           <!-- country  -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.country" label="Country" name="Country" id="Country" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Country')">{{ errors.first('Country') }}</span> -->
+            </div>
+          </div>
+
+
+
+         
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -53,12 +131,7 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span> -->
             </div>
           </div>
-          <!-- Legal name -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.legal_name" label="Legal  Name" name="Legal Name" id="Legal Name" />
-            </div>
-          </div>
+          
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -72,20 +145,8 @@
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.website" label="Website" name="Website" id="Website" />
             </div>
           </div>
-           <!--  code -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span> -->
-            </div>
-          </div>
-          <!-- phone -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
-            </div>
-          </div>
+          
+          
           <!-- whatsapp_number -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -99,64 +160,18 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <label class="vs-input--label">Manager</label>
-              <select-2
-                class="w-1/2 role-input"
-                name="Manager"
-                placeholder="Select Manager"
-                :value="form.manager"
-                @input="(item) => (form.manager = item && item.value)"
-                autocomplete
-                :ssr="true"
-                :multiple="false"
-                :options="this.dropDownManagers"
-                
-              />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
-            </div>
-          </div>
-          <!-- country  -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.country" label="Country" name="Country" id="Country" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Country')">{{ errors.first('Country') }}</span> -->
-            </div>
-          </div>
-          <!-- state -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input  icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span> -->
-            </div>
-          </div>
-          <!-- city -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.city" label="City" name="City" id="City" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('City')">{{ errors.first('City') }}</span> -->
-            </div>
-          </div>
+          
+         
+          
+          
           <!-- street   -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.street" label="Street" name="Street" id="Street" />
             </div>
           </div>
-          <!-- zip_code -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.zip_code" label="Zip Code" name="Zip Code" id="zip_code" />
-            </div>
-          </div>
-          <!-- address -->
-          <div class="vx-col w-1/2 mt-5">
-            <div class="">
-              <vs-textarea icon="icon icon-package" icon-pack="feather" v-model="form.address" label="Address" name="Address" id="Address" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Address')">{{ errors.first('Address') }}</span> -->
-            </div>
-          </div>
+          
+          
         </div>
         <!-- Send sms -->
         <div class="vx-col w-1/2 px-8">

@@ -63,22 +63,24 @@
              <div class="box-title">Total Orders</div>
              <div class="box-value">{{ OrderAnalytics.totalCount }}</div>
            </div>
-
-           <!-- You can add more analytics boxes here if needed -->
          </div>
        </template>
         <template slot="thead">
          <vs-th>Sr#</vs-th>
+         <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
           <vs-th sort-key="order_no">Order No</vs-th>
           <vs-th sort-key="order_type">Order Type</vs-th>
-          <vs-th sort-key="retailer.business_name">Retailer</vs-th>
-          <vs-th sort-key="retailer.business_name">Phone Number</vs-th>
-           <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
-          <vs-th sort-key="qty">Quantity</vs-th>
-          <!-- <vs-th sort-key="sub_total">Sub Total</vs-th>
-          <vs-th sort-key="discount">Discount</vs-th> -->
-          <vs-th sort-key="grand_total">Grand Total</vs-th>
-          <vs-th sort-key="date">Date</vs-th>
+          <vs-th sort-key="date">Order Date</vs-th>
+          <vs-th sort-key="production_name">Production Name</vs-th>
+          <vs-th sort-key="retailer.business_name">Retailer Code</vs-th>
+          <vs-th sort-key="production_style_no">Pingaksh Style No.</vs-th>
+          <vs-th sort-key="production_style_no">MFG Style No</vs-th>
+          <vs-th sort-key="production_style_no">Qty</vs-th>
+          <vs-th sort-key="production_style_no">Size</vs-th>
+          <vs-th sort-key="production_style_no">Gold Kt</vs-th>
+          <vs-th sort-key="production_style_no">Diamond Quality</vs-th>
+          <vs-th sort-key="production_style_no">Spl. Remarks</vs-th>
+          <vs-th sort-key="production_style_no">Order Delivery date</vs-th>
           <vs-th v-if="checkPermissionSlug(['orders_edit'])">Action</vs-th>
         </template>
 
@@ -88,6 +90,9 @@
             {{ page * length - (length - i - 1) }}
           </vs-td>
           <vs-td class="text-left">
+            <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
+          </vs-td>
+          <vs-td class="text-left">
            <vs-input v-if="tr.edit" v-model="tr.order_no" />
            <p v-else >{{ tr.order_no }}</p>
           </vs-td>
@@ -95,30 +100,39 @@
             <p>{{ tr.order_type || '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
+           <p>{{ formatDate(tr.createdAt) || "-" }}</p>
+          </vs-td>
+          <vs-td class="text-left">
+            <p>{{ tr.production_name || '-' }}</p>
+          </vs-td>
+          <vs-td class="text-left">
             <p>{{ tr.retailer ? tr.retailer.code : '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
-            <p>{{ tr.retailer ? tr.retailer.phone : '-' }}</p>
+            <p>{{ tr.production_style_no || '-'}}</p>
           </vs-td>
           <vs-td class="text-left">
-            <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
+             <p>{{ tr.manufacturing_number || '-'}}</p>
           </vs-td>
+          
           <vs-td class="text-left">
             <p>{{ tr.qty || '-' }}</p>
           </vs-td>
-          <!-- <vs-td class="text-left">
-            <p>{{ formatPrice(tr.sub_total) }}</p>
+          <vs-td class="text-left">
+            <p>{{ tr.size || '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
-            <p>{{ formatPrice(tr.discount) }}</p>
-          </vs-td> -->
-          <vs-td class="text-left">
-            <p>{{ formatPrice(tr.grand_total) }}</p>
+            <p>{{ tr.metal_carat || '-' }}</p>
           </vs-td>
           <vs-td class="text-left">
-           <p>{{ formatDate(tr.createdAt) }}</p>
-
-         </vs-td>
+            <p>{{ tr.diamond_clarity || '-' }}</p>
+          </vs-td>
+          <vs-td class="text-left">
+            <p>{{ tr.remark || '-' }}</p>
+          </vs-td>
+          <vs-td class="text-left">
+            <p>{{ tr.order_delivery || '-' }}</p>
+          </vs-td>
            <vs-td v-if="checkPermissionSlug(['orders_edit'])">
               <div class="inline-flex">
                 <vx-tooltip text="Order Details" v-if="checkPermissionSlug(['users_edit'])">
