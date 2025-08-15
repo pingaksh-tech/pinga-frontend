@@ -54,6 +54,27 @@
               <span class="text-danger text-sm" v-show="errors.has('vs_si_gh')">{{ errors.first('vs_si_gh') }}</span>
             </div>
 
+            <!-- si_gh  -->
+            <div class="vx-row mb-2">
+              <vs-input icon="icon-package" icon-pack="feather" class="w-full" v-validate="'required|numeric|min_value:0'"
+                v-model="form.si_gh" label="SI-GH *" name="si_gh" data-vv-as="SI-GH" id="SI-GH" type="number" />
+              <span class="text-danger text-sm" v-show="errors.has('si_gh')">{{ errors.first('si_gh') }}</span>
+            </div>
+
+            <!-- SI2_I1_GH  -->
+            <div class="vx-row mb-2">
+              <vs-input icon="icon-package" icon-pack="feather" class="w-full" v-validate="'required|numeric|min_value:0'"
+                v-model="form.si2_i1_gh" label="SI2-I1-GH *" name="si2_i1_gh" data-vv-as="SI2-I1-GH" id="SI2-I1-GH" type="number" />
+              <span class="text-danger text-sm" v-show="errors.has('si2_i1_gh')">{{ errors.first('si2_i1_gh') }}</span>
+            </div>
+
+            <!-- VVS-SI-HI -->
+            <!-- <div class="vx-row mb-2">
+              <vs-input icon="icon-package" icon-pack="feather" class="w-full" v-validate="'required|numeric|min_value:0'"
+                v-model="form.vvs_si_hi" label="VVS-SI-HI *" name="vvs_si_hi" data-vv-as="VVS-SI-HI" id="VVS-SI-HI" type="number" />
+              <span class="text-danger text-sm" v-show="errors.has('vvs_si_hi')">{{ errors.first('vvs_si_hi') }}</span>
+            </div> -->
+
             <!-- VS-SI-HI -->
             <div class="vx-row mb-2">
               <vs-input icon="icon-package" icon-pack="feather" class="w-full" v-validate="'required|numeric|min_value:0'"
@@ -172,6 +193,9 @@ export default {
         mm_size: null,
         si_hi: null,
         vs_si_gh: null,
+        si_gh: null,
+        si2_i1_gh:null,
+        // vvs_si_hi: null,
         vs_si_hi: null,
         vvs_ef: null,
         price_type: null,
@@ -209,6 +233,9 @@ export default {
           this.form.mm_size = newData.mm_size || null
           this.form.si_hi = newData.si_hi || null
           this.form.vs_si_gh = newData.vs_si_gh || null
+          this.form.si_gh = newData.si_gh || null
+          this.form.si2_i1_gh = newData.si2_i1_gh || null
+          // this.form.vvs_si_hi = newData.vvs_si_hi || null
           this.form.vs_si_hi = newData.vs_si_hi || null
           this.form.vvs_ef = newData.vvs_ef || null
           this.form.price_type = newData.price_type || 'Default'
@@ -249,6 +276,9 @@ export default {
             mm_size: this.form.mm_size,
             si_hi: this.form.si_hi,
             vs_si_gh: this.form.vs_si_gh,
+            si_gh: this.form.si_gh,
+            si2_i1_gh: this.form.si2_i1_gh,
+            // vvs_si_hi: this.form.vvs_si_hi,
             vs_si_hi: this.form.vs_si_hi,
             vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
@@ -259,6 +289,9 @@ export default {
           data = {
             si_hi: this.form.si_hi,
             vs_si_gh: this.form.vs_si_gh,
+            si_gh: this.form.si_gh,
+            si2_i1_gh: this.form.si2_i1_gh,
+            // vvs_si_hi: this.form.vvs_si_hi,
             vs_si_hi: this.form.vs_si_hi,
             vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
@@ -307,6 +340,7 @@ export default {
         mm_size: null,
         si_hi: null,
         vs_si_gh: null,
+        // vvs_si_hi: null,
         vs_si_hi: null,
         vvs_ef: null,
         price_type: null,
