@@ -127,13 +127,14 @@
                 icon-pack="feather"
                 class="w-full"
                 type="number"
-                min="1"
+                min="0"
+                v-validate="'required|decimal|min_value:0'"
                 v-model="form.manufacturing_price"
-                label="Manufacturing Price"
+                label="Manufacturing Price *"
                 name="Manufacturing Price"
                 id="Manufacturing Price"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{ errors.first('Manufacturing Price') }}</span> -->
+              <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{ errors.first('Manufacturing Price') }}</span>
             </div>
 
             <div class="vx-col w-1/2 mb-2">
@@ -159,7 +160,7 @@
                   </div>
                 </div>
 
-                <!-- Inventory In Stock -->
+                <!-- Wear It Item -->
                 <div class="mb-2 w-1/4">
                   <label class="vs-input--label pl-0">Wear It Item ?</label>
                   <div class="mt-1">
@@ -183,29 +184,29 @@
                 icon="icon icon-box"
                 icon-pack="feather"
                 class="w-full"
+                v-validate="'required'"
                 v-model="form.production_name"
-                label="Production Name"
+                label="Production Name *"
                 name="Production Name"
                 id="Production Name"
               />
+              <span class="text-danger text-sm" v-show="errors.has('Production Name')">{{ errors.first('Production Name') }}</span>
             </div>
 
             <div class="vx-col w-1/2 mb-2">
-             <vs-input
-               icon="icon icon-box"
-               icon-pack="feather"
-               class="w-full"
-               
-               v-model="form.manufacturing_number"
-               label="Manufacturing Number"
-               name="Manufacturing Number"
-               id="manufacturing_number"
-             />
-            
-           </div>
-           <div class="vx-col w-1/2 mb-2">
-            <!-- Collection dropdown -->
-            <label class="vs-input--label">Collection</label>
+              <vs-input
+                icon="icon icon-box"
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.manufacturing_number"
+                label="Manufacturing Number"
+                name="Manufacturing Number"
+                id="manufacturing_number"
+              />
+            </div>
+            <div class="vx-col w-1/2 mb-2">
+              <!-- Collection dropdown -->
+              <label class="vs-input--label">Collection</label>
               <select-2
                 class="w-full category-input"
                 name="Collection"
@@ -217,8 +218,8 @@
                 :multiple="false"
                 :options="collectionOption"
                 data-vv-as="Inventory Type"
-            />
-          </div>
+              />
+            </div>
 
             <!-- Family Products -->
             <div class="vx-col w-1/2 mb-2">
@@ -234,9 +235,9 @@
                 :multiple="true"
                 action="common/getFamilyProducts"
               />
-              <!-- <span class="text-primary text-sm" v-show="errors.has('Family Product')">{{ errors.first('Family Product') }}</span> -->
             </div>
 
+            <!-- Inventory Images -->
             <div class="vx-col w-full">
               <label class="vs-input--label block">Inventory Images</label>
               <input
@@ -244,14 +245,14 @@
                 class="border p-2 rounded w-full"
                 name="inventory_images"
                 ref="files"
-                accept=".jpg, .png , .jpeg,.pdf"
+                accept=".jpg, .png, .jpeg, .pdf"
                 @change="handleFileUpload"
                 style="border: 1px solid rgba(0, 0, 0, 0.2)"
                 multiple
               />
               <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{ errors.first('inventory_images') }}</span>
               <div class="mt-5 grid grid-cols-4 gap-4">
-                <div v-for="(image, index) in form.exist_inventory_images" :key="index" class="relative group">
+                <div v-for="(image, index) in form.exist_inventory_images" :key="'exist-' + index" class="relative group">
                   <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
                     <img :src="image" alt="Image Preview" class="object-cover h-full w-full" />
                     <div class="absolute top-0 right-0">
@@ -261,7 +262,7 @@
                     </div>
                   </div>
                 </div>
-                <div v-for="(image, index) in preview_images" :key="index" class="relative group">
+                <div v-for="(image, index) in preview_images" :key="'preview-' + index" class="relative group">
                   <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
                     <img :src="image.src" alt="Image Preview" class="object-cover h-full w-full" />
                     <div class="absolute top-0 right-0">
@@ -273,107 +274,188 @@
                 </div>
               </div>
             </div>
+          </div>
+          <!-- Close vx-row for form fields -->
 
-            <!-- Diamond Section -->
-            <div class="w-full px-4 mt-4">
-              <!-- Add Diamond -->
-              <vs-button @click="addDiamond" class="mb-4">Add Diamond</vs-button>
-              <div class="diamond-container">
-                <div v-for="(diamond, index) in form.diamonds" :key="index" class="diamond-entry vx-row border-sky-500 border">
-                  <div class="flex items-center mt-2">
-                    <h4>{{ index + 1 }}</h4>
-                  </div>
-                  <!-- Diamond Clarity -->
-                  <div class="vx-col w-1/5 mb-2">
-                    <label class="vs-input--label">Diamond Clarity *</label>
-                    <select-2
-                      class="w-full category-input"
-                      :name="'diamond_clarity_' + index"
-                      v-validate="'required'"
-                      placeholder="Select Diamond Clarity"
-                      :options="DIAMOND_CLARITY"
-                      autocomplete
-                      :ssr="true"
-                      :multiple="false"
-                      :value="form.diamonds[index].diamond_clarity"
-                      data-vv-as="Diamond Clarity"
-                      @input="(item) => (form.diamonds[index].diamond_clarity = item && item.value)"
-                    />
-                    <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
-                  </div>
-
-                  <!-- Diamond Shape -->
-                  <div class="vx-col w-1/5 mb-2">
-                    <label class="vs-input--label">Diamond Shape *</label>
-                    <select-2
-                      class="w-full category-input"
-                      :name="'diamond_shape_' + index"
-                      v-validate="'required'"
-                      placeholder="Select Diamond Shape"
-                      :options="DIAMOND_SHAPES"
-                      autocomplete
-                      :ssr="true"
-                      :multiple="false"
-                      :value="form.diamonds[index].diamond_shape"
-                      data-vv-as="Diamond Shape"
-                      @input="(item) => (form.diamonds[index].diamond_shape = item && item.value)"
-                    />
-                    <span class="text-danger text-xs" v-show="errors.has(`diamond_shape_${index}`)">{{ errors.first(`diamond_shape_${index}`) }}</span>
-                  </div>
-
-                  <!-- Diamond Size -->
-                  <div class="vx-col w-1/5 mb-2">
-                    <label class="vs-input--label">Diamond Size *</label>
-                    <select-2
-                      class="w-full category-input"
-                      :name="'diamond_size_' + index"
-                      v-validate="'required'"
-                      placeholder="Select Diamond Size"
-                      :options="DIAMOND_SIZES"
-                      autocomplete
-                      :ssr="true"
-                      :multiple="false"
-                      :value="form.diamonds[index].diamond_size"
-                      data-vv-as="Diamond Size"
-                      @input="(item) => (form.diamonds[index].diamond_size = item && item.value)"
-                    />
-
-                    <span class="text-danger text-xs" v-show="errors.has(`diamond_size_${index}`)">{{ errors.first(`diamond_size_${index}`) }}</span>
-                  </div>
-                  <!-- Diamond Count -->
-                  <div class="vx-col w-1/5 mb-2">
-                    <vs-input
-                      icon="icon icon-hash"
-                      icon-pack="feather"
-                      type="number"
-                      v-validate="'required|decimal|min_value:1'"
-                      data-vv-as="Diamond Count"
-                      v-model="diamond.diamond_count"
-                      label="Diamond Count *"
-                      min="1"
-                      :name="'diamond_count_' + index"
-                      class="w-full"
-                    />
-                    <span class="text-danger text-xs" v-show="errors.has(`diamond_count_${index}`)">{{ errors.first(`diamond_count_${index}`) }}</span>
-                  </div>
-
-                  <!-- Remove Diamond -->
-                  <div class="flex items-center">
-                    <vx-tooltip :text="`Remove`">
-                      <feather-icon @click="removeDiamond(index)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
-                    </vx-tooltip>
-                  </div>
-                  <vs-divider></vs-divider>
+          <!-- Diamond Section -->
+          <div class="w-full px-4 mt-4">
+            <vs-button @click="addDiamond" class="mb-4">Add Diamond</vs-button>
+            <div class="diamond-container">
+              <div v-for="(diamond, index) in form.diamonds" :key="'diamond-' + index" class="diamond-entry vx-row border-sky-500 border">
+                <div class="flex items-center mt-2">
+                  <h4>{{ index + 1 }}</h4>
                 </div>
+                <!-- Diamond Clarity -->
+                <div class="vx-col w-1/5 mb-2">
+                  <label class="vs-input--label">Diamond Clarity *</label>
+                  <select-2
+                    class="w-full category-input"
+                    :name="'diamond_clarity_' + index"
+                    v-validate="'required'"
+                    placeholder="Select Diamond Clarity"
+                    :options="DIAMOND_CLARITY"
+                    autocomplete
+                    :ssr="true"
+                    :multiple="false"
+                    :value="form.diamonds[index].diamond_clarity"
+                    data-vv-as="Diamond Clarity"
+                    @input="(item) => (form.diamonds[index].diamond_clarity = item && item.value)"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
+                </div>
+
+                <!-- Diamond Shape -->
+                <div class="vx-col w-1/5 mb-2">
+                  <label class="vs-input--label">Diamond Shape *</label>
+                  <select-2
+                    class="w-full category-input"
+                    :name="'diamond_shape_' + index"
+                    v-validate="'required'"
+                    placeholder="Select Diamond Shape"
+                    :options="DIAMOND_SHAPES"
+                    autocomplete
+                    :ssr="true"
+                    :multiple="false"
+                    :value="form.diamonds[index].diamond_shape"
+                    data-vv-as="Diamond Shape"
+                    @input="(item) => (form.diamonds[index].diamond_shape = item && item.value)"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_shape_${index}`)">{{ errors.first(`diamond_shape_${index}`) }}</span>
+                </div>
+
+                <!-- Diamond Size -->
+                <div class="vx-col w-1/5 mb-2">
+                  <label class="vs-input--label">Diamond Size *</label>
+                  <select-2
+                    class="w-full category-input"
+                    :name="'diamond_size_' + index"
+                    v-validate="'required'"
+                    placeholder="Select Diamond Size"
+                    :options="DIAMOND_SIZES"
+                    autocomplete
+                    :ssr="true"
+                    :multiple="false"
+                    :value="form.diamonds[index].diamond_size"
+                    data-vv-as="Diamond Size"
+                    @input="(item) => (form.diamonds[index].diamond_size = item && item.value)"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_size_${index}`)">{{ errors.first(`diamond_size_${index}`) }}</span>
+                </div>
+
+                <!-- Diamond Count -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input
+                    icon="icon icon-hash"
+                    icon-pack="feather"
+                    type="number"
+                    v-validate="'required|decimal|min_value:1'"
+                    data-vv-as="Diamond Count"
+                    v-model="diamond.diamond_count"
+                    label="Diamond Count *"
+                    min="1"
+                    :name="'diamond_count_' + index"
+                    class="w-full"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_count_${index}`)">{{ errors.first(`diamond_count_${index}`) }}</span>
+                </div>
+
+                <!-- Remove Diamond -->
+                <div class="flex items-center">
+                  <vx-tooltip :text="`Remove`">
+                    <feather-icon @click="removeDiamond(index)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
+                  </vx-tooltip>
+                </div>
+                <vs-divider></vs-divider>
+              </div>
+            </div>
+
+            <!-- Stone Section -->
+            <vs-button @click="addStone" class="mb-4">Add Stone</vs-button>
+            <div class="stone-container">
+              <div v-for="(stone, index) in form.colour_stone" :key="'stone-' + index" class="stone-entry vx-row border-sky-500 border">
+                <div class="flex items-center mt-2">
+                  <h4>{{ index + 1 }}</h4>
+                </div>
+                <!-- Stone Weight -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="stone.colour_stone_weight" label="Stone Weight" :name="'colour_stone_weight_' + index" class="w-full" />
+                </div>
+                <!-- Stone Price -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="stone.colour_stone_price" label="Stone Price" :name="'colour_stone_price_' + index" class="w-full" />
+                </div>
+                <!-- Stone Count -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="stone.colour_stone_count" label="Stone Count" :name="'colour_stone_count_' + index" class="w-full" />
+                </div>
+                <!-- Remove Stone -->
+                <div class="flex items-center">
+                  <vx-tooltip :text="`Remove`">
+                    <feather-icon @click="removeStone(index)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
+                  </vx-tooltip>
+                </div>
+                <vs-divider></vs-divider>
+              </div>
+            </div>
+
+            <!-- Pearl Section -->
+            <vs-button @click="addPearl" class="mb-4">Add Pearl</vs-button>
+            <div class="pearl-container">
+              <div v-for="(pearl, index) in form.pearl" :key="'pearl-' + index" class="pearl-entry vx-row border-sky-500 border">
+                <div class="flex items-center mt-2">
+                  <h4>{{ index + 1 }}</h4>
+                </div>
+                <!-- Pearl Price -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="pearl.pearl_price" label="Pearl Price" :name="'pearl_price_' + index" class="w-full" />
+                </div>
+                <!-- Pearl Weight -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="pearl.pearl_weight" label="Pearl Weight" :name="'pearl_weight_' + index" class="w-full" />
+                </div>
+                <!-- Pearl Count -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="pearl.pearl_count" label="Pearl Count" :name="'pearl_count_' + index" class="w-full" />
+                </div>
+                <!-- Remove Pearl -->
+                <div class="flex items-center">
+                  <vx-tooltip :text="`Remove`">
+                    <feather-icon @click="removePearl(index)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
+                  </vx-tooltip>
+                </div>
+                <vs-divider></vs-divider>
+              </div>
+            </div>
+
+            <!-- Mino Section -->
+            <vs-button :disabled="this.form.mino.length >= 1" @click="addMino" class="mb-4">Add Mino</vs-button>
+            <div class="mino-container">
+              <div v-for="(mino, index) in form.mino" :key="'mino-' + index" class="mino-entry vx-row border-sky-500 border">
+                <div class="flex items-center mt-2">
+                  <h4>{{ index + 1 }}</h4>
+                </div>
+                <!-- Mino Price -->
+                <div class="vx-col w-1/5 mb-2">
+                  <vs-input icon="icon icon-hash" icon-pack="feather" type="number" v-model="mino.mino_price" label="Mino Price" :name="'mino_price_' + index" class="w-full" />
+                </div>
+                <!-- Remove Mino -->
+                <div class="flex items-center">
+                  <vx-tooltip :text="`Remove`">
+                    <feather-icon @click="removeMino(index)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 text-danger cursor-pointer" />
+                  </vx-tooltip>
+                </div>
+                <vs-divider></vs-divider>
               </div>
             </div>
           </div>
+          <!-- Close diamond/stone/pearl/mino section -->
 
           <!-- Save & Reset Button -->
           <div class="vx-row pt-5 px-5 text-center">
             <div class="vx-col w-full">
               <div class="items-center">
                 <vs-button class="mr-2 vs-con-loading__container" id="create-inventory" @click="save_changes" :disabled="!validateForm"> {{ $route.params.id ? 'Update' : 'Add' }}</vs-button>
+                <!-- <vs-button color="warning" class="mr-2" @click="resetForm">Reset</vs-button> -->
                 <vs-button color="danger" class="text-left" @click="navigateToInventoryList">Cancel</vs-button>
               </div>
             </div>
@@ -383,20 +465,17 @@
     </div>
   </vs-card>
 </template>
+
 <script>
 import { mapActions, mapState } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  /** Page Name */
   name: 'AddInventory',
-
-  /** components */
   components: {
     Select2
   },
-
-  /** data */
   data() {
     return {
       categoryID: null,
@@ -408,6 +487,9 @@ export default {
       DIAMOND_SHAPES: [],
       SizeList: [],
       collectionOption: [],
+      isLoadingCategories: false,
+      isLoadingSubCategories: false,
+      isLoadingSizes: false,
       form: {
         name: null,
         category_id: null,
@@ -427,12 +509,14 @@ export default {
         manufacturing_price: null,
         diamonds: [],
         inventory_images: [],
-        exist_inventory_images: []
+        exist_inventory_images: [],
+        colour_stone: [],
+        pearl: [],
+        mino: []
       },
       preview_images: []
     }
   },
-  /** Mounted */
   async mounted() {
     this.fetchCollection()
     await this.diamondConstant()
@@ -440,20 +524,14 @@ export default {
     this.DIAMOND_SHAPES = Object.entries(this.diamondConstantList.DIAMOND_SHAPES).map(([value, label]) => ({ value: label, label }))
     this.DIAMOND_SIZES = this.diamondConstantList.DIAMOND_SIZES.map((v) => ({ value: v._id, label: v.diamond_slieve_size }))
   },
-
-  /** computed */
   computed: {
     ...mapState('inventory', ['createLoading']),
     ...mapState('common', ['diamondConstantList']),
     ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
-
-
     validateForm() {
       return !this.errors.any()
     }
   },
-
-  /** created */
   async created() {
     if (this.$route.params.id) {
       await this.$store.dispatch('inventory/getInvantoryById', this.$route.params.id).then(async (res) => {
@@ -464,7 +542,6 @@ export default {
         this.initial_category_id = data.category_id
         this.initial_sub_category_id = data.sub_category_id
 
-        /* form variable */
         this.form.name = data.name
         this.form.category_id = data.category_id
         this.form.metal_id = data.metal_id
@@ -480,7 +557,39 @@ export default {
           this.form.diamonds = data.diamonds.map((v) => {
             delete v._id
             delete v.total_price
-            return v
+            return { ...v, id: uuidv4() } // Add unique ID for rendering
+          })
+        }
+        
+        // Populate colour_stone array
+        if (data.colour_stone) {
+          this.form.colour_stone = data.colour_stone.map((v) => {
+            return {
+              colour_stone_count: v.colour_stone_count,
+              colour_stone_weight: v.colour_stone_weight,
+              colour_stone_price: v.colour_stone_price
+              //  id: uuidv4() // Add unique ID for rendering
+            }
+          })
+        }
+
+        // Populate pearl array
+        if (data.pearl) {
+          this.form.pearl = data.pearl.map((v) => {
+            return {
+              pearl_count: v.pearl_count,
+              pearl_weight: v.pearl_weight,
+              pearl_price: v.pearl_price
+            }
+          })
+        }
+
+        // Populate mino array
+        if (data.mino) {
+          this.form.mino = data.mino.map((v) => {
+            return {
+              mino_price: v.mino_price
+            }
           })
         }
         this.form.product_tags = data.product_tags
@@ -489,19 +598,16 @@ export default {
         this.form.manufacturing_price = data.manufacturing_price
         const category = await this.getCategories({ page: 1, limit: 25, type: 'dropdown', categoryId: data.category_id })
         this.categoryList = category.data
-        /** change sub category & size */
         if (this.form.category_id) {
           const sub_category = await this.getSubCategory({ categoryId: this.form.category_id, page: 1, limit: 25, type: 'dropdown', subCategoryId: data.sub_category_id })
           this.SubCategoryList = sub_category.data
           this.subCategoryID = data.sub_category_id
         }
-
         if (data.sub_category_id) {
           const size = await this.getSize(data.sub_category_id)
           this.SizeList = size.data
           this.sizeID = data.size
         }
-
         if (data.size) {
           this.form.size_id = data.size
         }
@@ -509,16 +615,16 @@ export default {
       })
     }
   },
-
-  /** methods */
+  beforeDestroy() {
+    this.preview_images.forEach((image) => URL.revokeObjectURL(image.src))
+  },
   methods: {
     ...mapActions('inventory', {
       createInventory: 'createInventory',
       updateInventoryRecord: 'updateInventoryRecord'
     }),
-     ...mapActions('collection', {
+    ...mapActions('collection', {
       getCollectionList: 'getCollectionList'
-      // deleteCollectionRecord: 'deleteCollectionRecord'
     }),
     ...mapActions('common', {
       getSubCategory: 'getSubCategoryByCategoryId',
@@ -527,46 +633,89 @@ export default {
       getCategories: 'getCategories'
     }),
     async fetchCollection() {
+      this.isLoadingCategories = true
       try {
-        // Replace with your actual API call to get categories
         const response = await this.$store.dispatch('common/getCollections', {
           page: 1,
           limit: 25,
           type: 'dropdown'
         })
-        this.collectionOption = response.data
+        this.collectionOption = response.data || []
       } catch (error) {
         console.error('Error fetching collections:', error)
+        this.$vs.notify({
+          title: 'Error',
+          text: 'Failed to load collections. Please try again.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+      } finally {
+        this.isLoadingCategories = false
       }
     },
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
+      if (this.form.diamonds.some((d) => !d.diamond_clarity || !d.diamond_shape || !d.diamond_size || !d.diamond_count)) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'All diamond fields must be filled.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+        return false
+      }
       try {
         let response
         const data = new FormData()
         for (const key in this.form) {
-          if (typeof this.form[key] == 'object') {
-            if (key == 'diamonds') {
-              this.form[key].map((item, index) => {
+          if (typeof this.form[key] === 'object' && this.form[key] !== null) {
+            if (key === 'diamonds') {
+              this.form[key].forEach((item, index) => {
+                for (const field in item) {
+                  if (field !== 'id') {
+                    data.append(`${key}[${index}][${field}]`, item[field])
+                  }
+                }
+              })
+            } else if (key === 'colour_stone') {
+              this.form[key].forEach((item, index) => {
+                for (const field in item) {
+                  data.append(`${key}[${index}][${field}]`, item[field])
+                }
+              })
+            } else if (key === 'pearl') {
+              this.form[key].forEach((item, index) => {
+                for (const field in item) {
+                  data.append(`${key}[${index}][${field}]`, item[field])
+                }
+              })
+            } else if (key === 'mino') {
+              this.form[key].forEach((item, index) => {
                 for (const field in item) {
                   data.append(`${key}[${index}][${field}]`, item[field])
                 }
               })
             } else {
               if (this.form[key]) {
-                this.form[key].map((item) => {
-                  data.append(key == 'inventory_images' ? key : key + '[]', item)
+                this.form[key].forEach((item) => {
+                  data.append(key === 'inventory_images' ? key : key + '[]', item)
                 })
               }
             }
           } else {
-             if (key === 'manufacturing_price') {
-                  data.append(key, this.form[key] === undefined ? '' : this.form[key])
+            if (key === 'manufacturing_price') {
+              data.append(key, this.form[key] === undefined ? '' : this.form[key])
             } else {
-                 data.append(key, this.form[key])
-              }
+              data.append(key, this.form[key] === null ? '' : this.form[key])
+            }
           }
         }
         if (this.$route.params.id) {
@@ -602,42 +751,98 @@ export default {
         })
       }
     },
-    /* -------------------------------------------------------------------------- */
-    /*                         Get Category List By Inventory                         */
-    /* -------------------------------------------------------------------------- */
     async fetchSubCategories() {
-      const sub_category = await this.getSubCategory({ categoryId: this.categoryID.value, page: 1, limit: 25, type: 'dropdown' })
-      this.SubCategoryList = sub_category.data
+      this.isLoadingSubCategories = true
+      try {
+        const sub_category = await this.getSubCategory({
+          categoryId: this.categoryID.value,
+          page: 1,
+          limit: 25,
+          type: 'dropdown'
+        })
+        this.SubCategoryList = sub_category.data || []
+      } catch (error) {
+        console.error('Error fetching subcategories:', error)
+        this.$vs.notify({
+          title: 'Error',
+          text: 'Failed to load subcategories. Please try again.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+      } finally {
+        this.isLoadingSubCategories = false
+      }
     },
     async fetchSizes() {
-      const size = await this.getSize(this.subCategoryID.value)
-      console.log('🚀 ~ fetchSizes ~ size:', size)
-      this.SizeList = size.data
+      this.isLoadingSizes = true
+      try {
+        const size = await this.getSize(this.subCategoryID.value)
+        this.SizeList = size.data || []
+      } catch (error) {
+        console.error('Error fetching sizes:', error)
+        this.$vs.notify({
+          title: 'Error',
+          text: 'Failed to load sizes. Please try again.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+      } finally {
+        this.isLoadingSizes = false
+      }
     },
-
     addDiamond() {
       this.form.diamonds.push({
+        id: uuidv4(),
         diamond_clarity: '',
         diamond_shape: '',
         diamond_size: '',
         diamond_count: 0
       })
     },
-
+    addStone() {
+      this.form.colour_stone.push({
+        colour_stone_weight: '',
+        colour_stone_price: '',
+        colour_stone_count: 0
+      })
+    },
+    addPearl() {
+      this.form.pearl.push({
+        pearl_price: '',
+        pearl_weight: '',
+        pearl_count: ''
+      })
+    },
+    addMino() {
+      this.form.mino.push({
+        mino_price: ''
+      })
+    },
     removeDiamond(index) {
       this.form.diamonds.splice(index, 1)
     },
-
-    /** navigate to inventoryList */
+    removeStone(index) {
+      this.form.colour_stone.splice(index, 1)
+    },
+    removePearl(index) {
+      this.form.pearl.splice(index, 1)
+    },
+    removeMino(index) {
+      this.form.mino.splice(index, 1)
+    },
     navigateToInventoryList() {
       this.$router.push({ name: 'inventory-list' })
     },
-
-    /** file upload  */
     handleFileUpload(e) {
-      const files = Array.from(e.target.files) // Convert FileList to array
-
-      // Validate and handle each file
+      const files = Array.from(e.target.files)
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf']
+      const maxSize = 5 * 1024 * 1024 // 5MB
       files.forEach((file) => {
         if (!file) {
           this.$vs.notify({
@@ -647,37 +852,86 @@ export default {
             icon: 'icon-alert-circle',
             position: 'top-center',
             time: 5000,
-            color: 'primary'
+            color: 'danger'
           })
           return
         }
-
-        // Create a preview URL and add it to the array
+        if (!validTypes.includes(file.type)) {
+          this.$vs.notify({
+            title: 'Error',
+            text: 'Invalid file type. Only JPG, PNG, and PDF are allowed.',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'danger'
+          })
+          return
+        }
+        if (file.size > maxSize) {
+          this.$vs.notify({
+            title: 'Error',
+            text: 'File size exceeds 5MB limit.',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'danger'
+          })
+          return
+        }
         const previewURL = URL.createObjectURL(file)
         this.preview_images.push({ src: previewURL, file })
         this.form.inventory_images.push(file)
       })
     },
-
-    /** remove file */
     removeFile(index, type) {
-      if (type == 'preview') {
-        // Revoke the object URL
+      if (type === 'preview') {
         URL.revokeObjectURL(this.preview_images[index].src)
-
-        // Remove the file from the arrays
         this.preview_images.splice(index, 1)
         this.form.inventory_images.splice(index, 1)
       } else {
-        const exist_index = this.form.exist_inventory_images.findIndex((value) => index == value)
-        if (exist_index != -1) {
+        const exist_index = this.form.exist_inventory_images.findIndex((value) => index === value)
+        if (exist_index !== -1) {
           this.form.exist_inventory_images.splice(exist_index, 1)
         }
       }
+    },
+    resetForm() {
+      this.form = {
+        name: null,
+        category_id: null,
+        sub_category_id: null,
+        size_id: null,
+        metal_id: null,
+        metal_weight: null,
+        gender: null,
+        in_stock: false,
+        wear_it_item: false,
+        delivery: null,
+        production_name: null,
+        manufacturing_number: null,
+        collection: null,
+        product_tags: [],
+        family_products: [],
+        manufacturing_price: null,
+        diamonds: [],
+        inventory_images: [],
+        exist_inventory_images: [],
+        colour_stone: [],
+        pearl: [],
+        mino: []
+      }
+      this.preview_images = []
+      this.categoryID = null
+      this.subCategoryID = null
+      this.sizeID = null
+      this.SubCategoryList = []
+      this.SizeList = []
+      this.$refs.files.value = ''
+      this.$validator.reset()
     }
   },
-
-  /** watch */
   watch: {
     createLoading() {
       if (this.createLoading) {
@@ -697,7 +951,7 @@ export default {
         this.fetchSubCategories()
       }
     },
-    subCategoryID(newValue, oldValue) {
+    subCategoryID(newValue) {
       this.form.size_id = null
       this.sizeID = null
       if (newValue && newValue.value) {
