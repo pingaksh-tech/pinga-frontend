@@ -132,13 +132,13 @@
             </div>
 
             <!-- User -->
-            <div class="vx-row mb-2">
+            <!-- <div class="vx-row mb-2">
               <label class="vs-input--label">User *</label>
               <select-2 multiple="true" class="w-full category-input" name="User" placeholder="Select User"
                 :value="form.user" @input="(item) => (form.user = item && item.value)" autocomplete
                 :ssr="true" v-validate="'required'" action="common/getUserDropdownList" />
               <span class="text-danger text-sm" v-show="errors.has('User')">{{ errors.first('User') }}</span>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -200,7 +200,6 @@ export default {
         vvs_ef: null,
         price_type: null,
         retailer: [],
-        user: []
       },
       zIndex: 0
     }
@@ -240,7 +239,6 @@ export default {
           this.form.vvs_ef = newData.vvs_ef || null
           this.form.price_type = newData.price_type || 'Default'
           this.form.retailer = newData.retailer ? (Array.isArray(newData.retailer) ? newData.retailer : [newData.retailer]) : []
-          this.form.user = newData.user ? (Array.isArray(newData.user) ? newData.user : [newData.user]) : []
         } else {
           this.resetForm()
         }
@@ -283,7 +281,7 @@ export default {
             vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
             retailer: this.form.retailer,
-            user: this.form.user
+           // user: this.form.user
           }
         } else {
           data = {
@@ -296,7 +294,7 @@ export default {
             vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
             retailer: this.form.retailer,
-            user: this.form.user
+            // user: this.form.user
           }
         }
 
@@ -345,7 +343,7 @@ export default {
         vvs_ef: null,
         price_type: null,
         retailer: [],
-        user: []
+        // user: []
       }
       this.$validator.reset()
     }

@@ -8,14 +8,14 @@ span
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter first name" class="w-full" v-validate="'required|min:4'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter first name" class="w-full" v-validate="'required'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
               <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
             </div>
           </div>
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" placeholder="Enter last name" v-validate="'required|min:4'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" placeholder="Enter last name" v-validate="'required'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
               <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
             </div>
           </div>
@@ -58,7 +58,7 @@ span
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" placeholder="Enter email e.g.,jo@example.co" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email *" name="Email" id="Email" />
+              <vs-input icon="icon icon-package" placeholder="Enter email e.g.,jo@example.co" icon-pack="feather" class="w-full" v-validate="'required'" v-model="form.email" label="Email *" name="Email" id="Email" />
               <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
             </div>
           </div>

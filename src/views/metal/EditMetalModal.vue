@@ -17,7 +17,7 @@
             </div>
             <!-- Short Name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter short name" class="w-full" v-validate="'required|min:4'"
+              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter short name" class="w-full" v-validate="'required|min:2'"
                 v-model="form.sort_name" label="Short Name *" name="Short Name" id="Short Name" />
               <span class="text-danger text-sm" v-show="errors.has('Short Name')">{{ errors.first('Short Name')
                 }}</span>

@@ -75,6 +75,15 @@
                 errors.first('collection')
               }}</span>
             </div>
+
+             <!-- Retailer -->
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer </label>
+              <select-2 multiple="true" class="w-full category-input" name="Retailer" placeholder="Select Retailer"
+                :value="form.retailer" @input="(item) => (form.retailer = item && item.value)" autocomplete
+                :ssr="true" action="common/getRetailer" />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span> -->
+            </div>
           </div>
         </div>
 
@@ -125,6 +134,7 @@ export default {
        sub_category_id: null,
         regular_price: null,
         collection_id: null,
+        retailer:[]
       },
       preview_image: null,
       zIndex: 0

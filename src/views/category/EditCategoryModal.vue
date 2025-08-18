@@ -10,7 +10,7 @@
           <div class="vx-col w-full px-8">
             <!-- Category name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" v-validate="'required|min:4'" icon-pack="feather" class="w-full"
+              <vs-input icon="icon icon-package" v-validate="'required'" icon-pack="feather" class="w-full"
                 v-model="form.name" label="Category Name *" name="Category Name" />
               <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
                 }}</span>
