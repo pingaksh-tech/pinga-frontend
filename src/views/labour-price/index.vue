@@ -1,108 +1,226 @@
 <template>
   <div>
-    <!-- Labour Price list -->
+    <!-- Tabs for Default and Retailer Price -->
     <div class="vx-card p-6">
-      <vs-table id="labour_price_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="LabourPriceRecords">
-        <template slot="header">
-          <div class="mb-2 flex items-center">
-            <div class="flex flex-wrap justify-between items-center">
-              <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
-                <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
-                    <span class="mr-2">
-                      {{ page * length - (length - (FilteredCount && 1)) }}
-                      -
-                      {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
-                      of {{ subtotal }}
-                    </span>
-                    <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+      <vs-tabs v-model="activeTab">
+        <vs-tab label="Default">
+          <div class="tab-content">
+            <vs-table
+              id="labour_price_list_default"
+              class="vs-con-loading__container"
+              stripe
+              :sst="true"
+              maxHeight="800px"
+              @search="updateSearchQuery"
+              @change-page="handleChangePage"
+              @sort="handleSort"
+              :total="FilteredCount"
+              :max-items="length"
+              search
+              :data="LabourPriceRecords"
+            >
+              <template slot="header">
+                <div class="mb-2 flex items-center">
+                  <div class="flex flex-wrap justify-between items-center">
+                    <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
+                      <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
+                        <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                          <span class="mr-2">
+                            {{ page * length - (length - (FilteredCount && 1)) }}
+                            -
+                            {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
+                            of {{ subtotal }}
+                          </span>
+                          <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+                        </div>
+                        <vs-dropdown-menu>
+                          <vs-dropdown-item @click="handleChangeLength(10)">
+                            <span>10</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(20)">
+                            <span>20</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(50)">
+                            <span>50</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(100)">
+                            <span>100</span>
+                          </vs-dropdown-item>
+                        </vs-dropdown-menu>
+                      </vs-dropdown>
+                    </div>
                   </div>
-                  <vs-dropdown-menu>
-                    <vs-dropdown-item @click="handleChangeLength(10)">
-                      <span>10</span>
-                    </vs-dropdown-item>
-                    <vs-dropdown-item @click="handleChangeLength(20)">
-                      <span>20</span>
-                    </vs-dropdown-item>
-                    <vs-dropdown-item @click="handleChangeLength(50)">
-                      <span>50</span>
-                    </vs-dropdown-item>
-                    <vs-dropdown-item @click="handleChangeLength(100)">
-                      <span>100</span>
-                    </vs-dropdown-item>
-                  </vs-dropdown-menu>
-                </vs-dropdown>
-              </div>
-            </div>
-            <div @click="toggleAddLabourPriceModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
-              <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
-            </div>
+                  <div
+                    @click="toggleAddLabourPriceModal"
+                    class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+                  >
+                    <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+                    <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
+                  </div>
+                </div>
+              </template>
+
+              <template slot="thead">
+                <vs-th>Sr#</vs-th>
+                <vs-th sort-key="regular_price">Regular Price</vs-th>
+                <vs-th sort-key="category_name">Category Name</vs-th>
+                <vs-th sort-key="sub_category_name">Sub Category Name</vs-th>
+                <vs-th sort-key="collection_name">Collection Name</vs-th>
+                <vs-th v-if="checkPermissionSlug(['labour_Prices_edit', 'labour_Prices_delete'])">Action</vs-th>
+              </template>
+
+              <template slot-scope="{ data }" ref="tableBody">
+                <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
+                  <vs-td>
+                    {{ page * length - (length - i - 1) }}
+                  </vs-td>
+                  <vs-td class="text-left">{{ tr.regular_price || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.category_name || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.sub_category_name || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.collection_name || '-' }} </vs-td>
+                  <vs-td v-if="checkPermissionSlug(['labour_Prices_edit', 'labour_Prices_delete'])">
+                    <div class="inline-flex">
+                      <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_edit'])">
+                        <feather-icon @click.stop="toggleEditLabourPriceModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                      </vx-tooltip>
+                      <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_delete'])">
+                        <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                      </vx-tooltip>
+                    </div>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+            <!-- Custom Pagination -->
+            <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
           </div>
-        </template>
+        </vs-tab>
+        <vs-tab label="Retailer Price">
+          <div class="tab-content">
+            <vs-table
+              id="labour_price_list_retailer"
+              class="vs-con-loading__container"
+              stripe
+              :sst="true"
+              maxHeight="800px"
+              @search="updateSearchQuery"
+              @change-page="handleChangePage"
+              @sort="handleSort"
+              :total="FilteredCount"
+              :max-items="length"
+              search
+              :data="LabourPriceRecords"
+            >
+              <template slot="header">
+                <div class="mb-2 flex items-center">
+                  <div class="flex flex-wrap justify-between items-center">
+                    <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
+                      <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
+                        <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                          <span class="mr-2">
+                            {{ page * length - (length - (FilteredCount && 1)) }}
+                            -
+                            {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
+                            of {{ subtotal }}
+                          </span>
+                          <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+                        </div>
+                        <vs-dropdown-menu>
+                          <vs-dropdown-item @click="handleChangeLength(10)">
+                            <span>10</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(20)">
+                            <span>20</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(50)">
+                            <span>50</span>
+                          </vs-dropdown-item>
+                          <vs-dropdown-item @click="handleChangeLength(100)">
+                            <span>100</span>
+                          </vs-dropdown-item>
+                        </vs-dropdown-menu>
+                      </vs-dropdown>
+                    </div>
+                  </div>
+                  <div
+                    @click="toggleAddLabourPriceModal"
+                    class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+                  >
+                    <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+                    <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
+                  </div>
+                </div>
+              </template>
 
-        <template slot="thead">
-          <vs-th>Sr#</vs-th>
-          <vs-th sort-key="regular_price">Regular Price</vs-th>
-          <vs-th sort-key="category_name">Category Name</vs-th>
-          <vs-th sort-key="sub_category_name">Sub Category Name</vs-th>
-          <vs-th sort-key="collection_name">Collection Name</vs-th>
-          <vs-th v-if="checkPermissionSlug(['labour_Prices_edit','labour_Prices_delete'])">Action</vs-th>
-        </template>
+              <template slot="thead">
+                <vs-th>Sr#</vs-th>
+                <vs-th>Retailer Code</vs-th>
+                <vs-th sort-key="regular_price">Regular Price</vs-th>
+                <vs-th sort-key="category_name">Category Name</vs-th>
+                <vs-th sort-key="sub_category_name">Sub Category Name</vs-th>
+                <vs-th sort-key="collection_name">Collection Name</vs-th>
+                <vs-th v-if="checkPermissionSlug(['labour_Prices_edit', 'labour_Prices_delete'])">Action</vs-th>
+              </template>
 
-        <template slot-scope="{ data }" ref="tableBody">
-          <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
-            <vs-td>
-              {{ page * length - (length - i - 1) }}
-            </vs-td>
-            <vs-td class="text-left">{{ tr.regular_price || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.category_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.sub_category_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.collection_name || '-' }} </vs-td>
-            <vs-td v-if="checkPermissionSlug(['labour_Prices_edit','labour_Prices_delete'])">
-              <div class="inline-flex">
-                <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_edit'])">
-                  <feather-icon @click.stop="toggleEditLabourPriceModal(tr)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
-                </vx-tooltip>
-                <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_delete'])">
-                  <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
-                </vx-tooltip>
-              </div>
-            </vs-td>
-          </vs-tr>
-        </template>
-      </vs-table>
-      <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8" @onchange="handleChangePage"></vs-pagination>
+              <template slot-scope="{ data }" ref="tableBody">
+                <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
+                  <vs-td>
+                    {{ page * length - (length - i - 1) }}
+                  </vs-td>
+                  <vs-td class="text-left">
+                    <p class="capitalize">{{ tr.retailer && tr.retailer.length > 0 ? tr.retailer[0].code : '-' }}</p>
+                  </vs-td>
+                  <vs-td class="text-left">{{ tr.regular_price || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.category_name || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.sub_category_name || '-' }} </vs-td>
+                  <vs-td class="text-left">{{ tr.collection_name || '-' }} </vs-td>
+                  <vs-td v-if="checkPermissionSlug(['labour_Prices_edit', 'labour_Prices_delete'])">
+                    <div class="inline-flex">
+                      <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_edit'])">
+                        <feather-icon @click.stop="toggleEditLabourPriceModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                      </vx-tooltip>
+                      <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['labour_Prices_delete'])">
+                        <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                      </vx-tooltip>
+                    </div>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+            <!-- Custom Pagination -->
+            <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
+          </div>
+        </vs-tab>
+      </vs-tabs>
+
+      <!-- Add Labour Price modal -->
+      <action-modal :module_name="module_name" @update-data="getData" v-if="isAddLabourPriceModalMounted" :showModal.sync="isAddLabourPriceModalShow" :action_name="'Add'" :price_type="priceType" />
+
+      <!-- Edit Labour Price modal -->
+      <action-modal
+        :module_name="module_name"
+        @update-data="getData"
+        v-if="isEditLabourPriceModalMounted"
+        :showModal.sync="isEditLabourPriceModalShow"
+        :data="selectedRecord"
+        :action_name="'Update'"
+        :price_type="priceType"
+      />
     </div>
-
-    <!-- Add Labour Price modal -->
-    <action-modal :module_name="module_name" @update-data="getData" v-if="isAddLabourPriceModalMounted"
-      :showModal.sync="isAddLabourPriceModalShow" :action_name="'Add'" />
-
-    <!-- Edit Labour Price modal -->
-    <action-modal :module_name="module_name" @update-data="getData" v-if="isEditLabourPriceModalMounted"
-      :showModal.sync="isEditLabourPriceModalShow" :data="selectedRecord" :action_name="'Update'" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import actionModal from '@/views/labour-price/action'
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'LabourPriceList',
 
   /** Components */
   components: {
-   actionModal,
+    actionModal
   },
 
   /** Data */
@@ -113,24 +231,24 @@ export default {
     page: 1,
     search: '',
     module_name: 'Labour Price',
-
-    // add Latest price modal
+    activeTab: 0, // 0 for Default, 1 for Retailer Price
     isAddLabourPriceModalMounted: false,
     isAddLabourPriceModalShow: false,
-
-    // Edit Latest price modal
     isEditLabourPriceModalMounted: false,
     isEditLabourPriceModalShow: false,
     selectedRecord: null
   }),
 
-  /** computed */
+  /** Computed */
   computed: {
     ...mapState('labourPrice', ['LabourPriceRecords', 'subtotal', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
     },
-    ...mapGetters('auth', ['checkPermissionSlug']),
+    priceType() {
+      return this.activeTab === 0 ? 'Default' : 'Retailer Price'
+    }
   },
 
   /** Functions */
@@ -171,10 +289,10 @@ export default {
     /** Labour Price List API */
     getData() {
       this.getLabourPriceList({
-        // order: this.order,
         limit: this.length,
         page: this.page,
-        search: this.search
+        search: this.search,
+        price_type: this.priceType
       })
     },
 
@@ -236,11 +354,11 @@ export default {
     listLoading() {
       if (this.listLoading) {
         this.$vs.loading({
-          container: '#labour_price_list',
+          container: this.activeTab === 0 ? '#labour_price_list_default' : '#labour_price_list_retailer',
           scale: 0.45
         })
       } else {
-        this.$vs.loading.close('#labour_price_list > .con-vs-loading')
+        this.$vs.loading.close(this.activeTab === 0 ? '#labour_price_list_default > .con-vs-loading' : '#labour_price_list_retailer > .con-vs-loading')
       }
     },
 
@@ -270,6 +388,11 @@ export default {
 
     page() {
       this.getData()
+    },
+
+    activeTab() {
+      this.page = 1
+      this.getData()
     }
   },
 
@@ -279,3 +402,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.tab-content {
+  padding-top: 1rem;
+}
+</style>

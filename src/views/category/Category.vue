@@ -60,6 +60,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="category.name">Category Name</vs-th>
+          <vs-th sort-key="category.index">Index</vs-th>
           <vs-th sort-key="category.status">Status</vs-th>
           <!-- <vs-th>Action</vs-th> -->
         </template>
@@ -70,12 +71,15 @@
               {{ page * length - (length - i - 1) }}
             </vs-td>
             <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
-           <vs-td>
-             <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id)">
-               <span slot="on"></span>
-               <span slot="off"></span>
-             </vs-switch>
-           </vs-td>
+            <vs-td class="text-left w-1/6">
+              <vs-input v-model="tr.index" v-validate="'required'" type="number" class="w-1/2" @click.stop @keydown.enter="updateIndexPosition(tr._id, tr.index)" />
+            </vs-td>
+            <vs-td>
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id)">
+                <span slot="on"></span>
+                <span slot="off"></span>
+              </vs-switch>
+            </vs-td>
             <!-- <vs-td>
               <div class="inline-flex">
                 <vx-tooltip text="Edit Category">
@@ -164,12 +168,43 @@ export default {
       getCategoryList: 'getCategoryList',
       deleteCategoryRecord: 'deleteCategoryRecord'
     }),
+    updateIndexPosition(id, index) {
+      if (index > 0) {
+        this.$store
+          .dispatch('category/manageIndexNumber', { type: 'category', id, index })
+          .then((Success) => {
+            const { message } = Success
+            this.getData()
+            this.$vs.notify({
+              title: 'Success',
+              text: message,
+              iconPack: 'feather',
+              icon: 'icon-alert-circle',
+              position: 'top-center',
+              time: 5000,
+              color: 'success'
+            })
+          })
+          .catch((err) => {
+            const { message } = err
+            this.$vs.notify({
+              title: 'Error',
+              text: message,
+              iconPack: 'feather',
+              icon: 'icon-alert-circle',
+              position: 'top-center',
+              time: 5000,
+              color: 'primary'
+            })
+          })
+      }
+    },
 
     /** updateStatus API */
     updateStatus(id) {
       this.$store
         .dispatch('category/updateStatus', {
-         type:'category',
+          type: 'category',
           id
         })
         .then((Success) => {
