@@ -21,7 +21,7 @@
           </div>
 
           <vs-button :disabled="createLoading" class="mr-2 mt-5 vs-con-loading__container" @click="imageImport">Import</vs-button>
-          <vs-button :disabled='importLoading' id="import-loading" class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
+          <vs-button :disabled="importLoading" id="import-loading" class="mr-2 mt-5 vs-con-loading__container" @click="downloadPDFSample">Download Sample</vs-button>
         </div>
       </div>
       <div class="vx-row">
@@ -226,6 +226,7 @@
               </vs-dropdown>
             </div>
           </vs-th>
+          <vs-th sort-key="Inventory.status">Status </vs-th>
           <vs-th v-if="checkPermissionSlug(['inventories_edit', 'inventories_delete'])">Action</vs-th>
         </template>
         <template slot-scope="{ data }">
@@ -250,6 +251,14 @@
             </vs-td>
             <vs-td class="text-left">
               <p class="capitalize">{{ tr.gender }}</p>
+            </vs-td>
+            <vs-td>
+              <vs-td class="text-left">
+                <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id, tr.status)">
+                  <span slot="on"></span>
+                  <span slot="off"></span>
+                </vs-switch>
+              </vs-td>
             </vs-td>
             <vs-td v-if="checkPermissionSlug(['inventories_edit', 'inventories_delete'])">
               <div class="inline-flex">
@@ -329,7 +338,7 @@ export default {
     categoryID: null,
     subCategoryID: null,
     SubCategoryList: [],
-    subCategoryOptionList:[],
+    subCategoryOptionList: [],
     form: {
       categoryId: null,
       subCategoryId: null,
@@ -339,7 +348,7 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCountInventory', 'listLoading','createLoading','importLoading']),
+    ...mapState('inventory', ['InventoryRecords', 'total', 'FilteredCountInventory', 'listLoading', 'createLoading', 'importLoading']),
     ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
@@ -372,7 +381,7 @@ export default {
         this.fetchSubCategories()
       }
     },
-   resetImportForm() {
+    resetImportForm() {
       this.form = {
         categoryId: null,
         subCategoryId: null,
@@ -455,7 +464,37 @@ export default {
         console.error('Error fetching collections:', error)
       }
     },
-
+    updateStatus(id) {
+      this.$store
+        .dispatch('inventory/updateUserStatus', {
+          id
+        })
+        .then((Success) => {
+          this.getData()
+          const { message } = Success
+          this.$vs.notify({
+            title: 'Success',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'success'
+          })
+        })
+        .catch((err) => {
+          const { message } = err
+          this.$vs.notify({
+            title: 'Error',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        })
+    },
     async fetchSubCategories() {
       try {
         // Replace with your actual API call to get subcategories
@@ -666,7 +705,6 @@ export default {
         // Clear file input
         this.$refs.files.value = ''
       } catch ({ data }) {
-
         this.form.categoryId = null
         this.form.subCategoryId = null
         this.categoryID = null
@@ -689,7 +727,7 @@ export default {
           })
         }
       } finally {
-          this.resetImportForm() //  Always reset form...
+        this.resetImportForm() //  Always reset form...
       }
     },
     downloadErrorLog() {
@@ -798,7 +836,7 @@ export default {
         this.form.subCategoryId = null
         this.subCategoryID = null
       }
-    },
+    }
 
     // Modify your existing inventoryImport method to include category/subcategory
     // async inventoryImport() {
@@ -887,7 +925,7 @@ export default {
         this.$vs.loading.close('#inventory-list > .con-vs-loading')
       }
     },
-    importLoading(){
+    importLoading() {
       if (this.importLoading) {
         this.$vs.loading({
           container: '#import-loading',
@@ -897,7 +935,7 @@ export default {
         this.$vs.loading.close('#import-loading > .con-vs-loading')
       }
     },
-    createLoading(){
+    createLoading() {
       if (this.createLoading) {
         this.$vs.loading({
           container: '#image-loading',
