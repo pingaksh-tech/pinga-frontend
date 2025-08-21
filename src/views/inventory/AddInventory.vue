@@ -9,7 +9,6 @@
               <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-validate="'required'" v-model="form.name" label="Inventory Name *" name="Inventory Name" id="Inventory Name" />
               <span class="text-danger text-sm" v-show="errors.has('Inventory Name')">{{ errors.first('Inventory Name') }}</span>
             </div>
-
             <!-- Category -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Category *</label>
@@ -28,7 +27,6 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
             </div>
-
             <!-- Sub Category -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Sub Category *</label>
@@ -49,17 +47,16 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Sub Category')">{{ errors.first('Sub Category') }}</span>
             </div>
-
             <!-- Size -->
             <div class="vx-col w-1/2 mb-2">
-              <label class="vs-input--label">Size</label>
+              <label class="vs-input--label">Size 123</label>
               <select-2
                 class="w-full category-input"
                 name="Size"
                 placeholder="Select Size"
                 :value="form.size_id"
                 v-model="sizeID"
-                @input="(item) => (form.size_id = item && item.value)"
+                @input="(item) => (form.sub_category_id = item && item.value)"
                 :options="SizeList"
                 autocomplete
                 :ssr="true"
@@ -67,7 +64,6 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Size')">{{ errors.first('Size') }}</span>
             </div>
-
             <!-- Inventory Metal -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Inventory Metal *</label>
@@ -85,7 +81,6 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Metal')">{{ errors.first('Metal') }}</span>
             </div>
-
             <!-- Metal Weight -->
             <div class="vx-col w-1/2 mb-2">
               <vs-input
@@ -102,7 +97,6 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Metal Weight')">{{ errors.first('Metal Weight') }}</span>
             </div>
-
             <!-- Product Tag -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Product Tag</label>
@@ -119,7 +113,6 @@
               />
               <span class="text-primary text-sm" v-show="errors.has('Product Tag')">{{ errors.first('Product Tag') }}</span>
             </div>
-
             <!-- Manufacturing Price -->
             <div class="vx-col w-1/2 mb-2">
               <vs-input
@@ -128,15 +121,12 @@
                 class="w-full"
                 type="number"
                 min="0"
-                v-validate="'required|decimal|min_value:0'"
                 v-model="form.manufacturing_price"
-                label="Manufacturing Price *"
+                label="Manufacturing Price"
                 name="Manufacturing Price"
                 id="Manufacturing Price"
               />
-              <span class="text-danger text-sm" v-show="errors.has('Manufacturing Price')">{{ errors.first('Manufacturing Price') }}</span>
             </div>
-
             <div class="vx-col w-1/2 mb-2">
               <div class="vx-row px-5">
                 <!-- Inventory Gender -->
@@ -159,7 +149,6 @@
                     </vs-switch>
                   </div>
                 </div>
-
                 <!-- Wear It Item -->
                 <div class="mb-2 w-1/4">
                   <label class="vs-input--label pl-0">Wear It Item ?</label>
@@ -177,7 +166,6 @@
               <vs-input icon="icon icon-box" icon-pack="feather" class="w-full" v-validate="'required'" v-model="form.delivery" label="Delivery *" name="Delivery" id="Delivery" />
               <span class="text-danger text-sm" v-show="errors.has('Delivery')">{{ errors.first('Delivery') }}</span>
             </div>
-
             <!-- Production Name -->
             <div class="vx-col w-1/2 mb-2">
               <vs-input
@@ -192,7 +180,6 @@
               />
               <span class="text-danger text-sm" v-show="errors.has('Production Name')">{{ errors.first('Production Name') }}</span>
             </div>
-
             <div class="vx-col w-1/2 mb-2">
               <vs-input
                 icon="icon icon-box"
@@ -220,7 +207,6 @@
                 data-vv-as="Inventory Type"
               />
             </div>
-
             <!-- Family Products -->
             <div class="vx-col w-1/2 mb-2">
               <label class="vs-input--label">Family Product</label>
@@ -236,7 +222,6 @@
                 action="common/getFamilyProducts"
               />
             </div>
-
             <!-- Inventory Images -->
             <div class="vx-col w-full">
               <label class="vs-input--label block">Inventory Images</label>
@@ -250,7 +235,7 @@
                 style="border: 1px solid rgba(0, 0, 0, 0.2)"
                 multiple
               />
-              <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{ errors.first('inventory_images') }}</span>
+              <!-- <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{ errors.first('inventory_images') }}</span> -->
               <div class="mt-5 grid grid-cols-4 gap-4">
                 <div v-for="(image, index) in form.exist_inventory_images" :key="'exist-' + index" class="relative group">
                   <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
@@ -276,7 +261,6 @@
             </div>
           </div>
           <!-- Close vx-row for form fields -->
-
           <!-- Diamond Section -->
           <div class="w-full px-4 mt-4">
             <vs-button @click="addDiamond" class="mb-4">Add Diamond</vs-button>
@@ -303,7 +287,6 @@
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
                 </div>
-
                 <!-- Diamond Shape -->
                 <div class="vx-col w-1/5 mb-2">
                   <label class="vs-input--label">Diamond Shape *</label>
@@ -322,7 +305,6 @@
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_shape_${index}`)">{{ errors.first(`diamond_shape_${index}`) }}</span>
                 </div>
-
                 <!-- Diamond Size -->
                 <div class="vx-col w-1/5 mb-2">
                   <label class="vs-input--label">Diamond Size *</label>
@@ -341,7 +323,6 @@
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_size_${index}`)">{{ errors.first(`diamond_size_${index}`) }}</span>
                 </div>
-
                 <!-- Diamond Count -->
                 <div class="vx-col w-1/5 mb-2">
                   <vs-input
@@ -358,7 +339,6 @@
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_count_${index}`)">{{ errors.first(`diamond_count_${index}`) }}</span>
                 </div>
-
                 <!-- Remove Diamond -->
                 <div class="flex items-center">
                   <vx-tooltip :text="`Remove`">
@@ -368,7 +348,6 @@
                 <vs-divider></vs-divider>
               </div>
             </div>
-
             <!-- Stone Section -->
             <vs-button @click="addStone" class="mb-4">Add Stone</vs-button>
             <div class="stone-container">
@@ -397,7 +376,6 @@
                 <vs-divider></vs-divider>
               </div>
             </div>
-
             <!-- Pearl Section -->
             <vs-button @click="addPearl" class="mb-4">Add Pearl</vs-button>
             <div class="pearl-container">
@@ -426,7 +404,6 @@
                 <vs-divider></vs-divider>
               </div>
             </div>
-
             <!-- Mino Section -->
             <vs-button :disabled="this.form.mino.length >= 1" @click="addMino" class="mb-4">Add Mino</vs-button>
             <div class="mino-container">
@@ -449,7 +426,6 @@
             </div>
           </div>
           <!-- Close diamond/stone/pearl/mino section -->
-
           <!-- Save & Reset Button -->
           <div class="vx-row pt-5 px-5 text-center">
             <div class="vx-col w-full">
@@ -465,12 +441,10 @@
     </div>
   </vs-card>
 </template>
-
 <script>
 import { mapActions, mapState } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
 import { v4 as uuidv4 } from 'uuid'
-
 export default {
   name: 'AddInventory',
   components: {
@@ -538,10 +512,8 @@ export default {
         const data = res.data.data
         this.categoryID = data.category_id
         this.subCategoryID = data.sub_category_id
-        this.sizeID = data.size
         this.initial_category_id = data.category_id
         this.initial_sub_category_id = data.sub_category_id
-
         this.form.name = data.name
         this.form.category_id = data.category_id
         this.form.metal_id = data.metal_id
@@ -553,6 +525,7 @@ export default {
         this.form.production_name = data.production_name
         this.form.manufacturing_number = data.manufacturing_number
         this.form.collection = data.collection
+        this.form.size_id = data.size_id
         if (data.diamonds) {
           this.form.diamonds = data.diamonds.map((v) => {
             delete v._id
@@ -560,7 +533,6 @@ export default {
             return { ...v, id: uuidv4() } // Add unique ID for rendering
           })
         }
-        
         // Populate colour_stone array
         if (data.colour_stone) {
           this.form.colour_stone = data.colour_stone.map((v) => {
@@ -568,11 +540,10 @@ export default {
               colour_stone_count: v.colour_stone_count,
               colour_stone_weight: v.colour_stone_weight,
               colour_stone_price: v.colour_stone_price
-              //  id: uuidv4() // Add unique ID for rendering
+              // id: uuidv4() // Add unique ID for rendering
             }
           })
         }
-
         // Populate pearl array
         if (data.pearl) {
           this.form.pearl = data.pearl.map((v) => {
@@ -583,7 +554,6 @@ export default {
             }
           })
         }
-
         // Populate mino array
         if (data.mino) {
           this.form.mino = data.mino.map((v) => {
@@ -606,10 +576,18 @@ export default {
         if (data.sub_category_id) {
           const size = await this.getSize(data.sub_category_id)
           this.SizeList = size.data
-          this.sizeID = data.size
+          // Removed incorrect line: this.sizeID = data.size
+          this.form.size_id = data.size_id
+          // Pre-select the size by setting sizeID to the matching option object
+          if (data.size_id) {
+            const selectedSize = this.SizeList.find((option) => option.value === data.size_id)
+            if (selectedSize) {
+              this.sizeID = selectedSize.value
+            }
+          }
         }
-        if (data.size) {
-          this.form.size_id = data.size
+        if (data.size_id) {
+          this.form.size_id = data.size_id
         }
         this.form.sub_category_id = data.sub_category_id
       })
