@@ -820,7 +820,7 @@ export default {
     handleFileUpload(e) {
       const files = Array.from(e.target.files)
       const validTypes = ['image/jpeg', 'image/png', 'application/pdf']
-      const maxSize = 5 * 1024 * 1024 // 5MB
+
       files.forEach((file) => {
         if (!file) {
           this.$vs.notify({
@@ -834,6 +834,7 @@ export default {
           })
           return
         }
+
         if (!validTypes.includes(file.type)) {
           this.$vs.notify({
             title: 'Error',
@@ -846,23 +847,14 @@ export default {
           })
           return
         }
-        if (file.size > maxSize) {
-          this.$vs.notify({
-            title: 'Error',
-            text: 'File size exceeds 5MB limit.',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            position: 'top-center',
-            time: 5000,
-            color: 'danger'
-          })
-          return
-        }
+
+        // ✅ Removed file size validation
         const previewURL = URL.createObjectURL(file)
         this.preview_images.push({ src: previewURL, file })
         this.form.inventory_images.push(file)
       })
     },
+
     removeFile(index, type) {
       if (type === 'preview') {
         URL.revokeObjectURL(this.preview_images[index].src)
