@@ -166,8 +166,8 @@
 
         <template slot="thead">
           <vs-th>Sr#</vs-th>
-          <vs-th sort-key="Inventory.name">Inventory Name</vs-th>
-          <vs-th sort-key="Inventory.category_id" class="relative">
+          <vs-th sort-key="name">Inventory Name 12</vs-th>
+          <vs-th sort-key="category_id" class="relative">
             <div class="flex items-start cursor-pointer" @click.stop="toggleCategoryFilter">
               <span>Category</span>
               <feather-icon icon="FilterIcon" svgClasses="h-4 w-4 ml-1" />
@@ -186,7 +186,7 @@
               </vs-dropdown>
             </div>
           </vs-th>
-          <vs-th sort-key="Inventory.sub_category_id" class="relative">
+          <vs-th sort-key="sub_category_id" class="relative">
             <div class="flex items-start cursor-pointer" @click.stop="toggleSubCategoryFilter">
               <span>Sub Category</span>
               <feather-icon icon="FilterIcon" svgClasses="h-4 w-4 ml-1" />
@@ -205,9 +205,9 @@
               </vs-dropdown>
             </div>
           </vs-th>
-          <vs-th sort-key="Inventory.production_name">Production Name</vs-th>
-          <vs-th sort-key="Inventory.manufacturing_price">Manufacturing Price</vs-th>
-          <vs-th sort-key="Inventory.gender" class="relative">
+          <vs-th sort-key="production_name">Production Name</vs-th>
+          <vs-th sort-key="manufacturing_price">Manufacturing Price</vs-th>
+          <vs-th sort-key="gender" class="relative">
             <div class="flex items-start cursor-pointer" @click.stop="toggleGenderFilter">
               <span>Gender </span>
               <feather-icon icon="FilterIcon" svgClasses="h-4 w-4 ml-1" />
@@ -226,7 +226,7 @@
               </vs-dropdown>
             </div>
           </vs-th>
-          <vs-th sort-key="Inventory.status">Status </vs-th>
+          <vs-th>Status </vs-th>
           <vs-th v-if="checkPermissionSlug(['inventories_edit', 'inventories_delete'])">Action</vs-th>
         </template>
         <template slot-scope="{ data }">

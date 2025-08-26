@@ -335,7 +335,6 @@ export default {
         search: this.search,
         price_type: this.priceType
       })
-      console.log(this.activeTab, 'this.activeTab..............')
     },
     formatPrice(value) {
       if (typeof value !== 'number' || isNaN(value)) {

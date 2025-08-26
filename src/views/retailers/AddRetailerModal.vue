@@ -4,18 +4,17 @@
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
-
           <!--  code -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" type='text' icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
+              <vs-input icon="icon icon-package" type="text" icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span> -->
             </div>
           </div>
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full"  v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span> -->
             </div>
           </div>
@@ -39,15 +38,64 @@
                 :ssr="true"
                 :multiple="false"
                 :options="this.dropDownManagers"
-                
               />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
+
+          <!-- state_head -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">State head</label>
+              <select-2
+                class="w-1/2 role-input"
+                name="Manager"
+                placeholder="Select State Head"
+                :value="form.state_head"
+                @input="(item) => (form.state_head = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                :options="this.dropDownManagers"
+              />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
+            </div>
+          </div>
+
+          <!-- regional_sales_head -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Regional state head</label>
+              <select-2
+                class="w-1/2 role-input"
+                name="Manager"
+                placeholder="Select State Head"
+                :value="form.regional_sales_head"
+                @input="(item) => (form.regional_sales_head = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                :options="this.dropDownManagers"
+              />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
+            </div>
+          </div>
+
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.phone" label="Phone" name="Phone" id="Phone" />
+              <vs-input
+                type="text"
+                @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone.replace(/^\+91/, '').replace(/[^0-9]/g, '')"
+                @clear="form.phone = '+91'"
+                icon="icon icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.phone"
+                label="Phone"
+                name="Phone"
+                id="Phone"
+              />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
             </div>
           </div>
@@ -74,11 +122,11 @@
           <!-- state -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input  icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span> -->
             </div>
           </div>
-           <!-- country  -->
+          <!-- country  -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.country" label="Country" name="Country" id="Country" />
@@ -86,13 +134,10 @@
             </div>
           </div>
 
-
-
-         
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full"  v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span> -->
             </div>
           </div>
@@ -119,19 +164,11 @@
           <!-- business_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input
-                icon="icon icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-model="form.business_name"
-                label="Business Name"
-                name="Business Name"
-                id="Business Name"
-              />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.business_name" label="Business Name" name="Business Name" id="Business Name" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span> -->
             </div>
           </div>
-          
+
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -145,8 +182,7 @@
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.website" label="Website" name="Website" id="Website" />
             </div>
           </div>
-          
-          
+
           <!-- whatsapp_number -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -160,18 +196,6 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
-          
-         
-          
-          
-          <!-- street   -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.street" label="Street" name="Street" id="Street" />
-            </div>
-          </div>
-          
-          
         </div>
         <!-- Send sms -->
         <div class="vx-col w-1/2 px-8">
@@ -233,12 +257,13 @@ export default {
         zip_code: '',
         send_sms: false,
         website: '',
-        street: '',
         anniversary_date: '',
         birth_date: '',
         manager: '',
         whatsapp_number: '',
-        legal_name: ''
+        legal_name: '',
+        state_head: '',
+        regional_sales_head: ''
       },
       zIndex: 0,
       dropDownManagers: []
@@ -285,9 +310,9 @@ export default {
     },
     ...mapState('user', { getManagers: 'managers' }),
     async save_changes() {
-     // if (!(await this.$validator.validate())) {
-     // return false
-     //}
+      // if (!(await this.$validator.validate())) {
+      // return false
+      //}
       try {
         const { message } = await this.createRetailer(this.form)
         this.$emit('update-data', true)
