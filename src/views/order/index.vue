@@ -2,27 +2,26 @@
   <div>
     <!-- Order list -->
     <div class="vx-card p-6">
-      <vs-table 
-          id="order-list"
-          class="vs-con-loading__container"
-          stripe
-          :sst="true"
-          maxHeight="800px"
-          @search="updateSearchQuery"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          :total="FilteredCount"
-          :max-items="length" 
-          search
-          :data="OrderRecords"
-        >
+      <vs-table
+        id="order-list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="OrderRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) || 0 }}
                       -
@@ -51,127 +50,94 @@
           </div>
         </template>
         <template slot="header">
-         <div class="flex flex-wrap mb-4">
-           <!-- Total Amount Box -->
-           <div class="analytics-box bg-primary text-white mr-4 mb-2 p-4 rounded-lg">
-             <div class="box-title">Total Amount</div>
-             <div class="box-value">{{ formatPrice(OrderAnalytics.totalAmount) }}</div>
-           </div>
+          <div class="flex flex-wrap mb-4">
+            <!-- Total Amount Box -->
+            <div class="analytics-box bg-primary text-white mr-4 mb-2 p-4 rounded-lg">
+              <div class="box-title">Total Amount</div>
+              <div class="box-value">{{ formatPrice(OrderAnalytics.totalAmount) }}</div>
+            </div>
 
-           <!-- Total Orders Box -->
-           <div class="analytics-box bg-success text-white mr-4 mb-2 p-4 rounded-lg">
-             <div class="box-title">Total Orders</div>
-             <div class="box-value">{{ OrderAnalytics.totalCount }}</div>
-           </div>
-         </div>
-       </template>
+            <!-- Total Orders Box -->
+            <div class="analytics-box bg-success text-white mr-4 mb-2 p-4 rounded-lg">
+              <div class="box-title">Total Orders</div>
+              <div class="box-value">{{ OrderAnalytics.totalCount }}</div>
+            </div>
+          </div>
+        </template>
         <template slot="thead">
-         <vs-th>Sr#</vs-th>
-         <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
+          <vs-th>Sr#</vs-th>
+          <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
           <vs-th sort-key="order_no">Order No</vs-th>
           <vs-th sort-key="order_type">Order Type</vs-th>
           <vs-th sort-key="date">Order Date</vs-th>
-          <vs-th sort-key="production_name">Production Name</vs-th>
+          <!-- <vs-th sort-key="production_name">Production Name</vs-th> -->
           <vs-th sort-key="retailer.business_name">Retailer Code</vs-th>
-          <vs-th sort-key="production_style_no">Pingaksh Style No.</vs-th>
-          <vs-th sort-key="production_style_no">MFG Style No</vs-th>
-          <vs-th sort-key="production_style_no">Qty</vs-th>
-          <vs-th sort-key="production_style_no">Size</vs-th>
-          <vs-th sort-key="production_style_no">Gold Kt</vs-th>
-          <vs-th sort-key="production_style_no">Diamond Quality</vs-th>
-          <vs-th sort-key="production_style_no">Spl. Remarks</vs-th>
-          <vs-th sort-key="production_style_no">Order Delivery date</vs-th>
+          <vs-th sort-key="retailer.business_name">Qty</vs-th>
+          <vs-th sort-key="retailer.business_name">Grand Total</vs-th>
           <vs-th v-if="checkPermissionSlug(['orders_edit'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }">
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
-           <vs-td>
-            {{ page * length - (length - i - 1) }}
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-           <vs-input v-if="tr.edit" v-model="tr.order_no" />
-           <p v-else >{{ tr.order_no }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.order_type || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-           <p>{{ formatDate(tr.createdAt) || "-" }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.production_name || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.retailer ? tr.retailer.code : '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.production_style_no || '-'}}</p>
-          </vs-td>
-          <vs-td class="text-left">
-             <p>{{ tr.manufacturing_number || '-'}}</p>
-          </vs-td>
-          
-          <vs-td class="text-left">
-            <p>{{ tr.qty || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.size || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.metal_carat || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.diamond_clarity || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.remark || '-' }}</p>
-          </vs-td>
-          <vs-td class="text-left">
-            <p>{{ tr.order_delivery || '-' }}</p>
-          </vs-td>
-           <vs-td v-if="checkPermissionSlug(['orders_edit'])">
+            <vs-td>
+              {{ page * length - (length - i - 1) }}
+            </vs-td>
+            <vs-td class="text-left">
+              <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <vs-input v-if="tr.edit" v-model="tr.order_no" />
+              <p v-else>{{ tr.order_no }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <p>{{ tr.order_type || '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <p>{{ formatDate(tr.createdAt) || '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <p>{{ tr.retailer ? tr.retailer.code : '-' }}</p>
+            </vs-td>
+
+            <vs-td class="text-left">
+              <p>{{ tr.qty || '-' }}</p>
+            </vs-td>
+
+            <vs-td class="text-left">
+              <p>{{ formatPrice(tr.grand_total) || '-' }}</p>
+            </vs-td>
+
+            <vs-td v-if="checkPermissionSlug(['orders_edit'])">
               <div class="inline-flex">
                 <vx-tooltip text="Order Details" v-if="checkPermissionSlug(['users_edit'])">
-                  <feather-icon 
-                    @click="handleOrderDetails(tr._id)" 
-                    icon="BookIcon" 
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" 
-                  />
+                  <feather-icon @click="handleOrderDetails(tr._id)" icon="BookIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="tr.edit ? `Save ${module_name}` : `Edit ${module_name}`">
-                  <feather-icon @click="tr.edit ? saveEdit(tr) : toggleEdit(tr)"
+                  <feather-icon
+                    @click="tr.edit ? saveEdit(tr) : toggleEdit(tr)"
                     :icon="tr.edit ? 'CheckIcon' : 'EditIcon'"
-                    svgClasses="h-5 w-5 mx-2 felx justify-center hover:text-primary cursor-pointer" />
+                    svgClasses="h-5 w-5 mx-2 felx justify-center hover:text-primary cursor-pointer"
+                  />
                 </vx-tooltip>
                 <vx-tooltip v-if="tr.edit" text="Remove">
-                  <feather-icon @click="closeEdit(tr)" icon="XIcon"
-                    svgClasses="h-5 w-5 felx justify-center hover:text-primary cursor-pointer" />
+                  <feather-icon @click="closeEdit(tr)" icon="XIcon" svgClasses="h-5 w-5 felx justify-center hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
-
             </vs-td>
           </vs-tr>
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" @onchange="handleChangePage" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"class="mt-8"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" @onchange="handleChangePage" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8"></vs-pagination>
 
-      <order-details-modal 
-        :showModal="isEditUserModalShow"
-        :data="selectedRecord"
-        :module_name="module_name"
-      />
+      <order-details-modal :showModal="isEditUserModalShow" :data="selectedRecord" :module_name="module_name" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import OrderDetailsModal from "./OrderDetailsModal.vue"
+import OrderDetailsModal from './OrderDetailsModal.vue'
 
 export default {
   name: 'Order',
@@ -189,14 +155,14 @@ export default {
 
     // Order Details modal
     isOrderDetailsModalMounted: false,
-    selectedRecord : null,
-    isEditUserModalShow: false,
+    selectedRecord: null,
+    isEditUserModalShow: false
   }),
 
   /** computed */
   computed: {
-     ...mapState('user', ['createLoading', 'managers']),
-    ...mapState('order', ['OrderRecords', 'total', 'FilteredCount', 'listLoading','OrderAnalytics','orderList','orderLoading']),
+    ...mapState('user', ['createLoading', 'managers']),
+    ...mapState('order', ['OrderRecords', 'total', 'FilteredCount', 'listLoading', 'OrderAnalytics', 'orderList', 'orderLoading']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
@@ -208,9 +174,9 @@ export default {
     ...mapActions('order', {
       getOrderList: 'getOrderList',
       updateOrder: 'updateOrder',
-      getOrderDetails:"getOrderDetails",
+      getOrderDetails: 'getOrderDetails'
     }),
-   async handleOrderDetails(id) {
+    async handleOrderDetails(id) {
       this.$router.push(`/order/list/${id}`)
     },
     /** Per Page Limit Change */
@@ -251,21 +217,20 @@ export default {
       })
     },
 
-
     // Edit Order modal
     toggleEdit(row) {
-      this.$set(row, 'edit', true);
+      this.$set(row, 'edit', true)
     },
     // Save the edited data
 
     async saveEdit(row) {
       const data = {
-        order_no: row.order_no,
+        order_no: row.order_no
       }
-      const orderId = row._id;
+      const orderId = row._id
       try {
         const { message } = await this.updateOrder({ orderId, data })
-        this.$set(row, 'edit', false);
+        this.$set(row, 'edit', false)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -289,7 +254,7 @@ export default {
     },
 
     closeEdit(row) {
-      this.$set(row, 'edit', false);
+      this.$set(row, 'edit', false)
     },
 
     /** FormatPrice */
@@ -299,25 +264,25 @@ export default {
     },
 
     formatDate(dateString) {
-     if (!dateString) return '-';
-     const date = new Date(dateString);
+      if (!dateString) return '-'
+      const date = new Date(dateString)
 
-     const options = {
-       day: '2-digit',
-       month: '2-digit',
-       year: 'numeric',
-       hour: '2-digit',
-       minute: '2-digit',
-       second: '2-digit',
-       hour12: false
-     };
+      const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }
 
-     // Format as DD-MM-YYYY HH:mm:ss
-     return date.toLocaleString('en-IN', options)
-       .replace(/\//g, '-') // Replace slashes with dashes
-       .replace(',', '');   // Remove comma between date and time
-   }
-
+      // Format as DD-MM-YYYY HH:mm:ss
+      return date
+        .toLocaleString('en-IN', options)
+        .replace(/\//g, '-') // Replace slashes with dashes
+        .replace(',', '') // Remove comma between date and time
+    }
   },
 
   /** Watchers */
@@ -344,7 +309,6 @@ export default {
 }
 </script>
 <style scoped>
-
 .analytics-box {
   padding: 1rem 1.5rem;
   border-radius: 0.5rem;
