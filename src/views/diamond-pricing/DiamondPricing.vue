@@ -51,7 +51,7 @@
                     </div>
                   </div>
                   <div
-                    @click="toggleAddDiamondModal"
+                    @click="toggleAddDiamondModal('Default')"
                     v-if="checkPermissionSlug(['latest_Products_create'])"
                     class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
                   >
@@ -173,7 +173,7 @@
                     </div>
                   </div>
                   <div
-                    @click="toggleAddDiamondModal"
+                    @click="toggleAddDiamondModal('Retailer Price')"
                     v-if="checkPermissionSlug(['latest_Products_create'])"
                     class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
                   >
@@ -254,7 +254,15 @@
           </div>
         </vs-tab>
       </vs-tabs>
-      <diamond-modal :module_name="module_name" @update-data="getData" v-if="isDiamondModalMounted" :showModal.sync="isDiamondModalShow" :action_name="modalAction" :editData="selectedDiamond" />
+      <diamond-modal
+        :module_name="module_name"
+        @update-data="getData"
+        v-if="isDiamondModalMounted"
+        :showModal.sync="isDiamondModalShow"
+        :action_name="modalAction"
+        :editData="selectedDiamond"
+        :tabConfig="tabConfig"
+      />
     </div>
   </div>
 </template>
@@ -279,7 +287,8 @@ export default {
     isDiamondModalShow: false,
     modalAction: 'Add',
     selectedDiamond: null,
-    activeTab: 0 // 0 for Default, 1 for Retailer Price
+    activeTab: 0, // 0 for Default, 1 for Retailer Price
+    tabConfig: ''
   }),
   computed: {
     ...mapState('diamondPricing', ['DiamondPricingRecords', 'total', 'FilteredCount', 'listLoading']),
@@ -296,11 +305,12 @@ export default {
       getDiamondPricingList: 'getDiamondPricingList',
       updateDiamondPricing: 'updateDiamondPricing'
     }),
-    toggleAddDiamondModal() {
+    toggleAddDiamondModal(config) {
       this.modalAction = 'Add'
       this.selectedDiamond = null
       this.isDiamondModalMounted = true
       this.isDiamondModalShow = true
+      this.tabConfig = config
     },
     toggleEditDiamondModal(row) {
       this.modalAction = 'Edit'

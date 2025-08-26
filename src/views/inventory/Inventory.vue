@@ -166,7 +166,7 @@
 
         <template slot="thead">
           <vs-th>Sr#</vs-th>
-          <vs-th sort-key="name">Inventory Name 12</vs-th>
+          <vs-th sort-key="name">Inventory Name</vs-th>
           <vs-th sort-key="category_id" class="relative">
             <div class="flex items-start cursor-pointer" @click.stop="toggleCategoryFilter">
               <span>Category</span>
