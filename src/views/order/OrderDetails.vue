@@ -6,43 +6,45 @@
           <div class="bg-white shadow rounded-lg p-3">
             <!-- Details Grid -->
             <div class="grid grid-cols-2 gap-5 md:grid-cols-3">
-               <div class="col-span-1 bg-white shadow-md rounded-lg p-4">
+              <div class="col-span-1 bg-white shadow-md rounded-lg p-4" style="max-height: 300px; overflow-y: auto">
                 <!-- Heading -->
                 <h5 class="text-2xl font-bold text-gray-800 border-b pb-3">Retailer Details</h5>
                 <!-- Business Name -->
                 <div class="flex flex-col gap-2">
                   <div class="flex flex-row w-full gap-1">
-                    <label class="text-lg font-semibold text-gray-700">Business Name : </label>
-                    <p class="text-lg font-medium text-gray-900">
-                     {{ orderList.order.retailer_id.business_name ||"-" }}
+                    <label class="text-lg font-semibold text-gray-700">Legal Name : </label>
+                    <p class="text-lg font-medium text-gray-900 capitalize" style="overflow-wrap: break-word; max-width: 100%">
+                      {{ orderList.order.retailer_id.legal_name || '-' }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Retailer Name : </label>
-                    <p class="text-lg font-medium text-gray-900 capitalize">
-                      {{ orderList.order.retailer_id.first_name || "" }} {{ orderList.order.retailer_id.last_name || "-" }}
+                    <p class="text-lg font-medium text-gray-900 capitalize" style="overflow-wrap: break-word; max-width: 100%">
+                      {{ orderList.order.retailer_id.first_name || '' }} {{ orderList.order.retailer_id.last_name || '-' }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Phone : </label>
-                    <p class="text-lg font-medium text-gray-900">
-                     {{ orderList.order.retailer_id.phone || "-" }}
+                    <p class="text-lg font-medium text-gray-900" style="overflow-wrap: break-word; max-width: 100%">
+                      {{ orderList.order.retailer_id.phone || '-' }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700">Email : </label>
-                    <p class="text-lg font-medium text-gray-900">
+                    <p class="text-lg font-medium text-gray-900" style="overflow-wrap: break-word; max-width: 100%">
                       {{ orderList.order.retailer_id.email || '-' }}
                     </p>
                   </div>
 
                   <div class="flex flex-row w-full gap-1">
                     <label class="text-lg font-semibold text-gray-700 capitalize">Address : </label>
-                    <p class="text-lg font-medium text-gray-900">
-                       {{ orderList.order.retailer_id.address || "" }},{{ orderList.order.retailer_id.city || "" }},{{ orderList.order.retailer_id.state || ""}},{{ orderList.order.retailer_id.country || "" }}
+                    <p class="text-lg font-medium text-gray-900" style="overflow-wrap: break-word; max-width: 100%">
+                      {{ orderList.order.retailer_id.address || '' }},{{ orderList.order.retailer_id.city || '' }},{{ orderList.order.retailer_id.state || '' }},{{
+                        orderList.order.retailer_id.country || ''
+                      }}
                     </p>
                   </div>
                 </div>
@@ -84,32 +86,39 @@
             </div>
           </div>
 
-          <vs-table :data="orderList.productItems" stripe class="mt-6">
+          <vs-table :data="orderList.orderItems" stripe class="mt-6">
             <!-- Table Header -->
             <template slot="thead">
               <vs-th>Sr#</vs-th>
-              <vs-th>Product Image</vs-th>
-              <vs-th>Name</vs-th>
+              <vs-th>Product Image </vs-th>
+              <vs-th>Pingaksh Style Name</vs-th>
+              <vs-th>Mfg Style No.</vs-th>
+              <vs-th>Product Name</vs-th>
+              <vs-th>Qty</vs-th>
+              <vs-th>Size</vs-th>
               <vs-th>Metal</vs-th>
               <vs-th>Diamond Clarity</vs-th>
-              <vs-th>Total Price</vs-th>
+              <vs-th>Remarks</vs-th>
+              <vs-th>Delivery Days</vs-th>
             </template>
 
             <!-- Table Rows -->
             <template slot-scope="{ data }">
               <vs-tr v-for="(tr, i) in data" :key="i">
                 <vs-td>{{ i + 1 }}</vs-td>
+
                 <vs-td class="text-left">
-                  <img :src="tr.inventory_images[0]" alt="Product Image" class="h-12 w-12 object-cover rounded" />
+                  <img :src="tr.product && tr.product.inventory_images ? tr.product.inventory_images[0] : ''" alt="Product Image" class="h-12 w-12 object-cover rounded" />
                 </vs-td>
-                <vs-td class="text-left">
-                  {{ tr.name || '-' }}
-                </vs-td>
-                <vs-td class="text-left">{{ tr.product_info.Metal || '-' }}</vs-td>
-                <vs-td class="text-left">{{ tr.diamonds[0].diamond_clarity || '-' }}</vs-td>
-                <vs-td class="text-left">
-                   {{ tr.price_breaking.total != null ? tr.price_breaking.total.toFixed(2) : '-' }}
-                </vs-td>
+                <vs-td>{{ tr.product && tr.product.name ? tr.product.name : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.manufacturing_number ? tr.product.manufacturing_number : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.name ? tr.product.name : '-' }}</vs-td>
+                <vs-td>{{ tr.qty || '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.size ? tr.product.size.name : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.metal ? tr.product.metal.name : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.diamond_clarity ? tr.product.diamond_clarity : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.remark ? tr.product.remark : '-' }}</vs-td>
+                <vs-td>{{ tr.product && tr.product.delivery ? tr.product.delivery : '-' }}</vs-td>
               </vs-tr>
             </template>
           </vs-table>
