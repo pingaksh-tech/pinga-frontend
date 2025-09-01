@@ -262,6 +262,7 @@
         :action_name="modalAction"
         :editData="selectedDiamond"
         :tabConfig="tabConfig"
+        :clarityData="DiamondClarityRecords"
       />
     </div>
   </div>
@@ -288,10 +289,12 @@ export default {
     modalAction: 'Add',
     selectedDiamond: null,
     activeTab: 0, // 0 for Default, 1 for Retailer Price
-    tabConfig: ''
+    tabConfig: '',
+    clarity: []
   }),
   computed: {
     ...mapState('diamondPricing', ['DiamondPricingRecords', 'total', 'FilteredCount', 'listLoading']),
+    // ...mapState('common', ['DiamondClarityList']),
     ...mapGetters('auth', ['checkPermissionSlug']),
     totalPages() {
       return Math.ceil(this.FilteredCount / this.length)
@@ -304,6 +307,9 @@ export default {
     ...mapActions('diamondPricing', {
       getDiamondPricingList: 'getDiamondPricingList',
       updateDiamondPricing: 'updateDiamondPricing'
+    }),
+    ...mapActions('common', {
+      getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
     toggleAddDiamondModal(config) {
       this.modalAction = 'Add'
@@ -345,6 +351,9 @@ export default {
         search: this.search,
         price_type: this.priceType
       })
+    },
+    getClarityData() {
+      this.getDiamondClarityDropdown()
     },
     formatPrice(value) {
       if (typeof value !== 'number' || isNaN(value)) {

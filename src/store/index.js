@@ -39,36 +39,38 @@ import order from './order'
 /** pdf-upload API Store */
 import pdfUpload from './pdf-upload'
 /** user API Store */
+// diamond clarity api store 
+import diamondClarity from './diamond-clarity'
 import user from './user'
 import role from '@/store/role'
-
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
- getters,
- mutations,
- state,
- actions,
- strict: process.env.NODE_ENV !== 'production',
- modules: {
-  category,
-  auth,
-  metal,
-  common,
-  product,
-  diamond,
-  retailer,
-  inventory,
-  banner,
-  latestProduct,
-  collection,
-  setting,
-  diamondPricing,
-  user,
-  pdfUpload,
-  labourPrice,
-  role,
-  order
- }
+  getters,
+  mutations,
+  state,
+  actions,
+  strict: process.env.NODE_ENV !== 'production',
+  modules: {
+    category,
+    auth,
+    metal,
+    common,
+    product,
+    diamond,
+    retailer,
+    inventory,
+    banner,
+    latestProduct,
+    collection,
+    setting,
+    diamondPricing,
+    user,
+    pdfUpload,
+    labourPrice,
+    role,
+    order,
+    diamondClarity
+  }
 })

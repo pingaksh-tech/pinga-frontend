@@ -1,4 +1,5 @@
 import { MetalCaratOptions, MetalColorOptions } from '../../utils/predefineTypes.js/constant'
+import DiamondClarity from '../../views/diamond-clarity/DiamondClarity.vue'
 
 export default {
   /* -------------------------------------------------------------------------- */
@@ -11,5 +12,6 @@ export default {
   SizeList: [],
   diamondConstantList: [],
   DiamondList: [],
-  RoleList: []
+  RoleList: [],
+  DiamondClarityList: [],
 }

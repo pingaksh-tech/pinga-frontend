@@ -82,139 +82,6 @@
             </div>
           </div>
 
-          <!-- SI-HI -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.si_hi"
-                label="SI-HI *"
-                name="si_hi"
-                data-vv-as="SI-HI"
-                id="SI-HI"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('si_hi')">{{ errors.first('si_hi') }}</span>
-            </div>
-          </div>
-
-          <!-- VS-SI-GH -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.vs_si_gh"
-                label="VS-SI-GH *"
-                name="vs_si_gh"
-                data-vv-as="VS-SI-GH"
-                id="VS-SI-GH"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('vs_si_gh')">{{ errors.first('vs_si_gh') }}</span>
-            </div>
-          </div>
-
-          <!-- si_gh  -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.si_gh"
-                label="SI-GH *"
-                name="si_gh"
-                data-vv-as="SI-GH"
-                id="SI-GH"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('si_gh')">{{ errors.first('si_gh') }}</span>
-            </div>
-          </div>
-
-          <!-- SI2_I1_GH  -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.si2_i1_gh"
-                label="SI2-I1-GH *"
-                name="si2_i1_gh"
-                data-vv-as="SI2-I1-GH"
-                id="SI2-I1-GH"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('si2_i1_gh')">{{ errors.first('si2_i1_gh') }}</span>
-            </div>
-          </div>
-
-          <!-- VVS-SI-HI -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.vvs_si_hi"
-                label="VVS-SI-HI *"
-                name="vvs_si_hi"
-                data-vv-as="VVS-SI-HI"
-                id="VVS-SI-HI"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('vvs_si_hi')">{{ errors.first('vvs_si_hi') }}</span>
-            </div>
-          </div>
-
-          <!-- VS-SI-HI -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.vs_si_hi"
-                label="VS-SI-HI *"
-                name="vs_si_hi"
-                data-vv-as="VS-SI-HI"
-                id="VS-SI-HI"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('vs_si_hi')">{{ errors.first('vs_si_hi') }}</span>
-            </div>
-          </div>
-
-          <!-- VVS-EF -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|numeric|min_value:0'"
-                v-model="form.vvs_ef"
-                label="VVS-EF *"
-                name="vvs_ef"
-                data-vv-as="VVS-EF"
-                id="VVS-EF"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('vvs_ef')">{{ errors.first('vvs_ef') }}</span>
-            </div>
-          </div>
-
           <!-- Retailer -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2" v-if="form.price_type === 'Retailer Price'">
@@ -235,23 +102,39 @@
             </div>
           </div>
 
-          <!-- User -->
-          <!-- <div class="vx-row mb-2">
-            <label class="vs-input--label">User *</label>
-            <select-2
-              multiple="true"
-              class="w-full category-input"
-              name="User"
-              placeholder="Select User"
-              :value="form.user"
-              @input="(item) => (form.user = item && item.value)"
-              autocomplete
-              :ssr="true"
-              v-validate="'required'"
-              action="common/getUserDropdownList"
-            />
-            <span class="text-danger text-sm" v-show="errors.has('User')">{{ errors.first('User') }}</span>
-          </div> -->
+          <div class="w-full px-4">
+            <vs-button @click="addClarity" class="mb-4 mt-2">Add diamond clarity</vs-button>
+            <div class="retailer-container px-4">
+              <div v-for="(item, index) in form.clarity" :key="'retailer-' + index" class="retailer-entry vx-row border-sky-500 border">
+                <div class="flex items-center mt-2">
+                  <h4>{{ index + 1 }}</h4>
+                </div>
+                <div class="vx-col mb-2">
+                  <label class="vs-input--label">Diamond Clarity *</label>
+                  <select-2
+                    class="w-full category-input"
+                    :name="'diamond_clarity_' + index"
+                    v-validate="'required'"
+                    placeholder="Select Diamond Clarity"
+                    :options="DiamondClarityList"
+                    :ssr="false"
+                    :multiple="false"
+                    :value="form.clarity[index].diamond_clarity"
+                    data-vv-as="Diamond Clarity"
+                    @input="(item) => (form.clarity[index].diamond_clarity = item && item.value)"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
+                </div>
+                <div class="vx-col mb-2">
+                  <vs-input type="number" v-model="form.clarity[index].price" label="Price *" :name="'price_' + index" v-validate="'required|numeric|min_value:0'" data-vv-as="Price" />
+                  <span class="text-danger text-xs" v-show="errors.has(`price_${index}`)">{{ errors.first(`price_${index}`) }}</span>
+                </div>
+                <div class="vx-col mb-2 flex items-center">
+                  <vs-button color="danger" type="flat" icon-pack="feather" icon="icon-trash" @click="deleteClarity(index)" :disabled="form.clarity.length <= 1"></vs-button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Save & Cancel Buttons -->
@@ -297,6 +180,10 @@ export default {
     tabConfig: {
       type: String,
       default: 'Default'
+    },
+    clarityData: {
+      type: Array,
+      default: []
     }
   },
   data() {
@@ -306,21 +193,16 @@ export default {
         slieve_size_range: null,
         carat: null,
         mm_size: null,
-        si_hi: null,
-        vs_si_gh: null,
-        si_gh: null,
-        si2_i1_gh: null,
-        // vvs_si_hi: null,
-        vs_si_hi: null,
-        vvs_ef: null,
         price_type: this.tabConfig,
-        retailer: []
+        retailer: [],
+        clarity: []
       },
       zIndex: 0
     }
   },
   computed: {
     ...mapState('diamondPricing', ['createLoading']),
+    ...mapState('common', ['DiamondClarityList']),
     validateForm() {
       return !this.errors.any()
     },
@@ -345,15 +227,14 @@ export default {
           this.form.slieve_size_range = newData.slieve_size_range || null
           this.form.carat = newData.carat || null
           this.form.mm_size = newData.mm_size || null
-          this.form.si_hi = newData.si_hi || null
-          this.form.vs_si_gh = newData.vs_si_gh || null
-          this.form.si_gh = newData.si_gh || null
-          this.form.si2_i1_gh = newData.si2_i1_gh || null
-          // this.form.vvs_si_hi = newData.vvs_si_hi || null
-          this.form.vs_si_hi = newData.vs_si_hi || null
-          this.form.vvs_ef = newData.vvs_ef || null
           this.form.price_type = newData.price_type || 'Default'
           this.form.retailer = newData.retailer ? (Array.isArray(newData.retailer) ? newData.retailer : [newData.retailer]) : []
+          this.form.clarity = newData.clarity
+            ? newData.clarity.map((item) => ({
+                diamond_clarity: item.diamond_clarity || '',
+                price: item.price || null
+              }))
+            : []
         } else {
           this.resetForm()
         }
@@ -379,9 +260,26 @@ export default {
   methods: {
     ...mapActions('diamondPricing', {
       createDiamondPricing: 'createDiamondPricing',
-      updateDiamondPricing: 'updateDiamondPricing'
+      updateDiamondPricing: 'updateDiamondPricing',
+      getDiamondClarityList: 'getDiamondClarityList'
+    }),
+    ...mapActions('common', {
+      getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
     async save_changes() {
+      if (this.form.clarity.length === 0) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'At least one diamond clarity entry is required.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+        return false
+      }
+
       if (!(await this.$validator.validate())) {
         return false
       }
@@ -393,29 +291,15 @@ export default {
             slieve_size_range: this.form.slieve_size_range,
             carat: this.form.carat,
             mm_size: this.form.mm_size,
-            si_hi: this.form.si_hi,
-            vs_si_gh: this.form.vs_si_gh,
-            si_gh: this.form.si_gh,
-            si2_i1_gh: this.form.si2_i1_gh,
-            // vvs_si_hi: this.form.vvs_si_hi,
-            vs_si_hi: this.form.vs_si_hi,
-            vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
-            retailer: this.form.retailer
-            // user: this.form.user
+            retailer: this.form.retailer,
+            clarity: this.form.clarity
           }
         } else {
           data = {
-            si_hi: this.form.si_hi,
-            vs_si_gh: this.form.vs_si_gh,
-            si_gh: this.form.si_gh,
-            si2_i1_gh: this.form.si2_i1_gh,
-            // vvs_si_hi: this.form.vvs_si_hi,
-            vs_si_hi: this.form.vs_si_hi,
-            vvs_ef: this.form.vvs_ef,
             price_type: this.form.price_type,
-            retailer: this.form.retailer
-            // user: this.form.user
+            retailer: this.form.retailer,
+            clarity: this.form.clarity
           }
         }
 
@@ -459,15 +343,33 @@ export default {
         mm_size: null,
         si_hi: null,
         vs_si_gh: null,
-        // vvs_si_hi: null,
         vs_si_hi: null,
         vvs_ef: null,
         price_type: this.tabConfig,
-        retailer: []
-        // user: []
+        retailer: [],
+        clarity: []
       }
       this.$validator.reset()
+    },
+    addClarity() {
+      this.form.clarity.push({
+        diamond_clarity: '',
+        price: null
+      })
+    },
+    deleteClarity(index) {
+      this.form.clarity.splice(index, 1)
+      this.$validator.reset() // Reset validation to clear errors for removed fields
+    },
+    getClarityData() {
+      this.getDiamondClarityList({
+        type: 'dropdown'
+      })
     }
+  },
+  mounted() {
+    this.getClarityData()
+    this.getDiamondClarityDropdown()
   }
 }
 </script>
