@@ -7,8 +7,7 @@
           <!-- Slieve Size -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input
-                :disabled="action_name === 'Edit'"
+              <vs-input 
                 icon="icon-package"
                 icon-pack="feather"
                 class="w-full"
@@ -27,7 +26,6 @@
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
-                :disabled="action_name === 'Edit'"
                 icon="icon-package"
                 icon-pack="feather"
                 class="w-full"
@@ -46,7 +44,6 @@
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
-                :disabled="action_name === 'Edit'"
                 icon="icon-package"
                 icon-pack="feather"
                 class="w-full"
@@ -66,7 +63,6 @@
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
-                :disabled="action_name === 'Edit'"
                 icon="icon-package"
                 icon-pack="feather"
                 class="w-full"
