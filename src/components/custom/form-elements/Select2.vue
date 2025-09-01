@@ -13,6 +13,8 @@
       :loader="processing || loading"
       :clearable="clearable"
       :multiple="multiple"
+      :action="action"
+      @search-input="handleSearchInput"
     >
       <vs-select-item v-if="newLabel" :label="newLabel" :text="newLabel" value="newItemAddEvent" class="select-head-btn" />
       <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label" :value="item[val] || item['value']"  :label="item[label] || item.label"/>
@@ -97,6 +99,10 @@ export default {
     actionCallRemove: {
       type: Boolean,
       default: true
+    },
+    typeable: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -148,7 +154,10 @@ export default {
     },
 
     vOptions() {
-      let options = [...this.extra, ...this.options, ...this.sso]
+      let options = [...this.extra, ...this.options]
+      if (this.ssr && this.action) {
+        options = [...options, ...this.sso] // Only include sso if ssr and action are set
+      }
       if (this.autocomplete && this.searchFromStart) {
         options = options.filter((e) => {
           return !this.search || (e.label || '').toLowerCase().startsWith(this.search.toLowerCase())
@@ -194,8 +203,18 @@ export default {
         await this.getOptions(false)
       }
     },
+    handleSearchInput(event) {
+      const searchValue = event.target.value // Extract the search value
+      console.log(searchValue, 'searchValue..... select 2')
+      this.$emit('search', searchValue) // Emit the search value to the parent
+    },
 
     async getOptions(apiStat = true) {
+      if (!this.ssr || !this.action) {
+        this.sso = [] // Clear sso if not using server-side rendering
+        return
+      }
+
       const payload = {
         search: this.search,
         page: this.page,
@@ -203,31 +222,29 @@ export default {
         type: this.type,
         ...this.params
       }
-      if (this.action) {
-        if (this.actionCallRemove || this.page != 1) {
-          this.processing = true
-          this.$store
-            .dispatch(this.action, payload)
-            .then((response) => {
-              if (apiStat) {
-                this.sso = []
-              }
 
-              this.nodata = response.data.length < 1
-              this.sso.push(...response.data)
-            })
-            .catch(() => {})
-            .finally(() => {
-              this.processing = false
-            })
-        } else {
+      if (this.actionCallRemove || this.page !== 1) {
+        this.processing = true
+        try {
+          const response = await this.$store.dispatch(this.action, payload)
+          if (apiStat) {
+            this.sso = []
+          }
+          this.nodata = response.data.length < 1
+          this.sso.push(...response.data)
+        } catch (error) {
+          console.error('Error fetching options:', error)
+        } finally {
+          this.processing = false
         }
       }
     },
 
     inputChanged(e) {
       this.search = e.target.value
-      this.getOptions()
+      if (this.ssr && this.action) {
+        this.getOptions() // Only fetch if ssr and action are set
+      }
     },
 
     clearVal() {

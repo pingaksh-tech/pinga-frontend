@@ -194,32 +194,30 @@ export default {
       })
     }
   },
-  async getManagers({ commit }, roleId) {
-    commit('SET_STATE', {
-      action: 'managersLoading',
-      data: true
-    })
+  async getManagers({ commit }, { roleId, searchValue }) {
+    commit('SET_STATE', { action: 'managersLoading', data: true })
     try {
-      const res = await this.$http.get('/users/role-wise-users', { params: { role: roleId,type:"Retailer" } })
+      const res = await this.$http.get('/users/role-wise-users', {
+        params: { role: roleId, type: 'Retailer', search: searchValue }
+      })
+
       const formattedManagers = (res.data.data || []).map((manager) => ({
         value: manager._id,
         label: `${manager.first_name} ${manager.last_name}`
       }))
-      commit('SET_STATE', {
-        action: 'managersLoading',
-        data: false
-      })
-      commit('SET_STATE', {
-        action: 'managers',
-        data: formattedManagers
-      })
+
+      console.log(formattedManagers, 'formattedManagers manages.....')
+
+      commit('SET_STATE', { action: 'managersLoading', data: false })
+      commit('SET_STATE', { action: 'managers', data: formattedManagers })
+
+      return formattedManagers
     } catch (error) {
-      commit('SET_STATE', {
-        action: 'managersLoading',
-        data: false
-      })
+      commit('SET_STATE', { action: 'managersLoading', data: false })
+      throw error
     }
   },
+
   /* -------------------------------------------------------------------------- */
   /*                             Update User Status                            */
   /* -------------------------------------------------------------------------- */
@@ -249,5 +247,5 @@ export default {
         message
       })
     }
-  },
+  }
 }

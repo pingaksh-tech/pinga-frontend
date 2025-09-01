@@ -1,27 +1,24 @@
 <template>
   <div>
-    <!-- Add Retailer popup -->
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
-          <!--  code -->
+          <!-- Code -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" type="text" icon-pack="feather" class="w-full" v-model="form.code" label="Code" name="Code" id="Code" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Code')">{{ errors.first('Code') }}</span> -->
             </div>
           </div>
-          <!-- first_name -->
+          <!-- First Name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.first_name" label="First Name" name="First Name" id="First Name" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span> -->
             </div>
           </div>
-          <!-- Legal name -->
+          <!-- Legal Name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.legal_name" label="Legal  Name" name="Legal Name" id="Legal Name" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.legal_name" label="Legal Name" name="Legal Name" id="Legal Name" />
             </div>
           </div>
           <!-- Manager -->
@@ -34,54 +31,55 @@
                 placeholder="Select Manager"
                 :value="form.manager"
                 @input="(item) => (form.manager = item && item.value)"
-                autocomplete
-                :ssr="true"
+                :autocomplete="true"
+                :ssr="false" 
                 :multiple="false"
-                :options="this.dropDownManagers"
+                :options="managers"
+                :typeable="true"
+                @search="debouncedHandleManagerSearch"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
-
-          <!-- state_head -->
+          <!-- State Head -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">State head</label>
+              <label class="vs-input--label">State Head</label>
               <select-2
                 class="w-1/2 role-input"
-                name="Manager"
+                name="StateHead"
                 placeholder="Select State Head"
                 :value="form.state_head"
                 @input="(item) => (form.state_head = item && item.value)"
-                autocomplete
-                :ssr="true"
+                :autocomplete="true"
+                :ssr="false"
                 :multiple="false"
-                :options="this.dropDownManagers"
+                :options="stateHeads"
+                :typeable="true"
+                @search="debouncedHandleStateHeadSearch"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
-
-          <!-- regional_sales_head -->
+          <!-- Regional Sales Head -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Regional state head</label>
+              <label class="vs-input--label">Regional Sales Head</label>
               <select-2
                 class="w-1/2 role-input"
-                name="Manager"
-                placeholder="Select State Head"
+                name="RegionalSalesHead"
+                placeholder="Select Regional Sales Head"
                 :value="form.regional_sales_head"
                 @input="(item) => (form.regional_sales_head = item && item.value)"
-                autocomplete
-                :ssr="true"
+                :autocomplete="true"
+                :ssr="false"
                 :multiple="false"
-                :options="this.dropDownManagers"
+                :options="regionalSalesHeads"
+                :typeable="true"
+                @search="debouncedHandleRegionalSalesHeadSearch"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
-
-          <!-- phone -->
+          <!-- Other fields remain unchanged -->
+          <!-- Phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
@@ -96,62 +94,55 @@
                 name="Phone"
                 id="Phone"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span> -->
             </div>
           </div>
-          <!-- address -->
+          <!-- Address -->
           <div class="vx-col w-1/2 mt-5">
             <div class="">
               <vs-textarea icon="icon icon-package" icon-pack="feather" v-model="form.address" label="Address" name="Address" id="Address" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Address')">{{ errors.first('Address') }}</span> -->
             </div>
           </div>
-          <!-- zip_code -->
+          <!-- Zip Code -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.zip_code" label="Zip Code" name="Zip Code" id="zip_code" />
             </div>
           </div>
-          <!-- city -->
+          <!-- City -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.city" label="City" name="City" id="City" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('City')">{{ errors.first('City') }}</span> -->
             </div>
           </div>
-          <!-- state -->
+          <!-- State -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.state" label="State" name="State" id="State" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('State')">{{ errors.first('State') }}</span> -->
             </div>
           </div>
-          <!-- country  -->
+          <!-- Country -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.country" label="Country" name="Country" id="Country" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Country')">{{ errors.first('Country') }}</span> -->
             </div>
           </div>
-
-          <!-- last_name -->
+          <!-- Last Name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.last_name" label="Last Name" name="Last Name" id="Last Name" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span> -->
             </div>
           </div>
-          <!-- date of birth -->
+          <!-- Date of Birth -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Date of birth</label>
+              <label class="vs-input--label">Date of Birth</label>
               <datepicker class="w-full" v-model="form.birth_date" :input-class="'vs-inputx vs-input--input normal'" placeholder="Select Date of Birth" name="birth_date"></datepicker>
             </div>
           </div>
-          <!-- date of anniversary -->
+          <!-- Date of Anniversary -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Date of anniversary</label>
+              <label class="vs-input--label">Date of Anniversary</label>
               <datepicker
                 class="w-full"
                 v-model="form.anniversary_date"
@@ -161,49 +152,43 @@
               ></datepicker>
             </div>
           </div>
-          <!-- business_name -->
+          <!-- Business Name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.business_name" label="Business Name" name="Business Name" id="Business Name" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span> -->
             </div>
           </div>
-
-          <!-- email -->
+          <!-- Email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.email" label="Email" name="Email" id="Email" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span> -->
             </div>
           </div>
-          <!-- website -->
+          <!-- Website -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.website" label="Website" name="Website" id="Website" />
             </div>
           </div>
-
-          <!-- whatsapp_number -->
+          <!-- WhatsApp Number -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.whatsapp_number" label="Whatsapp Number" name="whatsapp_number" id="whatsapp_number" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.whatsapp_number" label="WhatsApp Number" name="whatsapp_number" id="whatsapp_number" />
             </div>
           </div>
-          <!-- landline -->
+          <!-- Landline -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.landline" label="Landline (with area code)" name="Landline" id="Landline" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
         </div>
-        <!-- Send sms -->
+        <!-- Send SMS -->
         <div class="vx-col w-1/2 px-8">
           <div class="vx-row mb-2">
             <vs-checkbox v-model="form.send_sms" name="send_sms" id="send_sms"> Send SMS </vs-checkbox>
           </div>
         </div>
-
         <!-- Save & Reset Button -->
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
@@ -219,27 +204,20 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-import Select2 from '@/components/custom/form-elements/Select2.vue'
-import Datepicker from 'vuejs-datepicker'
+import { mapActions, mapState } from 'vuex';
+import Select2 from '@/components/custom/form-elements/Select2.vue';
+import Datepicker from 'vuejs-datepicker';
 
 export default {
-  /** Page Name */
   name: 'AddCategory',
-
-  /** components */
   components: {
     Select2,
     Datepicker
   },
-
-  /** Props */
   props: {
     showModal: Boolean,
     module_name: String
   },
-
-  /** data */
   data() {
     return {
       form: {
@@ -265,57 +243,118 @@ export default {
         state_head: '',
         regional_sales_head: ''
       },
-      zIndex: 0,
-      dropDownManagers: []
-    }
+      debounceTimeout: null
+    };
   },
-  /** Mounted */
   mounted() {
-    console.log('Fasdfasdf............')
-    this.getData()
+    this.getData();
   },
-
-  /** computed */
   computed: {
-    ...mapState('retailer', ['createLoading']),
-    ...mapState('user', ['createLoading', 'managers']),
-    // validateForm() {
-    //   return !this.errors.any()
-    // },
+    ...mapState('user', ['managers', 'stateHeads', 'regionalSalesHeads']),
     isActive: {
       get() {
-        return this.showModal
+        return this.showModal;
       },
       set(val) {
-        this.$emit('update:showModal', val)
+        this.$emit('update:showModal', val);
       }
     }
   },
-
-  /** methods */
   methods: {
     ...mapActions('retailer', {
       createRetailer: 'createRetailer'
     }),
     ...mapActions('user', {
-      getManagerList: 'getManagers'
+      getManagerList: 'getManagers',
+      getStateHeadList: 'getStateHeads',
+      getRegionalSalesHeadList: 'getRegionalSalesHeads'
     }),
-    async getData() {
+    async handleManagerSearch(searchValue) {
+      console.log('searchValue add retailer', searchValue);
       try {
-        const res = await this.getManagerList('6847b9542a3c54aa35ce4b7b')
-        console.log('Manager list fetched in component:', res)
+        const res = await this.getManagerList({
+          roleId: '6847b9542a3c54aa35ce4b7b',
+          searchValue: searchValue
+        });
+        console.log('Manager list fetched in component:', res);
+        return res;
       } catch (error) {
-        console.error('Failed to fetch manager list:', error)
+        console.error('Failed to fetch manager list:', error);
+        throw error;
       }
     },
-    ...mapState('user', { getManagers: 'managers' }),
-    async save_changes() {
-      // if (!(await this.$validator.validate())) {
-      // return false
-      //}
+    debouncedHandleManagerSearch(searchValue) {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        try {
+          await this.handleManagerSearch(searchValue);
+        } catch (error) {
+          // Error is already logged in handleManagerSearch
+        }
+      }, 500); // Reduced debounce time for better UX
+    },
+    async handleStateHeadSearch(searchValue) {
       try {
-        const { message } = await this.createRetailer(this.form)
-        this.$emit('update-data', true)
+        const res = await this.getStateHeadList({
+          roleId: 'STATE_HEAD_ROLE_ID', // Replace with actual role ID
+          searchValue: searchValue
+        });
+        console.log('State Head list fetched:', res);
+        return res;
+      } catch (error) {
+        console.error('Failed to fetch state head list:', error);
+        throw error;
+      }
+    },
+    debouncedHandleStateHeadSearch(searchValue) {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        try {
+          await this.handleStateHeadSearch(searchValue);
+        } catch (error) {
+          // Error is already logged in handleStateHeadSearch
+        }
+      }, 500);
+    },
+    async handleRegionalSalesHeadSearch(searchValue) {
+      try {
+        const res = await this.getRegionalSalesHeadList({
+          roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', // Replace with actual role ID
+          searchValue: searchValue
+        });
+        console.log('Regional Sales Head list fetched:', res);
+        return res;
+      } catch (error) {
+        console.error('Failed to fetch regional sales head list:', error);
+        throw error;
+      }
+    },
+    debouncedHandleRegionalSalesHeadSearch(searchValue) {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        try {
+          await this.handleRegionalSalesHeadSearch(searchValue);
+        } catch (error) {
+          // Error is already logged in handleRegionalSalesHeadSearch
+        }
+      }, 500);
+    },
+    async getData() {
+      try {
+        const [managers, stateHeads, regionalSalesHeads] = await Promise.all([
+          this.getManagerList({ roleId: '6847b9542a3c54aa35ce4b7b', searchValue: '' }),
+          this.getStateHeadList({ roleId: 'STATE_HEAD_ROLE_ID', searchValue: '' }),
+          this.getRegionalSalesHeadList({ roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', searchValue: '' })
+        ]);
+        console.log('Data fetched:', { managers, stateHeads, regionalSalesHeads });
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    },
+    async save_changes() {
+      try {
+        const { message } = await this.createRetailer(this.form);
+        this.$emit('update-data', true);
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -324,8 +363,8 @@ export default {
           position: 'top-center',
           time: 5000,
           color: 'success'
-        })
-        this.isActive = false
+        });
+        this.isActive = false;
       } catch ({ message }) {
         this.$vs.notify({
           title: 'Error',
@@ -335,26 +374,9 @@ export default {
           position: 'top-center',
           time: 5000,
           color: 'primary'
-        })
+        });
       }
-    }
-  },
-
-  /** watch */
-  watch: {
-    createLoading() {
-      if (this.createLoading) {
-        this.$vs.loading({
-          container: '#create-category',
-          scale: 0.45
-        })
-      } else {
-        this.$vs.loading.close('#create-category > .con-vs-loading')
-      }
-    },
-    managers(managersArray) {
-      this.dropDownManagers = managersArray
     }
   }
-}
+};
 </script>
