@@ -262,7 +262,9 @@ export default {
                 price: item.price || null
               }))
             : []
-          this.form.shape = newData.shape ? newData.shape.map((item) => item._id || null) : []
+          this.form.shape = newData.shape
+          this.form.price_type = newData.price_type || 'Default'
+          // console.log(this.form.price_type, 'this.form.price_type......')
         } else {
           this.resetForm()
         }
@@ -281,6 +283,7 @@ export default {
     tabConfig: {
       immediate: true,
       handler(newData) {
+        console.log(newData, 'newData....')
         this.form.price_type = newData
       }
     }
@@ -295,6 +298,7 @@ export default {
       getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
     async save_changes() {
+      console.log(this.form.price_type, 'form.price_type......')
       if (this.form.clarity.length === 0) {
         this.$vs.notify({
           title: 'Error',
@@ -325,8 +329,9 @@ export default {
             shape: this.form.shape
           }
         } else {
+          console.log(this.tabConfig, 'this.tabConfig ......')
           data = {
-            price_type: this.form.price_type,
+            price_type: this.tabConfig,
             retailer: this.form.retailer,
             clarity: this.form.clarity,
             shape: this.form.shape

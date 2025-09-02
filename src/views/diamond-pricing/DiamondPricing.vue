@@ -178,7 +178,7 @@
                     class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
                   >
                     <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-                    <span class="ml-2 text-base text-primary">Add diamond</span>
+                    <span class="ml-2 text-base text-primary">Add diamond 56</span>
                   </div>
                 </div>
               </template>
@@ -312,6 +312,7 @@ export default {
       getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
     toggleAddDiamondModal(config) {
+      console.log(config, 'config.......')
       this.modalAction = 'Add'
       this.selectedDiamond = null
       this.isDiamondModalMounted = true
@@ -323,6 +324,7 @@ export default {
       this.selectedDiamond = { ...row }
       this.isDiamondModalMounted = true
       this.isDiamondModalShow = true
+      this.tabConfig = row.price_type
     },
     handleChangeLength(length) {
       this.page = 1

@@ -33,6 +33,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="name">Name</vs-th>
+          <vs-th sort-key="name">Status</vs-th>
           <vs-th v-if="checkPermissionSlug(['collections_edit', 'collections_delete'])">Action</vs-th>
         </template>
 
@@ -40,6 +41,12 @@
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>{{ page * length - (length - i - 1) }}</vs-td>
             <vs-td class="text-left">{{ tr.name || '-' }}</vs-td>
+            <vs-td class="text-left">
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id)">
+                <span slot="on"></span>
+                <span slot="off"></span>
+              </vs-switch>
+            </vs-td>
             <vs-td v-if="checkPermissionSlug(['collections_edit', 'collections_delete'])">
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['collections_edit'])">
@@ -175,6 +182,38 @@ export default {
           color: 'danger'
         })
       }
+    },
+    updateStatus(id) {
+      this.$store
+        .dispatch('diamondClarity/updateDiamondClarityStatus', {
+          type: 'users',
+          id
+        })
+        .then((Success) => {
+          this.getData()
+          const { message } = Success
+          this.$vs.notify({
+            title: 'Success',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'success'
+          })
+        })
+        .catch((err) => {
+          const { message } = err
+          this.$vs.notify({
+            title: 'Error',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        })
     }
   },
 
