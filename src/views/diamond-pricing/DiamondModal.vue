@@ -7,7 +7,7 @@
           <!-- Slieve Size -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input 
+              <vs-input
                 icon="icon-package"
                 icon-pack="feather"
                 class="w-full"
@@ -75,6 +75,36 @@
                 type="number"
               />
               <span class="text-danger text-sm" v-show="errors.has('mm_size')">{{ errors.first('mm_size') }}</span>
+            </div>
+          </div>
+
+          <!-- Diamond shapes -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Diamond shapes</label>
+              <select-2
+                multiple="true"
+                class="w-full category-input"
+                name="Shape"
+                placeholder="Select Diamond Shapes"
+                :value="form.shape"
+                @input="(item) => (form.shape = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :options="[
+                  { label: 'Round', value: 'Round' },
+                  { label: 'Princess', value: 'Princess' },
+                  { label: 'Emerald', value: 'Emerald' },
+                  { label: 'Oval', value: 'Oval' },
+                  { label: 'Marquise', value: 'Marquise' },
+                  { label: 'Radiant', value: 'Radiant' },
+                  { label: 'Pear', value: 'Pear' },
+                  { label: 'Cushion', value: 'Cushion' },
+                  { label: 'Heart', value: 'Heart' },
+                  { label: 'Heart', value: 'Heart' }
+                ]"
+              />
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span> -->
             </div>
           </div>
 
@@ -191,7 +221,8 @@ export default {
         mm_size: null,
         price_type: this.tabConfig,
         retailer: [],
-        clarity: []
+        clarity: [],
+        shape: []
       },
       zIndex: 0
     }
@@ -231,6 +262,7 @@ export default {
                 price: item.price || null
               }))
             : []
+          this.form.shape = newData.shape ? newData.shape.map((item) => item._id || null) : []
         } else {
           this.resetForm()
         }
@@ -289,13 +321,15 @@ export default {
             mm_size: this.form.mm_size,
             price_type: this.form.price_type,
             retailer: this.form.retailer,
-            clarity: this.form.clarity
+            clarity: this.form.clarity,
+            shape: this.form.shape
           }
         } else {
           data = {
             price_type: this.form.price_type,
             retailer: this.form.retailer,
-            clarity: this.form.clarity
+            clarity: this.form.clarity,
+            shape: this.form.shape
           }
         }
 
@@ -343,7 +377,8 @@ export default {
         vvs_ef: null,
         price_type: this.tabConfig,
         retailer: [],
-        clarity: []
+        clarity: [],
+        shape: []
       }
       this.$validator.reset()
     },
