@@ -49,14 +49,14 @@
             </div>
             <!-- Size -->
             <div class="vx-col w-1/2 mb-2">
-              <label class="vs-input--label">Size 123</label>
+              <label class="vs-input--label">Size</label>
               <select-2
                 class="w-full category-input"
                 name="Size"
                 placeholder="Select Size"
                 :value="form.size_id"
                 v-model="sizeID"
-                @input="(item) => (form.sub_category_id = item && item.value)"
+                @input="(item) => (form.size_id = item && item.value)"
                 :options="SizeList"
                 autocomplete
                 :ssr="true"

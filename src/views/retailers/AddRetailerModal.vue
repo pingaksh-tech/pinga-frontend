@@ -270,13 +270,11 @@ export default {
       getRegionalSalesHeadList: 'getRegionalSalesHeads'
     }),
     async handleManagerSearch(searchValue) {
-      console.log('searchValue add retailer', searchValue);
       try {
         const res = await this.getManagerList({
           roleId: '6847b9542a3c54aa35ce4b7b',
           searchValue: searchValue
         });
-        console.log('Manager list fetched in component:', res);
         return res;
       } catch (error) {
         console.error('Failed to fetch manager list:', error);
@@ -299,7 +297,6 @@ export default {
           roleId: 'STATE_HEAD_ROLE_ID', // Replace with actual role ID
           searchValue: searchValue
         });
-        console.log('State Head list fetched:', res);
         return res;
       } catch (error) {
         console.error('Failed to fetch state head list:', error);
@@ -322,7 +319,6 @@ export default {
           roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', // Replace with actual role ID
           searchValue: searchValue
         });
-        console.log('Regional Sales Head list fetched:', res);
         return res;
       } catch (error) {
         console.error('Failed to fetch regional sales head list:', error);
@@ -346,7 +342,6 @@ export default {
           this.getStateHeadList({ roleId: 'STATE_HEAD_ROLE_ID', searchValue: '' }),
           this.getRegionalSalesHeadList({ roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', searchValue: '' })
         ]);
-        console.log('Data fetched:', { managers, stateHeads, regionalSalesHeads });
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }

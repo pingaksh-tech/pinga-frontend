@@ -67,12 +67,8 @@
                 <vs-th sort-key="slieve_size_range">Slieve Size Range</vs-th>
                 <vs-th sort-key="mm_size">MM Size</vs-th>
                 <vs-th sort-key="carat">CT</vs-th>
-                <vs-th sort-key="vvs_ef">VVS-EF</vs-th>
-                <vs-th sort-key="vs_si_gh">VS-SI-GH</vs-th>
-                <vs-th sort-key="si2_i1_gh">VI2-I1-GH</vs-th>
-                <vs-th sort-key="vs_si_hi">VS-SI-HI</vs-th>
-                <vs-th sort-key="si_hi">SI-HI</vs-th>
-                <vs-th sort-key="si_gh">SI-GH</vs-th>
+                <!-- Dynamically render clarity headers. -->
+                <vs-th v-for="(header, index) in DiamondClarityRecords" :key="index"> {{ header.name }} </vs-th>
                 <vs-th v-if="checkPermissionSlug(['diamond_Pricings_edit'])">Action</vs-th>
               </template>
 
@@ -93,23 +89,11 @@
                   <vs-td class="text-left">
                     <p class="capitalize">{{ tr.carat || '-' }}</p>
                   </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vvs_ef) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vs_si_gh) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vvs_si_hi) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si2_i1_gh) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si_hi) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si_gh) || '-' }}</p>
+                  <!-- Dynamically render clarity prices -->
+                  <vs-td v-for="(header, index) in DiamondClarityRecords" :key="index" class="text-left">
+                    <p class="capitalize">
+                      {{ formatPrice(getClarityPrice(tr.clarity, header.name)) || '-' }}
+                    </p>
                   </vs-td>
                   <vs-td v-if="checkPermissionSlug(['diamond_Pricings_edit'])">
                     <div class="inline-flex">
@@ -178,24 +162,20 @@
                     class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
                   >
                     <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-                    <span class="ml-2 text-base text-primary">Add diamond 56</span>
+                    <span class="ml-2 text-base text-primary">Add diamond</span>
                   </div>
                 </div>
               </template>
 
               <template slot="thead">
-                <vs-th>Sr#</vs-th>
+                <vs-th>Sr# </vs-th>
                 <vs-th>Retailer Code</vs-th>
                 <vs-th sort-key="diamond_slieve_size">Slieve Size</vs-th>
                 <vs-th sort-key="slieve_size_range">Slieve Size Range</vs-th>
                 <vs-th sort-key="mm_size">MM Size</vs-th>
                 <vs-th sort-key="carat">CT</vs-th>
-                <vs-th sort-key="vvs_ef">VVS-EF</vs-th>
-                <vs-th sort-key="vs_si_gh">VS-SI-GH</vs-th>
-                <vs-th sort-key="si2_i1_gh">VI2-I1-GH</vs-th>
-                <vs-th sort-key="vs_si_hi">VS-SI-HI</vs-th>
-                <vs-th sort-key="si_hi">SI-HI</vs-th>
-                <vs-th sort-key="si_gh">SI-GH</vs-th>
+                <!-- Dynamically render clarity headers. -->
+                <vs-th v-for="(header, index) in DiamondClarityRecords" :key="index"> {{ header.name }} </vs-th>
                 <vs-th v-if="checkPermissionSlug(['diamond_Pricings_edit'])">Action</vs-th>
               </template>
 
@@ -206,7 +186,7 @@
                   </vs-td>
                   <vs-td>
                     <p class="capitalize">
-                      {{ tr.retailer && tr.retailer.length > 0 ? tr.retailer[0].code : '-' }}
+                      {{ tr.retailer && tr.retailer.length > 0 && tr.retailer[0].code ? tr.retailer[0].code : '-' }}
                     </p>
                   </vs-td>
                   <vs-td class="text-left">
@@ -221,23 +201,11 @@
                   <vs-td class="text-left">
                     <p class="capitalize">{{ tr.carat || '-' }}</p>
                   </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vvs_ef) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vs_si_gh) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.vvs_si_hi) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si2_i1_gh) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si_hi) || '-' }}</p>
-                  </vs-td>
-                  <vs-td class="text-left">
-                    <p class="capitalize">{{ formatPrice(tr.si_gh) || '-' }}</p>
+                  <!-- Dynamically render clarity prices -->
+                  <vs-td v-for="(header, index) in DiamondClarityRecords" :key="index" class="text-left">
+                    <p class="capitalize">
+                      {{ formatPrice(getClarityPrice(tr.clarity, header.name)) || '-' }}
+                    </p>
                   </vs-td>
                   <vs-td v-if="checkPermissionSlug(['diamond_Pricings_edit'])">
                     <div class="inline-flex">
@@ -293,6 +261,7 @@ export default {
     clarity: []
   }),
   computed: {
+    ...mapState('diamondClarity', ['DiamondClarityRecords', 'FilteredCount', 'listLoading']),
     ...mapState('diamondPricing', ['DiamondPricingRecords', 'total', 'FilteredCount', 'listLoading']),
     // ...mapState('common', ['DiamondClarityList']),
     ...mapGetters('auth', ['checkPermissionSlug']),
@@ -304,6 +273,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('diamondClarity', {
+      getDiamondClarityList: 'getDiamondClarityList'
+    }),
     ...mapActions('diamondPricing', {
       getDiamondPricingList: 'getDiamondPricingList',
       updateDiamondPricing: 'updateDiamondPricing'
@@ -311,8 +283,17 @@ export default {
     ...mapActions('common', {
       getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
+    getDiamondClarity() {
+      this.getDiamondClarityList({
+        type: 'dropdown'
+      })
+    },
+    getClarityPrice(clarityArray, clarityName) {
+      if (!clarityArray || !Array.isArray(clarityArray)) return null
+      const clarity = clarityArray.find((item) => item.name === clarityName)
+      return clarity ? clarity.price : null
+    },
     toggleAddDiamondModal(config) {
-      console.log(config, 'config.......')
       this.modalAction = 'Add'
       this.selectedDiamond = null
       this.isDiamondModalMounted = true
@@ -381,10 +362,18 @@ export default {
     activeTab() {
       this.page = 1
       this.getData()
+    },
+    DiamondClarityRecords: {
+      handler(newVal) {
+        // console.log('DiamondClarityRecords updated:', newVal)
+      },
+      immediate: true, // if you also want to log the initial value
+      deep: true // if you want to track nested changes
     }
   },
   mounted() {
     this.getData()
+    this.getDiamondClarity()
   }
 }
 </script>

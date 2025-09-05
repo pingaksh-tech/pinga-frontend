@@ -4,6 +4,26 @@
     <vs-popup :title="`${action_name} ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
+          <!-- Retailer -->
+          <div class="vx-col w-1/2 px-8" v-if="form.price_type === 'Retailer Price'">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer *</label>
+              <select-2
+                multiple="true"
+                class="w-full category-input"
+                name="Retailer"
+                placeholder="Select Retailer"
+                :value="form.retailer"
+                @input="(item) => (form.retailer = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                action="common/getRetailer"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
+            </div>
+          </div>
+
           <!-- Slieve Size -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -105,26 +125,6 @@
                 ]"
               />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span> -->
-            </div>
-          </div>
-
-          <!-- Retailer -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2" v-if="form.price_type === 'Retailer Price'">
-              <label class="vs-input--label">Retailer *</label>
-              <select-2
-                multiple="true"
-                class="w-full category-input"
-                name="Retailer"
-                placeholder="Select Retailer"
-                :value="form.retailer"
-                @input="(item) => (form.retailer = item && item.value)"
-                autocomplete
-                :ssr="true"
-                v-validate="'required'"
-                action="common/getRetailer"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
             </div>
           </div>
 
@@ -255,7 +255,11 @@ export default {
           this.form.carat = newData.carat || null
           this.form.mm_size = newData.mm_size || null
           this.form.price_type = newData.price_type || 'Default'
-          this.form.retailer = newData.retailer ? (Array.isArray(newData.retailer) ? newData.retailer : [newData.retailer]) : []
+          this.form.retailer = newData.retailer
+            ? Array.isArray(newData.retailer)
+              ? newData.retailer.map((r) => r._id) // extract only _id
+              : [newData.retailer._id] // single object → wrap in array
+            : []
           this.form.clarity = newData.clarity
             ? newData.clarity.map((item) => ({
                 diamond_clarity: item.diamond_clarity || '',
@@ -264,7 +268,6 @@ export default {
             : []
           this.form.shape = newData.shape
           this.form.price_type = newData.price_type || 'Default'
-          // console.log(this.form.price_type, 'this.form.price_type......')
         } else {
           this.resetForm()
         }
@@ -283,7 +286,6 @@ export default {
     tabConfig: {
       immediate: true,
       handler(newData) {
-        console.log(newData, 'newData....')
         this.form.price_type = newData
       }
     }
@@ -298,7 +300,6 @@ export default {
       getDiamondClarityDropdown: 'getDiamondClarityDropdown'
     }),
     async save_changes() {
-      console.log(this.form.price_type, 'form.price_type......')
       if (this.form.clarity.length === 0) {
         this.$vs.notify({
           title: 'Error',
@@ -329,7 +330,6 @@ export default {
             shape: this.form.shape
           }
         } else {
-          console.log(this.tabConfig, 'this.tabConfig ......')
           data = {
             price_type: this.tabConfig,
             retailer: this.form.retailer,
