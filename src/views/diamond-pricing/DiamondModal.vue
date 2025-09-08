@@ -120,11 +120,9 @@
                   { label: 'Radiant', value: 'Radiant' },
                   { label: 'Pear', value: 'Pear' },
                   { label: 'Cushion', value: 'Cushion' },
-                  { label: 'Heart', value: 'Heart' },
                   { label: 'Heart', value: 'Heart' }
                 ]"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span> -->
             </div>
           </div>
 
@@ -147,7 +145,7 @@
                     :multiple="false"
                     :value="form.clarity[index].diamond_clarity"
                     data-vv-as="Diamond Clarity"
-                    @input="(item) => (form.clarity[index].diamond_clarity = item && item.value)"
+                    @input="(item) => handleClarityChange(index, item)"
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
                 </div>
@@ -255,11 +253,7 @@ export default {
           this.form.carat = newData.carat || null
           this.form.mm_size = newData.mm_size || null
           this.form.price_type = newData.price_type || 'Default'
-          this.form.retailer = newData.retailer
-            ? Array.isArray(newData.retailer)
-              ? newData.retailer.map((r) => r._id) // extract only _id
-              : [newData.retailer._id] // single object → wrap in array
-            : []
+          this.form.retailer = newData.retailer ? (Array.isArray(newData.retailer) ? newData.retailer.map((r) => r._id) : [newData.retailer._id]) : []
           this.form.clarity = newData.clarity
             ? newData.clarity.map((item) => ({
                 diamond_clarity: item.diamond_clarity || '',
@@ -395,7 +389,26 @@ export default {
     },
     deleteClarity(index) {
       this.form.clarity.splice(index, 1)
-      this.$validator.reset() // Reset validation to clear errors for removed fields
+      this.$validator.reset()
+    },
+    handleClarityChange(index, item) {
+      const selectedClarity = item && item.value
+      const existingClarity = this.form.clarity.some((clarity, i) => i !== index && clarity.diamond_clarity === selectedClarity)
+
+      if (existingClarity) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'This diamond clarity is already selected. Please choose a different clarity.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+        this.form.clarity[index].diamond_clarity = ''
+      } else {
+        this.form.clarity[index].diamond_clarity = selectedClarity
+      }
     },
     getClarityData() {
       this.getDiamondClarityList({
