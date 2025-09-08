@@ -328,7 +328,11 @@ export default {
             price_type: this.tabConfig,
             retailer: this.form.retailer,
             clarity: this.form.clarity,
-            shape: this.form.shape
+            shape: this.form.shape,
+            diamond_slieve_size: this.form.diamond_slieve_size,
+            slieve_size_range: this.form.slieve_size_range,
+            carat: this.form.carat,
+            mm_size: this.form.mm_size
           }
         }
 
