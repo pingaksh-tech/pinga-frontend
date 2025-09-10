@@ -198,15 +198,13 @@ export default {
     commit('SET_STATE', { action: 'managersLoading', data: true })
     try {
       const res = await this.$http.get('/users/role-wise-users', {
-        params: { role: roleId, type: 'Retailer', search: searchValue }
+        params: { role: roleId, search: searchValue }
       })
 
       const formattedManagers = (res.data.data || []).map((manager) => ({
         value: manager._id,
         label: `${manager.first_name} ${manager.last_name}`
       }))
-
-      console.log(formattedManagers, 'formattedManagers manages.....')
 
       commit('SET_STATE', { action: 'managersLoading', data: false })
       commit('SET_STATE', { action: 'managers', data: formattedManagers })

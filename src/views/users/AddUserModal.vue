@@ -8,14 +8,34 @@ span
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter first name" class="w-full" v-validate="'required'" v-model="form.first_name" label="First Name *" name="First Name" id="First Name" />
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                placeholder="Enter first name"
+                class="w-full"
+                v-validate="'required'"
+                v-model="form.first_name"
+                label="First Name *"
+                name="First Name"
+                id="First Name"
+              />
               <span class="text-danger text-sm" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
             </div>
           </div>
           <!-- last_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" placeholder="Enter last name" v-validate="'required'" v-model="form.last_name" label="Last Name *" name="Last Name" id="Last Name" />
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                class="w-full"
+                placeholder="Enter last name"
+                v-validate="'required'"
+                v-model="form.last_name"
+                label="Last Name *"
+                name="Last Name"
+                id="Last Name"
+              />
               <span class="text-danger text-sm" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
             </div>
           </div>
@@ -23,13 +43,7 @@ span
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <label class="vs-input--label">Date of joining</label>
-              <datepicker
-                class="w-full"
-                v-model="form.date_of_joining"
-                :input-class="'vs-inputx vs-input--input normal'"
-                placeholder="Select Date"
-                name="date_of_joining"
-              ></datepicker>
+              <datepicker class="w-full" v-model="form.date_of_joining" :input-class="'vs-inputx vs-input--input normal'" placeholder="Select Date" name="date_of_joining"></datepicker>
             </div>
           </div>
           <!-- gender -->
@@ -50,7 +64,7 @@ span
                   { label: 'Female', value: 'female' },
                   { label: 'Other', value: 'other' }
                 ]"
-                 :typeable="false"
+                :typeable="false"
               />
             </div>
           </div>
@@ -58,14 +72,37 @@ span
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" placeholder="Enter email e.g.,jo@example.co" icon-pack="feather" class="w-full" v-validate="'required'" v-model="form.email" label="Email *" name="Email" id="Email" />
+              <vs-input
+                icon="icon icon-package"
+                placeholder="Enter email e.g.,jo@example.co"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required'"
+                v-model="form.email"
+                label="Email *"
+                name="Email"
+                id="Email"
+              />
               <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
             </div>
           </div>
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" placeholder="Enter number e.g.,9999900000" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone *" name="Phone" id="Phone" />
+              <vs-input
+                type="text"
+                @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone.replace(/^\+91/, '').replace(/[^0-9]/g, '')"
+                @clear="form.phone = '+91'"
+                icon="icon icon-package"
+                placeholder="Enter number e.g.,9999900000"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:4'"
+                v-model="form.phone"
+                label="Phone *"
+                name="Phone"
+                id="Phone"
+              />
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
@@ -116,7 +153,17 @@ span
           <!-- adhaar card -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" placeholder="e.g., 0000 0000 0000" icon-pack="feather" class="w-full" type="number"  v-model="form.aadhar_number" label="Aadhar Number" name="aadhar_number" id="aadhar_number" />
+              <vs-input
+                icon="icon icon-credit-card"
+                placeholder="e.g., 0000 0000 0000"
+                icon-pack="feather"
+                class="w-full"
+                type="number"
+                v-model="form.aadhar_number"
+                label="Aadhar Number"
+                name="aadhar_number"
+                id="aadhar_number"
+              />
             </div>
           </div>
           <!-- Bank account details -->
@@ -158,32 +205,38 @@ span
           <!-- Designation -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-credit-card" 
+              <vs-input
+                icon="icon icon-credit-card"
                 placeholder="Enter designation"
-               icon-pack="feather" class="w-full" v-model="form.designation" label="Designation" name="designation" id="designation" />
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.designation"
+                label="Designation"
+                name="designation"
+                id="designation"
+              />
             </div>
           </div>
           <!-- employee Id -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input placeholder="Enter employee id" icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.employee_id" label="Employee Id" name="employee_id" id="employee_id" />
+              <vs-input
+                placeholder="Enter employee id"
+                icon="icon icon-credit-card"
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.employee_id"
+                label="Employee Id"
+                name="employee_id"
+                id="employee_id"
+              />
             </div>
           </div>
 
           <!-- password -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input
-                type="password"
-                icon="icon icon-lock"
-                icon-pack="feather"
-                class="w-full"
-                v-model="form.password"
-                label="Password"
-                name="Password"
-                id="Password"
-                placeholder="Enter password"
-              />
+              <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-model="form.password" label="Password" name="Password" id="Password" placeholder="Enter password" />
               <!-- <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span> -->
             </div>
           </div>
@@ -239,10 +292,10 @@ export default {
         bank_account_details: '',
         aadhar_number: '',
         marital_status: '',
-        employee_id:"",
-        designation:"",
-        gender:"",
-        date_of_joining:""
+        employee_id: '',
+        designation: '',
+        gender: '',
+        date_of_joining: ''
       },
       zIndex: 0,
       dropDownManagers: []
@@ -318,7 +371,7 @@ export default {
     'form.role_id'(newVal) {
       // whenever the value of the form.role_id change that time this function will be called.
       if (newVal) {
-        this.getManagers(newVal)
+        this.getManagers({ roleId: newVal })
       }
     },
     managers(managersArray) {

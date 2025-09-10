@@ -23,13 +23,7 @@
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <label class="vs-input--label">Date of joining</label>
-              <datepicker
-                class="w-full"
-                v-model="form.date_of_joining"
-                :input-class="'vs-inputx vs-input--input normal'"
-                placeholder="Select Date"
-                name="date_of_joining"
-              ></datepicker>
+              <datepicker class="w-full" v-model="form.date_of_joining" :input-class="'vs-inputx vs-input--input normal'" placeholder="Select Date" name="date_of_joining"></datepicker>
             </div>
           </div>
           <!-- gender -->
@@ -63,7 +57,20 @@
           <!-- phone -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input type="text"  @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone .replace(/^\+91/, '') .replace(/[^0-9]/g, '')" @clear="form.phone = '+91'" icon="icon icon-package" placeholder="Enter number e.g.,9999900000" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.phone" label="Phone *" name="Phone" id="Phone" />
+              <vs-input
+                type="text"
+                @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone.replace(/^\+91/, '').replace(/[^0-9]/g, '')"
+                @clear="form.phone = '+91'"
+                icon="icon icon-package"
+                placeholder="Enter number e.g.,9999900000"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:4'"
+                v-model="form.phone"
+                label="Phone *"
+                name="Phone"
+                id="Phone"
+              />
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
@@ -106,10 +113,10 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
-           <!-- Pan Number -->
+          <!-- Pan Number -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full"  v-model="form.pan_number" label="Pan Number" name="pan_number" id="pan_number" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.pan_number" label="Pan Number" name="pan_number" id="pan_number" />
             </div>
           </div>
           <!-- adhaar card -->
@@ -165,7 +172,6 @@
               <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.employee_id" label="Employee Id" name="employee_id" id="employee_id" />
             </div>
           </div>
-         
 
           <!-- password -->
           <div class="vx-col w-1/2 px-8">
@@ -195,13 +201,13 @@ import Select2 from '@/components/custom/form-elements/Select2.vue'
 import { mapActions, mapState } from 'vuex'
 import Datepicker from 'vuejs-datepicker'
 
-
 export default {
   name: 'AddCategory',
 
   /** Components */
   components: {
-    Select2,Datepicker
+    Select2,
+    Datepicker
   },
 
   /** Props */
@@ -222,14 +228,14 @@ export default {
         role_id: this.data.role && this.data.role._id,
         password: '',
         manager: this.data.manager ? this.data.manager._id : null,
-        gender:this.data.userInfo ? this.data.userInfo.gender : null,
+        gender: this.data.userInfo ? this.data.userInfo.gender : null,
         pan_number: this.data.userInfo ? this.data.userInfo.pan_number : null,
         bank_account_details: this.data.userInfo ? this.data.userInfo.bank_account_details : null,
         aadhar_number: this.data.userInfo ? this.data.userInfo.aadhar_number : null,
         marital_status: this.data.userInfo ? this.data.userInfo.marital_status : null,
-        employee_id:this.data.userInfo ? this.data.userInfo.employee_id : null,
-        designation:this.data.userInfo ? this.data.userInfo.designation : null,
-        date_of_joining:this.data.userInfo ? this.data.userInfo.date_of_joining : null,
+        employee_id: this.data.userInfo ? this.data.userInfo.employee_id : null,
+        designation: this.data.userInfo ? this.data.userInfo.designation : null,
+        date_of_joining: this.data.userInfo ? this.data.userInfo.date_of_joining : null
       },
       zIndex: 0,
       dropDownManagers: []
@@ -254,7 +260,7 @@ export default {
   },
 
   mounted() {
-    this.getManagers(this.form.role_id)
+    this.getManagers({ roleId: this.form.role_id })
   },
 
   /** methods */
@@ -324,7 +330,7 @@ export default {
     'form.role_id'(newVal) {
       // whenever the value of the form.role_id change that time this function will be called.
       if (newVal) {
-        this.getManagers(newVal)
+        this.getManagers({ roleId: newVal })
       }
     },
     managers(managersArray) {
