@@ -32,7 +32,7 @@
                 :value="form.manager"
                 @input="(item) => (form.manager = item && item.value)"
                 :autocomplete="true"
-                :ssr="false" 
+                :ssr="false"
                 :multiple="false"
                 :options="managers"
                 :typeable="true"
@@ -204,9 +204,9 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import Select2 from '@/components/custom/form-elements/Select2.vue';
-import Datepicker from 'vuejs-datepicker';
+import { mapActions, mapState } from 'vuex'
+import Select2 from '@/components/custom/form-elements/Select2.vue'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   name: 'AddCategory',
@@ -244,19 +244,19 @@ export default {
         regional_sales_head: ''
       },
       debounceTimeout: null
-    };
+    }
   },
   mounted() {
-    this.getData();
+    this.getData()
   },
   computed: {
     ...mapState('user', ['managers', 'stateHeads', 'regionalSalesHeads']),
     isActive: {
       get() {
-        return this.showModal;
+        return this.showModal
       },
       set(val) {
-        this.$emit('update:showModal', val);
+        this.$emit('update:showModal', val)
       }
     }
   },
@@ -273,83 +273,84 @@ export default {
       try {
         const res = await this.getManagerList({
           roleId: '6847b9542a3c54aa35ce4b7b',
-          searchValue: searchValue
-        });
-        return res;
+          searchValue: searchValue,
+          type: 'Retailer'
+        })
+        return res
       } catch (error) {
-        console.error('Failed to fetch manager list:', error);
-        throw error;
+        console.error('Failed to fetch manager list:', error)
+        throw error
       }
     },
     debouncedHandleManagerSearch(searchValue) {
-      clearTimeout(this.debounceTimeout);
+      clearTimeout(this.debounceTimeout)
       this.debounceTimeout = setTimeout(async () => {
         try {
-          await this.handleManagerSearch(searchValue);
+          await this.handleManagerSearch(searchValue)
         } catch (error) {
           // Error is already logged in handleManagerSearch
         }
-      }, 500); // Reduced debounce time for better UX
+      }, 500) // Reduced debounce time for better UX
     },
     async handleStateHeadSearch(searchValue) {
       try {
         const res = await this.getStateHeadList({
           roleId: 'STATE_HEAD_ROLE_ID', // Replace with actual role ID
           searchValue: searchValue
-        });
-        return res;
+        })
+        return res
       } catch (error) {
-        console.error('Failed to fetch state head list:', error);
-        throw error;
+        console.error('Failed to fetch state head list:', error)
+        throw error
       }
     },
     debouncedHandleStateHeadSearch(searchValue) {
-      clearTimeout(this.debounceTimeout);
+      clearTimeout(this.debounceTimeout)
       this.debounceTimeout = setTimeout(async () => {
         try {
-          await this.handleStateHeadSearch(searchValue);
+          await this.handleStateHeadSearch(searchValue)
         } catch (error) {
           // Error is already logged in handleStateHeadSearch
         }
-      }, 500);
+      }, 500)
     },
     async handleRegionalSalesHeadSearch(searchValue) {
       try {
         const res = await this.getRegionalSalesHeadList({
           roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', // Replace with actual role ID
           searchValue: searchValue
-        });
-        return res;
+        })
+        return res
       } catch (error) {
-        console.error('Failed to fetch regional sales head list:', error);
-        throw error;
+        console.error('Failed to fetch regional sales head list:', error)
+        throw error
       }
     },
     debouncedHandleRegionalSalesHeadSearch(searchValue) {
-      clearTimeout(this.debounceTimeout);
+      clearTimeout(this.debounceTimeout)
       this.debounceTimeout = setTimeout(async () => {
         try {
-          await this.handleRegionalSalesHeadSearch(searchValue);
+          await this.handleRegionalSalesHeadSearch(searchValue)
         } catch (error) {
           // Error is already logged in handleRegionalSalesHeadSearch
         }
-      }, 500);
+      }, 500)
     },
     async getData() {
       try {
         const [managers, stateHeads, regionalSalesHeads] = await Promise.all([
-          this.getManagerList({ roleId: '6847b9542a3c54aa35ce4b7b', searchValue: '' }),
+          this.getManagerList({ roleId: '6847b9542a3c54aa35ce4b7b', searchValue: '', type: 'Retailer' }),
           this.getStateHeadList({ roleId: 'STATE_HEAD_ROLE_ID', searchValue: '' }),
           this.getRegionalSalesHeadList({ roleId: 'REGIONAL_SALES_HEAD_ROLE_ID', searchValue: '' })
-        ]);
+        ])
       } catch (error) {
-        console.error('Failed to fetch data:', error);
+        console.error('Failed to fetch data:', error)
       }
     },
     async save_changes() {
       try {
-        const { message } = await this.createRetailer(this.form);
-        this.$emit('update-data', true);
+        const { message } = await this.createRetailer(this.form)
+        this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -358,8 +359,8 @@ export default {
           position: 'top-center',
           time: 5000,
           color: 'success'
-        });
-        this.isActive = false;
+        })
+        this.isActive = false
       } catch ({ message }) {
         this.$vs.notify({
           title: 'Error',
@@ -369,9 +370,9 @@ export default {
           position: 'top-center',
           time: 5000,
           color: 'primary'
-        });
+        })
       }
     }
   }
-};
+}
 </script>

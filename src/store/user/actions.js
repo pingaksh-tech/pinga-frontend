@@ -194,11 +194,11 @@ export default {
       })
     }
   },
-  async getManagers({ commit }, { roleId, searchValue }) {
+  async getManagers({ commit }, { roleId, searchValue, type = '' }) {
     commit('SET_STATE', { action: 'managersLoading', data: true })
     try {
       const res = await this.$http.get('/users/role-wise-users', {
-        params: { role: roleId, search: searchValue }
+        params: { role: roleId, search: searchValue, type: type }
       })
 
       const formattedManagers = (res.data.data || []).map((manager) => ({

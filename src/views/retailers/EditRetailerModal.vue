@@ -62,7 +62,7 @@
                 :multiple="false"
                 :options="this.dropDownManagers"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> --> 
+              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
 
@@ -194,7 +194,6 @@
               <!-- <span class="text-danger text-sm" v-show="errors.has('Landline')">{{ errors.first('Landline') }}</span> -->
             </div>
           </div>
-
         </div>
         <!-- Send sms -->
         <div class="vx-col w-1/2 px-8">
@@ -293,7 +292,7 @@ export default {
     },
     async getData() {
       try {
-        const res = await this.getManagerList('6847b9542a3c54aa35ce4b7b')
+        const res = await this.getManagerList({ roleId: '6847b9542a3c54aa35ce4b7b', searchValue: '', type: 'Retailer' })
         console.log('Manager list fetched in component:', res)
       } catch (error) {
         console.error('Failed to fetch manager list:', error)
