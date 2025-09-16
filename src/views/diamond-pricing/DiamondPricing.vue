@@ -67,6 +67,8 @@
                 <vs-th sort-key="slieve_size_range">Slieve Size Range</vs-th>
                 <vs-th sort-key="mm_size">MM Size</vs-th>
                 <vs-th sort-key="carat">CT</vs-th>
+                <vs-th>Shape</vs-th>
+                <vs-th>Weight Range</vs-th>
                 <!-- Dynamically render clarity headers. -->
                 <vs-th v-for="(header, index) in DiamondClarityRecords" :key="index"> {{ header.name }} </vs-th>
                 <vs-th v-if="checkPermissionSlug(['diamond_Pricings_edit'])">Action</vs-th>
@@ -88,6 +90,16 @@
                   </vs-td>
                   <vs-td class="text-left">
                     <p class="capitalize">{{ tr.carat || '-' }}</p>
+                  </vs-td>
+                  <vs-td class="text-left">
+                    <p class="capitalize">{{ tr.shape && tr.shape.length ? tr.shape.join(', ') : '-' }}</p>
+                  </vs-td>
+                  <vs-td class="text-left">
+                    <p class="capitalize">
+                      {{ tr.weight_range ? tr.weight_range.min : '' }}
+                      -
+                      {{ tr.weight_range ? tr.weight_range.max : '' }}
+                    </p>
                   </vs-td>
                   <!-- Dynamically render clarity prices -->
                   <vs-td v-for="(header, index) in DiamondClarityRecords" :key="index" class="text-left">
@@ -174,6 +186,8 @@
                 <vs-th sort-key="slieve_size_range">Slieve Size Range</vs-th>
                 <vs-th sort-key="mm_size">MM Size</vs-th>
                 <vs-th sort-key="carat">CT</vs-th>
+                <vs-th>SHAPE</vs-th>
+                <vs-th>WEIGHT RANGE</vs-th>
                 <!-- Dynamically render clarity headers. -->
                 <vs-th v-for="(header, index) in DiamondClarityRecords" :key="index"> {{ header.name }} </vs-th>
                 <vs-th v-if="checkPermissionSlug(['diamond_Pricings_edit'])">Action</vs-th>
@@ -200,6 +214,16 @@
                   </vs-td>
                   <vs-td class="text-left">
                     <p class="capitalize">{{ tr.carat || '-' }}</p>
+                  </vs-td>
+                  <vs-td class="text-left">
+                    <p class="capitalize">{{ tr.shape && tr.shape.length ? tr.shape.join(', ') : '-' }}</p>
+                  </vs-td>
+                  <vs-td class="text-left">
+                    <p class="capitalize">
+                      {{ tr.weight_range ? tr.weight_range.min : '' }}
+                      -
+                      {{ tr.weight_range ? tr.weight_range.max : '' }}
+                    </p>
                   </vs-td>
                   <!-- Dynamically render clarity prices -->
                   <vs-td v-for="(header, index) in DiamondClarityRecords" :key="index" class="text-left">
@@ -301,6 +325,7 @@ export default {
       this.tabConfig = config
     },
     toggleEditDiamondModal(row) {
+      console.log(row, 'toggleEditDiamondModal >>>>>>>>> ......')
       this.modalAction = 'Edit'
       this.selectedDiamond = { ...row }
       this.isDiamondModalMounted = true

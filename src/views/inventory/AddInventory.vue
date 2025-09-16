@@ -235,7 +235,6 @@
                 style="border: 1px solid rgba(0, 0, 0, 0.2)"
                 multiple
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('inventory_images')">{{ errors.first('inventory_images') }}</span> -->
               <div class="mt-5 grid grid-cols-4 gap-4">
                 <div v-for="(image, index) in form.exist_inventory_images" :key="'exist-' + index" class="relative group">
                   <div class="h-64 w-full rounded-lg overflow-hidden mb-2">
@@ -260,7 +259,6 @@
               </div>
             </div>
           </div>
-          <!-- Close vx-row for form fields -->
           <!-- Diamond Section -->
           <div class="w-full px-4 mt-4">
             <vs-button @click="addDiamond" class="mb-4">Add Diamond</vs-button>
@@ -270,7 +268,7 @@
                   <h4>{{ index + 1 }}</h4>
                 </div>
                 <!-- Diamond Clarity -->
-                <div class="vx-col w-1/5 mb-2">
+                <div class="vx-col w-1/6 mb-2">
                   <label class="vs-input--label">Diamond Clarity *</label>
                   <select-2
                     class="w-full category-input"
@@ -288,7 +286,7 @@
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_clarity_${index}`)">{{ errors.first(`diamond_clarity_${index}`) }}</span>
                 </div>
                 <!-- Diamond Shape -->
-                <div class="vx-col w-1/5 mb-2">
+                <div class="vx-col w-1/6 mb-2">
                   <label class="vs-input--label">Diamond Shape *</label>
                   <select-2
                     class="w-full category-input"
@@ -301,12 +299,17 @@
                     :multiple="false"
                     :value="form.diamonds[index].diamond_shape"
                     data-vv-as="Diamond Shape"
-                    @input="(item) => (form.diamonds[index].diamond_shape = item && item.value)"
+                    @input="
+                      (item) => {
+                        form.diamonds[index].diamond_shape = item && item.value
+                        triggerValidation(index)
+                      }
+                    "
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_shape_${index}`)">{{ errors.first(`diamond_shape_${index}`) }}</span>
                 </div>
                 <!-- Diamond Size -->
-                <div class="vx-col w-1/5 mb-2">
+                <div class="vx-col w-1/6 mb-2" v-if="!['Marquise', 'Oval', 'Pear'].includes(form.diamonds[index].diamond_shape)">
                   <label class="vs-input--label">Diamond Size *</label>
                   <select-2
                     class="w-full category-input"
@@ -323,15 +326,30 @@
                   />
                   <span class="text-danger text-xs" v-show="errors.has(`diamond_size_${index}`)">{{ errors.first(`diamond_size_${index}`) }}</span>
                 </div>
-                <!-- Diamond Count -->
-                <div class="vx-col w-1/5 mb-2">
+                <!-- Diamond Weight -->
+                <div class="vx-col w-1/6 mb-2" v-if="['Marquise', 'Oval', 'Pear'].includes(form.diamonds[index].diamond_shape)">
                   <vs-input
                     icon="icon icon-hash"
                     icon-pack="feather"
                     type="number"
-                    v-validate="'required|decimal|min_value:1'"
+                    v-validate="'required|decimal|min_value:0.01'"
+                    data-vv-as="Diamond Weight"
+                    v-model="form.diamonds[index].diamond_weight"
+                    label="Diamond Weight *"
+                    :name="'diamond_weight_' + index"
+                    class="w-full"
+                  />
+                  <span class="text-danger text-xs" v-show="errors.has(`diamond_weight_${index}`)">{{ errors.first(`diamond_weight_${index}`) }}</span>
+                </div>
+                <!-- Diamond Count -->
+                <div class="vx-col w-1/6 mb-2">
+                  <vs-input
+                    icon="icon icon-hash"
+                    icon-pack="feather"
+                    type="number"
+                    v-validate="'required|numeric|min_value:1'"
                     data-vv-as="Diamond Count"
-                    v-model="diamond.diamond_count"
+                    v-model="form.diamonds[index].diamond_count"
                     label="Diamond Count *"
                     min="1"
                     :name="'diamond_count_' + index"
@@ -425,13 +443,11 @@
               </div>
             </div>
           </div>
-          <!-- Close diamond/stone/pearl/mino section -->
           <!-- Save & Reset Button -->
           <div class="vx-row pt-5 px-5 text-center">
             <div class="vx-col w-full">
               <div class="items-center">
                 <vs-button class="mr-2 vs-con-loading__container" id="create-inventory" @click="save_changes" :disabled="!validateForm"> {{ $route.params.id ? 'Update' : 'Add' }}</vs-button>
-                <!-- <vs-button color="warning" class="mr-2" @click="resetForm">Reset</vs-button> -->
                 <vs-button color="danger" class="text-left" @click="navigateToInventoryList">Cancel</vs-button>
               </div>
             </div>
@@ -441,10 +457,12 @@
     </div>
   </vs-card>
 </template>
+
 <script>
 import { mapActions, mapState } from 'vuex'
 import Select2 from '@/components/custom/form-elements/Select2.vue'
 import { v4 as uuidv4 } from 'uuid'
+
 export default {
   name: 'AddInventory',
   components: {
@@ -503,7 +521,17 @@ export default {
     ...mapState('common', ['diamondConstantList']),
     ...mapState('collection', ['CollectionRecords', 'subtotal', 'FilteredCount', 'listLoading']),
     validateForm() {
-      return !this.errors.any()
+      // Check if there are any validation errors and validate diamond fields
+      if (this.errors.any()) return false
+
+      // Custom validation for diamonds based on shape
+      return !this.form.diamonds.some((d) => {
+        if (['Marquise', 'Oval', 'Pear'].includes(d.diamond_shape)) {
+          return !d.diamond_clarity || !d.diamond_shape || !d.diamond_weight || !d.diamond_count
+        } else {
+          return !d.diamond_clarity || !d.diamond_shape || !d.diamond_size || !d.diamond_count
+        }
+      })
     }
   },
   async created() {
@@ -530,21 +558,18 @@ export default {
           this.form.diamonds = data.diamonds.map((v) => {
             delete v._id
             delete v.total_price
-            return { ...v, id: uuidv4() } // Add unique ID for rendering
+            return { ...v, id: uuidv4(), diamond_weight: v.diamond_weight || '' }
           })
         }
-        // Populate colour_stone array
         if (data.colour_stone) {
           this.form.colour_stone = data.colour_stone.map((v) => {
             return {
               colour_stone_count: v.colour_stone_count,
               colour_stone_weight: v.colour_stone_weight,
               colour_stone_price: v.colour_stone_price
-              // id: uuidv4() // Add unique ID for rendering
             }
           })
         }
-        // Populate pearl array
         if (data.pearl) {
           this.form.pearl = data.pearl.map((v) => {
             return {
@@ -554,7 +579,6 @@ export default {
             }
           })
         }
-        // Populate mino array
         if (data.mino) {
           this.form.mino = data.mino.map((v) => {
             return {
@@ -576,18 +600,13 @@ export default {
         if (data.sub_category_id) {
           const size = await this.getSize(data.sub_category_id)
           this.SizeList = size.data
-          // Removed incorrect line: this.sizeID = data.size
           this.form.size_id = data.size_id
-          // Pre-select the size by setting sizeID to the matching option object
           if (data.size_id) {
             const selectedSize = this.SizeList.find((option) => option.value === data.size_id)
             if (selectedSize) {
               this.sizeID = selectedSize.value
             }
           }
-        }
-        if (data.size_id) {
-          this.form.size_id = data.size_id
         }
         this.form.sub_category_id = data.sub_category_id
       })
@@ -636,12 +655,9 @@ export default {
     },
     async save_changes() {
       if (!(await this.$validator.validate())) {
-        return false
-      }
-      if (this.form.diamonds.some((d) => !d.diamond_clarity || !d.diamond_shape || !d.diamond_size || !d.diamond_count)) {
         this.$vs.notify({
           title: 'Error',
-          text: 'All diamond fields must be filled.',
+          text: 'Please fill all required fields correctly.',
           iconPack: 'feather',
           icon: 'icon-alert-circle',
           position: 'top-center',
@@ -650,6 +666,28 @@ export default {
         })
         return false
       }
+
+      const invalidDiamonds = this.form.diamonds.some((d) => {
+        if (['Marquise', 'Oval', 'Pear'].includes(d.diamond_shape)) {
+          return !d.diamond_clarity || !d.diamond_shape || !d.diamond_weight || !d.diamond_count
+        } else {
+          return !d.diamond_clarity || !d.diamond_shape || !d.diamond_size || !d.diamond_count
+        }
+      })
+
+      if (invalidDiamonds) {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'All required diamond fields must be filled.',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'danger'
+        })
+        return false
+      }
+
       try {
         let response
         const data = new FormData()
@@ -659,7 +697,15 @@ export default {
               this.form[key].forEach((item, index) => {
                 for (const field in item) {
                   if (field !== 'id') {
-                    data.append(`${key}[${index}][${field}]`, item[field])
+                    if (['Marquise', 'Oval', 'Pear'].includes(item.diamond_shape)) {
+                      if (field !== 'diamond_size') {
+                        data.append(`${key}[${index}][${field}]`, item[field])
+                      }
+                    } else {
+                      if (field !== 'diamond_weight') {
+                        data.append(`${key}[${index}][${field}]`, item[field])
+                      }
+                    }
                   }
                 }
               })
@@ -780,14 +826,15 @@ export default {
         diamond_clarity: '',
         diamond_shape: '',
         diamond_size: '',
-        diamond_count: 0
+        diamond_weight: '',
+        diamond_count: ''
       })
     },
     addStone() {
       this.form.colour_stone.push({
         colour_stone_weight: '',
         colour_stone_price: '',
-        colour_stone_count: 0
+        colour_stone_count: ''
       })
     },
     addPearl() {
@@ -803,7 +850,13 @@ export default {
       })
     },
     removeDiamond(index) {
+      this.$validator.errors.remove(`diamond_clarity_${index}`)
+      this.$validator.errors.remove(`diamond_shape_${index}`)
+      this.$validator.errors.remove(`diamond_size_${index}`)
+      this.$validator.errors.remove(`diamond_weight_${index}`)
+      this.$validator.errors.remove(`diamond_count_${index}`)
       this.form.diamonds.splice(index, 1)
+      this.$validator.validateAll()
     },
     removeStone(index) {
       this.form.colour_stone.splice(index, 1)
@@ -848,13 +901,11 @@ export default {
           return
         }
 
-        // ✅ Removed file size validation
         const previewURL = URL.createObjectURL(file)
         this.preview_images.push({ src: previewURL, file })
         this.form.inventory_images.push(file)
       })
     },
-
     removeFile(index, type) {
       if (type === 'preview') {
         URL.revokeObjectURL(this.preview_images[index].src)
@@ -900,6 +951,31 @@ export default {
       this.SizeList = []
       this.$refs.files.value = ''
       this.$validator.reset()
+    },
+    async triggerValidation(index) {
+      // Clear validation errors for diamond_size and diamond_weight
+      this.$validator.errors.remove(`diamond_size_${index}`)
+      this.$validator.errors.remove(`diamond_weight_${index}`)
+
+      // Reset non-relevant field based on diamond shape
+      if (['Marquise', 'Oval', 'Pear'].includes(this.form.diamonds[index].diamond_shape)) {
+        this.form.diamonds[index].diamond_size = ''
+      } else {
+        this.form.diamonds[index].diamond_weight = ''
+      }
+
+      // Re-validate all relevant fields
+      await this.$validator.validate(`diamond_clarity_${index}`)
+      await this.$validator.validate(`diamond_shape_${index}`)
+      await this.$validator.validate(`diamond_count_${index}`)
+      if (['Marquise', 'Oval', 'Pear'].includes(this.form.diamonds[index].diamond_shape)) {
+        await this.$validator.validate(`diamond_weight_${index}`)
+      } else {
+        await this.$validator.validate(`diamond_size_${index}`)
+      }
+
+      // Force re-validation of the entire form
+      await this.$validator.validateAll()
     }
   },
   watch: {

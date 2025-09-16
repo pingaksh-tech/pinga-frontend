@@ -5,7 +5,6 @@
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <!-- Diamond shape -->
-
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <label class="vs-input--label">Diamond shapes</label>
@@ -15,7 +14,7 @@
                 name="Shape"
                 placeholder="Select Diamond Shapes"
                 :value="form.shape"
-                @input="(item) => (form.shape = item && item.value)"
+                @input="(item) => (form.shape = item && item.value ? item.value : [])"
                 autocomplete
                 :ssr="true"
                 :options="[
@@ -36,7 +35,7 @@
           </div>
 
           <!-- weight range min -->
-          <div class="vx-col w-1/2 px-8" v-if="['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
+          <div class="vx-col w-1/2 px-8" v-if="form.shape && form.shape.length && ['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
             <div class="vx-row mb-2">
               <vs-input
                 v-validate="'required|min:1'"
@@ -55,7 +54,7 @@
           </div>
 
           <!-- weight range max -->
-          <div class="vx-col w-1/2 px-8" v-if="['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
+          <div class="vx-col w-1/2 px-8" v-if="form.shape && form.shape.length && ['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
             <div class="vx-row mb-2">
               <vs-input
                 v-validate="'required|min:1'"
@@ -83,7 +82,7 @@
                 name="Retailer"
                 placeholder="Select Retailer"
                 :value="form.retailer"
-                @input="(item) => (form.retailer = item && item.value)"
+                @input="(item) => (form.retailer = item && item.value ? item.value : [])"
                 autocomplete
                 :ssr="true"
                 v-validate="'required'"
@@ -94,7 +93,7 @@
           </div>
 
           <!-- Slieve Size -->
-          <div v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))" class="vx-col w-1/2 px-8">
+          <div v-if="form.shape && form.shape.length && ['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))" class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon-package"
@@ -112,7 +111,7 @@
           </div>
 
           <!-- Slieve Size Range -->
-          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+          <div class="vx-col w-1/2 px-8" v-if="form.shape && form.shape.length && ['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon-package"
@@ -130,7 +129,7 @@
           </div>
 
           <!-- Carat -->
-          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+          <div class="vx-col w-1/2 px-8" v-if="form.shape && form.shape.length && ['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon-package"
@@ -149,7 +148,7 @@
           </div>
 
           <!-- MM Size -->
-          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+          <div class="vx-col w-1/2 px-8" v-if="form.shape && form.shape.length && ['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon-package"
@@ -248,7 +247,7 @@ export default {
     },
     clarityData: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data() {
@@ -292,6 +291,7 @@ export default {
     editData: {
       immediate: true,
       handler(newData) {
+        console.log(newData, 'newData.........')
         if (newData) {
           this.form.diamond_slieve_size = newData.diamond_slieve_size || null
           this.form.slieve_size_range = newData.slieve_size_range || null
@@ -305,8 +305,9 @@ export default {
                 price: item.price || null
               }))
             : []
-          this.form.shape = newData.shape
-          this.form.price_type = newData.price_type || 'Default'
+          this.form.shape = Array.isArray(newData.shape) ? newData.shape : []
+          this.form.weight_range_min = newData.weight_range ? newData.weight_range.min || null : null
+          this.form.weight_range_max = newData.weight_range ? newData.weight_range.max || null : null
         } else {
           this.resetForm()
         }
@@ -330,14 +331,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('diamondPricing', {
-      createDiamondPricing: 'createDiamondPricing',
-      updateDiamondPricing: 'updateDiamondPricing',
-      getDiamondClarityList: 'getDiamondClarityList'
-    }),
-    ...mapActions('common', {
-      getDiamondClarityDropdown: 'getDiamondClarityDropdown'
-    }),
+    ...mapActions('diamondPricing', ['createDiamondPricing', 'updateDiamondPricing']),
+    ...mapActions('common', ['getDiamondClarityDropdown']),
     async save_changes() {
       if (this.form.clarity.length === 0) {
         this.$vs.notify({
@@ -443,14 +438,12 @@ export default {
         slieve_size_range: null,
         carat: null,
         mm_size: null,
-        si_hi: null,
-        vs_si_gh: null,
-        vs_si_hi: null,
-        vvs_ef: null,
         price_type: this.tabConfig,
         retailer: [],
         clarity: [],
-        shape: []
+        shape: [],
+        weight_range_min: null,
+        weight_range_max: null
       }
       this.$validator.reset()
     },
@@ -484,14 +477,11 @@ export default {
       }
     },
     getClarityData() {
-      this.getDiamondClarityList({
-        type: 'dropdown'
-      })
+      this.getDiamondClarityDropdown()
     }
   },
   mounted() {
     this.getClarityData()
-    this.getDiamondClarityDropdown()
   }
 }
 </script>
