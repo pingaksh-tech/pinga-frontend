@@ -4,101 +4,8 @@
     <vs-popup :title="`${action_name} ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
-          <!-- Retailer -->
-          <div class="vx-col w-1/2 px-8" v-if="form.price_type === 'Retailer Price'">
-            <div class="vx-row mb-2">
-              <label class="vs-input--label">Retailer *</label>
-              <select-2
-                multiple="true"
-                class="w-full category-input"
-                name="Retailer"
-                placeholder="Select Retailer"
-                :value="form.retailer"
-                @input="(item) => (form.retailer = item && item.value)"
-                autocomplete
-                :ssr="true"
-                v-validate="'required'"
-                action="common/getRetailer"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
-            </div>
-          </div>
+          <!-- Diamond shape -->
 
-          <!-- Slieve Size -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|min:1'"
-                v-model="form.diamond_slieve_size"
-                label="Slieve Size *"
-                name="diamond_slieve_size"
-                data-vv-as="Slieve Size"
-                id="Slieve Size"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('diamond_slieve_size')">{{ errors.first('diamond_slieve_size') }}</span>
-            </div>
-          </div>
-
-          <!-- Slieve Size Range -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|min:1'"
-                v-model="form.slieve_size_range"
-                label="Slieve Size Range *"
-                name="slieve_size_range"
-                data-vv-as="Slieve Size Range"
-                id="Slieve Size Range"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('slieve_size_range')">{{ errors.first('slieve_size_range') }}</span>
-            </div>
-          </div>
-
-          <!-- Carat -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|min:1'"
-                v-model="form.carat"
-                label="Carat *"
-                name="carat"
-                data-vv-as="Carat"
-                id="Carat"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('carat')">{{ errors.first('carat') }}</span>
-            </div>
-          </div>
-
-          <!-- MM Size -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <vs-input
-                icon="icon-package"
-                icon-pack="feather"
-                class="w-full"
-                v-validate="'required|min:1'"
-                v-model="form.mm_size"
-                label="MM Size *"
-                name="mm_size"
-                data-vv-as="MM Size"
-                id="MM Size"
-                type="number"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('mm_size')">{{ errors.first('mm_size') }}</span>
-            </div>
-          </div>
-
-          <!-- Diamond shapes -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <label class="vs-input--label">Diamond shapes</label>
@@ -122,7 +29,141 @@
                   { label: 'Cushion', value: 'Cushion' },
                   { label: 'Heart', value: 'Heart' }
                 ]"
+                v-validate="'required'"
               />
+              <span class="text-danger text-sm" v-show="errors.has('Shape')">{{ errors.first('Shape') }}</span>
+            </div>
+          </div>
+
+          <!-- weight range min -->
+          <div class="vx-col w-1/2 px-8" v-if="['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
+            <div class="vx-row mb-2">
+              <vs-input
+                v-validate="'required|min:1'"
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.weight_range_min"
+                label="Weight Range Minimum *"
+                name="weight_range_min"
+                data-vv-as="Weight Range Minimum"
+                id="weight_range_min"
+                type="number"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('weight_range_min')">{{ errors.first('weight_range_min') }}</span>
+            </div>
+          </div>
+
+          <!-- weight range max -->
+          <div class="vx-col w-1/2 px-8" v-if="['Pear', 'Marquise', 'Oval'].some((shape) => form.shape.includes(shape))">
+            <div class="vx-row mb-2">
+              <vs-input
+                v-validate="'required|min:1'"
+                type="number"
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-model="form.weight_range_max"
+                label="Weight Range Maximum *"
+                name="weight_range_max"
+                data-vv-as="Weight Range Maximum"
+                id="weight_range_max"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('weight_range_max')">{{ errors.first('weight_range_max') }}</span>
+            </div>
+          </div>
+
+          <!-- Retailer -->
+          <div class="vx-col w-1/2 px-8" v-if="form.price_type === 'Retailer Price'">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer *</label>
+              <select-2
+                multiple="true"
+                class="w-full category-input"
+                name="Retailer"
+                placeholder="Select Retailer"
+                :value="form.retailer"
+                @input="(item) => (form.retailer = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                action="common/getRetailer"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
+            </div>
+          </div>
+
+          <!-- Slieve Size -->
+          <div v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))" class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <vs-input
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:1'"
+                v-model="form.diamond_slieve_size"
+                label="Slieve Size *"
+                name="diamond_slieve_size"
+                data-vv-as="Slieve Size"
+                id="Slieve Size"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('diamond_slieve_size')">{{ errors.first('diamond_slieve_size') }}</span>
+            </div>
+          </div>
+
+          <!-- Slieve Size Range -->
+          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+            <div class="vx-row mb-2">
+              <vs-input
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:1'"
+                v-model="form.slieve_size_range"
+                label="Slieve Size Range *"
+                name="slieve_size_range"
+                data-vv-as="Slieve Size Range"
+                id="Slieve Size Range"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('slieve_size_range')">{{ errors.first('slieve_size_range') }}</span>
+            </div>
+          </div>
+
+          <!-- Carat -->
+          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+            <div class="vx-row mb-2">
+              <vs-input
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:1'"
+                v-model="form.carat"
+                label="Carat *"
+                name="carat"
+                data-vv-as="Carat"
+                id="Carat"
+                type="number"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('carat')">{{ errors.first('carat') }}</span>
+            </div>
+          </div>
+
+          <!-- MM Size -->
+          <div class="vx-col w-1/2 px-8" v-if="['Round', 'Princess', 'Emerald', 'Radiant', 'Cushion', 'Heart'].some((shape) => form.shape.includes(shape))">
+            <div class="vx-row mb-2">
+              <vs-input
+                icon="icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:1'"
+                v-model="form.mm_size"
+                label="MM Size *"
+                name="mm_size"
+                data-vv-as="MM Size"
+                id="MM Size"
+                type="number"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('mm_size')">{{ errors.first('mm_size') }}</span>
             </div>
           </div>
 
@@ -220,9 +261,13 @@ export default {
         price_type: this.tabConfig,
         retailer: [],
         clarity: [],
-        shape: []
+        shape: [],
+        weight_range_min: null,
+        weight_range_max: null
       },
-      zIndex: 0
+      zIndex: 0,
+      includeShapes: ['Pear', 'Oval', 'Marquise'],
+      excludeShapes: ['Radiant', 'Emerald', 'Princess', 'Round']
     }
   },
   computed: {
@@ -313,26 +358,50 @@ export default {
       try {
         let data
         if (this.action_name === 'Add') {
-          data = {
-            diamond_slieve_size: this.form.diamond_slieve_size,
-            slieve_size_range: this.form.slieve_size_range,
-            carat: this.form.carat,
-            mm_size: this.form.mm_size,
-            price_type: this.form.price_type,
-            retailer: this.form.retailer,
-            clarity: this.form.clarity,
-            shape: this.form.shape
+          if (this.includeShapes.some((shape) => this.form.shape.includes(shape)) && !this.excludeShapes.some((shape) => this.form.shape.includes(shape))) {
+            data = {
+              clarity: this.form.clarity,
+              shape: this.form.shape,
+              weight_range: {
+                min: this.form.weight_range_min,
+                max: this.form.weight_range_max
+              },
+              price_type: this.form.price_type
+            }
+          } else {
+            data = {
+              diamond_slieve_size: this.form.diamond_slieve_size,
+              slieve_size_range: this.form.slieve_size_range,
+              carat: this.form.carat,
+              mm_size: this.form.mm_size,
+              price_type: this.form.price_type,
+              retailer: this.form.retailer,
+              clarity: this.form.clarity,
+              shape: this.form.shape
+            }
           }
         } else {
-          data = {
-            price_type: this.tabConfig,
-            retailer: this.form.retailer,
-            clarity: this.form.clarity,
-            shape: this.form.shape,
-            diamond_slieve_size: this.form.diamond_slieve_size,
-            slieve_size_range: this.form.slieve_size_range,
-            carat: this.form.carat,
-            mm_size: this.form.mm_size
+          if (this.includeShapes.some((shape) => this.form.shape.includes(shape)) && !this.excludeShapes.some((shape) => this.form.shape.includes(shape))) {
+            data = {
+              clarity: this.form.clarity,
+              shape: this.form.shape,
+              weight_range: {
+                min: this.form.weight_range_min,
+                max: this.form.weight_range_max
+              },
+              price_type: this.form.price_type
+            }
+          } else {
+            data = {
+              diamond_slieve_size: this.form.diamond_slieve_size,
+              slieve_size_range: this.form.slieve_size_range,
+              carat: this.form.carat,
+              mm_size: this.form.mm_size,
+              price_type: this.form.price_type,
+              retailer: this.form.retailer,
+              clarity: this.form.clarity,
+              shape: this.form.shape
+            }
           }
         }
 
