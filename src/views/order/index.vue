@@ -67,6 +67,7 @@
         <template slot="thead">
           <vs-th>Sr#</vs-th>
           <vs-th sort-key="retailer.business_name">Sales Person</vs-th>
+          <vs-th sort-key="salesman">Salesmen</vs-th>
           <vs-th sort-key="order_no">Order No</vs-th>
           <vs-th sort-key="order_type">Order Type</vs-th>
           <vs-th sort-key="date">Order Date</vs-th>
@@ -84,6 +85,9 @@
             </vs-td>
             <vs-td class="text-left">
               <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
+            </vs-td>
+            <vs-td class="text-left">
+              <p>{{ tr.salesman ? tr.salesman : '-' }} </p>
             </vs-td>
             <vs-td class="text-left">
               <vs-input v-if="tr.edit" v-model="tr.order_no" />
