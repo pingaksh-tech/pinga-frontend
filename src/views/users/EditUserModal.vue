@@ -32,7 +32,7 @@
               <label class="vs-input--label">Gender</label>
               <select-2
                 class="w-full role-input"
-                name="MaterialStatus"
+                name="Gender"
                 placeholder="Gender"
                 :value="form.gender"
                 @input="(item) => (form.gender = item && item.value)"
@@ -50,7 +50,7 @@
           <!-- email -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.email" label="Email *" name="Email" id="Email" />
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|email'" v-model="form.email" label="Email *" name="Email" id="Email" />
               <span class="text-danger text-sm" v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
             </div>
           </div>
@@ -62,10 +62,10 @@
                 @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone.replace(/^\+91/, '').replace(/[^0-9]/g, '')"
                 @clear="form.phone = '+91'"
                 icon="icon icon-package"
-                placeholder="Enter number e.g.,9999900000"
+                placeholder="Enter number e.g., 9999900000"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required|min:4'"
+                v-validate="'required|min:10'"
                 v-model="form.phone"
                 label="Phone *"
                 name="Phone"
@@ -74,7 +74,6 @@
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
-
           <!-- Role -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -84,7 +83,7 @@
                 name="Role"
                 placeholder="Select Role"
                 :value="form.role_id"
-                @input="(item) => (form.role_id = item && item.value)"
+                @input="handleRoleChange"
                 autocomplete
                 :ssr="true"
                 :multiple="false"
@@ -94,7 +93,25 @@
               <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
             </div>
           </div>
-
+          <!-- Retailer (shown only when role is Retailer) -->
+          <div class="vx-col w-1/2 px-8" v-if="isRetailerRole">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer *</label>
+              <select-2
+                class="w-full category-input"
+                name="Retailer"
+                placeholder="Select Retailer"
+                :value="form.retailer"
+                @input="(item) => (form.retailer = item && item.value ? item.value : [])"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                action="common/getRetailer"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
+            </div>
+          </div>
           <!-- Manager -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -110,7 +127,6 @@
                 :multiple="false"
                 :options="this.dropDownManagers"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
           <!-- Pan Number -->
@@ -119,7 +135,7 @@
               <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-model="form.pan_number" label="Pan Number" name="pan_number" id="pan_number" />
             </div>
           </div>
-          <!-- adhaar card -->
+          <!-- Aadhar card -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-credit-card" type="number" icon-pack="feather" class="w-full" v-model="form.aadhar_number" label="Aadhar Number" name="aadhar_number" id="aadhar_number" />
@@ -140,14 +156,14 @@
               />
             </div>
           </div>
-          <!-- Material status  -->
+          <!-- Marital status -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Material Status</label>
+              <label class="vs-input--label">Marital Status</label>
               <select-2
                 class="w-full role-input"
-                name="MaterialStatus"
-                placeholder="Select Material Status"
+                name="MaritalStatus"
+                placeholder="Select Marital Status"
                 :value="form.marital_status"
                 @input="(item) => (form.marital_status = item && item.value)"
                 autocomplete
@@ -166,18 +182,16 @@
               <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.designation" label="Designation" name="designation" id="designation" />
             </div>
           </div>
-          <!-- employee Id -->
+          <!-- Employee Id -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input icon="icon icon-credit-card" icon-pack="feather" class="w-full" v-model="form.employee_id" label="Employee Id" name="employee_id" id="employee_id" />
             </div>
           </div>
-
-          <!-- password -->
+          <!-- Password -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-model="form.password" label="Password *" name="Password" id="Password" />
-              <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span>
+              <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-model="form.password" label="Password" name="Password" id="Password" />
             </div>
           </div>
         </div>
@@ -202,7 +216,7 @@ import { mapActions, mapState } from 'vuex'
 import Datepicker from 'vuejs-datepicker'
 
 export default {
-  name: 'AddCategory',
+  name: 'EditCategory',
 
   /** Components */
   components: {
@@ -221,11 +235,13 @@ export default {
   data() {
     return {
       form: {
-        first_name: this.data.first_name,
-        last_name: this.data.last_name,
-        email: this.data.email,
-        phone: this.data.phone,
-        role_id: this.data.role && this.data.role._id,
+        first_name: this.data.first_name || '',
+        last_name: this.data.last_name || '',
+        email: this.data.email || '',
+        phone: this.data.phone || '+91',
+        role_id: (this.data.role && this.data.role._id) || '',
+        role_name: (this.data.role && this.data.role.name) || '',
+        retailer: this.data.retailer || [],
         password: '',
         manager: this.data.manager ? this.data.manager._id : null,
         gender: this.data.userInfo ? this.data.userInfo.gender : null,
@@ -238,15 +254,19 @@ export default {
         date_of_joining: this.data.userInfo ? this.data.userInfo.date_of_joining : null
       },
       zIndex: 0,
-      dropDownManagers: []
+      dropDownManagers: [],
+      isRetailerRole: this.data.role && this.data.role.name === 'Retailer'
     }
   },
 
   /** Computed */
   computed: {
-    /** Form Validation Manage */
     ...mapState('user', ['createLoading', 'managers']),
     validateForm() {
+      // Ensure retailer is validated only when role is Retailer
+      if (this.isRetailerRole) {
+        return !this.errors.any() && this.form.retailer.length > 0
+      }
       return !this.errors.any()
     },
     isActive: {
@@ -260,24 +280,32 @@ export default {
   },
 
   mounted() {
-    this.getManagers({ roleId: this.form.role_id })
+    if (this.form.role_id) {
+      this.getManagers({ roleId: this.form.role_id })
+    }
   },
 
-  /** methods */
+  /** Methods */
   methods: {
     ...mapActions('user', {
       updateUserRecord: 'updateUserRecord',
       getManagers: 'getManagers'
     }),
-    // reset form data
+    handleRoleChange(item) {
+      this.form.role_id = item && item.value ? item.value : ''
+      this.form.role_name = item && item.label ? item.label : ''
+      this.isRetailerRole = this.form.role_name === 'Retailer'
+      // Clear retailer selection when role is not Retailer
+      if (!this.isRetailerRole) {
+        this.form.retailer = []
+      }
+    },
     resetForm() {
       this.$nextTick(() => {
         this.errors.clear()
         this.$validator.reset()
       })
     },
-
-    /** Update Category */
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
@@ -286,9 +314,14 @@ export default {
         if (!this.form.password) {
           delete this.form.password
         }
+        // Create payload, exclude role_name and include retailer only if role is Retailer
+        const { role_name, ...payload } = this.form
+        if (!this.isRetailerRole) {
+          delete payload.retailer
+        }
         const { message } = await this.updateUserRecord({
           UserId: this.data._id,
-          data: this.form
+          data: payload
         })
         this.$emit('update-data', true)
         this.$vs.notify({
@@ -315,10 +348,10 @@ export default {
     }
   },
 
-  /** watch Loading Manage */
+  /** Watch */
   watch: {
-    loading() {
-      if (this.loading) {
+    createLoading() {
+      if (this.createLoading) {
         this.$vs.loading({
           container: '#update_category_modal .vs-popup .vs-popup--content',
           scale: 0.45
@@ -328,7 +361,6 @@ export default {
       }
     },
     'form.role_id'(newVal) {
-      // whenever the value of the form.role_id change that time this function will be called.
       if (newVal) {
         this.getManagers({ roleId: newVal })
       }

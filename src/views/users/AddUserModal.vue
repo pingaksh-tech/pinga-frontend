@@ -1,4 +1,3 @@
-span
 <template>
   <div>
     <!-- Add User popup -->
@@ -52,7 +51,7 @@ span
               <label class="vs-input--label">Gender</label>
               <select-2
                 class="w-full role-input"
-                name="MaterialStatus"
+                name="Gender"
                 placeholder="Gender"
                 :value="form.gender"
                 @input="(item) => (form.gender = item && item.value)"
@@ -74,10 +73,10 @@ span
             <div class="vx-row mb-2">
               <vs-input
                 icon="icon icon-package"
-                placeholder="Enter email e.g.,jo@example.co"
+                placeholder="Enter email e.g., jo@example.co"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required'"
+                v-validate="'required|email'"
                 v-model="form.email"
                 label="Email *"
                 name="Email"
@@ -94,10 +93,10 @@ span
                 @input="form.phone = form.phone === '' ? '+91' : '+91' + form.phone.replace(/^\+91/, '').replace(/[^0-9]/g, '')"
                 @clear="form.phone = '+91'"
                 icon="icon icon-package"
-                placeholder="Enter number e.g.,9999900000"
+                placeholder="Enter number e.g., 9999900000"
                 icon-pack="feather"
                 class="w-full"
-                v-validate="'required|min:4'"
+                v-validate="'required|min:10'"
                 v-model="form.phone"
                 label="Phone *"
                 name="Phone"
@@ -111,11 +110,11 @@ span
             <div class="vx-row mb-2">
               <label class="vs-input--label">Role *</label>
               <select-2
-                class="w-1/2 role-input"
+                class="w-full role-input"
                 name="Role"
                 placeholder="Select Role"
                 :value="form.role_id"
-                @input="(item) => (form.role_id = item && item.value)"
+                @input="handleRoleChange"
                 autocomplete
                 :ssr="true"
                 :multiple="false"
@@ -125,12 +124,31 @@ span
               <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
             </div>
           </div>
+          <!-- Retailer (shown only when role is Retailer) -->
+          <div class="vx-col w-1/2 px-8" v-if="isRetailerRole">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer *</label>
+              <select-2
+                class="w-full category-input"
+                name="Retailer"
+                placeholder="Select Retailer"
+                :value="form.retailer"
+                @input="(item) => (form.retailer = item && item.value ? item.value : [])"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                action="common/getRetailer"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
+            </div>
+          </div>
           <!-- Manager -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <label class="vs-input--label">Manager</label>
               <select-2
-                class="w-1/2 role-input"
+                class="w-full role-input"
                 name="Manager"
                 placeholder="Select Manager"
                 :value="form.manager"
@@ -140,7 +158,6 @@ span
                 :multiple="false"
                 :options="this.dropDownManagers"
               />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span> -->
             </div>
           </div>
 
@@ -150,7 +167,7 @@ span
               <vs-input icon="icon icon-credit-card" placeholder="e.g., AAAPA1234A" icon-pack="feather" class="w-full" v-model="form.pan_number" label="PAN Number" name="pan_number" id="pan_number" />
             </div>
           </div>
-          <!-- adhaar card -->
+          <!-- Aadhar card -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
@@ -182,14 +199,14 @@ span
               />
             </div>
           </div>
-          <!-- Material status  -->
+          <!-- Marital status -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
-              <label class="vs-input--label">Material Status</label>
+              <label class="vs-input--label">Marital Status</label>
               <select-2
                 class="w-full role-input"
-                name="MaterialStatus"
-                placeholder="Select Material Status"
+                name="MaritalStatus"
+                placeholder="Select Marital Status"
                 :value="form.marital_status"
                 @input="(item) => (form.marital_status = item && item.value)"
                 autocomplete
@@ -217,7 +234,7 @@ span
               />
             </div>
           </div>
-          <!-- employee Id -->
+          <!-- Employee Id -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input
@@ -233,11 +250,10 @@ span
             </div>
           </div>
 
-          <!-- password -->
+          <!-- Password -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
               <vs-input type="password" icon="icon icon-lock" icon-pack="feather" class="w-full" v-model="form.password" label="Password" name="Password" id="Password" placeholder="Enter password" />
-              <!-- <span class="text-danger text-sm" v-show="errors.has('Password')">{{ errors.first('Password') }}</span> -->
             </div>
           </div>
         </div>
@@ -265,7 +281,7 @@ export default {
   /** Page Name */
   name: 'AddCategory',
 
-  /** components */
+  /** Components */
   components: {
     Select2,
     Datepicker
@@ -277,7 +293,7 @@ export default {
     module_name: String
   },
 
-  /** data */
+  /** Data */
   data() {
     return {
       form: {
@@ -286,6 +302,8 @@ export default {
         email: '',
         phone: '+91',
         role_id: '',
+        role_name: '',
+        retailer: [],
         password: '',
         manager: '',
         pan_number: '',
@@ -298,15 +316,19 @@ export default {
         date_of_joining: ''
       },
       zIndex: 0,
-      dropDownManagers: []
+      dropDownManagers: [],
+      isRetailerRole: false
     }
   },
-  /** Mounted */
 
-  /** computed */
+  /** Computed */
   computed: {
     ...mapState('user', ['createLoading', 'managers']),
     validateForm() {
+      // Ensure retailer is validated only when role is Retailer
+      if (this.isRetailerRole) {
+        return !this.errors.any() && this.form.retailer.length > 0
+      }
       return !this.errors.any()
     },
     isActive: {
@@ -319,18 +341,32 @@ export default {
     }
   },
 
-  /** methods */
+  /** Methods */
   methods: {
     ...mapActions('user', {
       createUser: 'createUser',
       getManagers: 'getManagers'
     }),
+    handleRoleChange(item) {
+      this.form.role_id = item && item.value ? item.value : ''
+      this.form.role_name = item && item.label ? item.label : ''
+      this.isRetailerRole = this.form.role_name === 'Retailer'
+      // Clear retailer selection when role changes
+      if (!this.isRetailerRole) {
+        this.form.retailer = []
+      }
+    },
     async save_changes() {
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        const { message } = await this.createUser(this.form)
+        // Create payload, exclude role_name and include retailer only if role is Retailer
+        const { role_name, ...payload } = this.form // Destructure to exclude role_name
+        if (!this.isRetailerRole) {
+          delete payload.retailer
+        }
+        const { message } = await this.createUser(payload)
         this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
@@ -356,7 +392,7 @@ export default {
     }
   },
 
-  /** watch */
+  /** Watch */
   watch: {
     createLoading() {
       if (this.createLoading) {
@@ -369,7 +405,6 @@ export default {
       }
     },
     'form.role_id'(newVal) {
-      // whenever the value of the form.role_id change that time this function will be called.
       if (newVal) {
         this.getManagers({ roleId: newVal })
       }
