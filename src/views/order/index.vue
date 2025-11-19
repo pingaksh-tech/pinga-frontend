@@ -87,7 +87,7 @@
               <p>{{ tr.sales_person ? tr.sales_person : '-' }}</p>
             </vs-td>
             <vs-td class="text-left">
-              <p>{{ tr.salesman ? tr.salesman : '-' }} </p>
+              <p>{{ tr.salesman ? tr.salesman : '-' }}</p>
             </vs-td>
             <vs-td class="text-left">
               <vs-input v-if="tr.edit" v-model="tr.order_no" />

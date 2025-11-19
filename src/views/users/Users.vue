@@ -71,17 +71,11 @@
               <vs-dropdown vs-custom-content class="filter-dropdown" :class="{ active: showRoleFilter }" v-model="showRoleFilter">
                 <div style="padding: 0.5rem; width: 200px">
                   <div class="flex flex-col" @click.stop>
-                    <vs-radio
-                      v-for="(option, index) in rollOption"
-                      :key="index"
-                      v-model="selectedRole"
-                      :vs-value="option.value"
-                      class="mb-1 flex items-start"
-                    >
+                    <vs-radio v-for="(option, index) in rollOption" :key="index" v-model="selectedRole" :vs-value="option.value" class="mb-1 flex items-start">
                       {{ option.label }}
                     </vs-radio>
                     <div class="flex justify-between mt-2">
-                       <vs-button size="small" @click="applyRoleFilter">Apply</vs-button>
+                      <vs-button size="small" @click="applyRoleFilter">Apply</vs-button>
                       <vs-button size="small" type="flat" @click="clearRoleFilter">Clear</vs-button>
                     </div>
                   </div>
@@ -90,7 +84,7 @@
             </div>
           </vs-th>
           <vs-th sort-key="user.name">Status</vs-th>
-          <vs-th v-if="checkPermissionSlug(['users_edit','users_delete'])">Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['users_edit', 'users_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -104,17 +98,17 @@
             <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
             <vs-td class="text-left">{{ (tr.role && tr.role.name) || '-' }} </vs-td>
             <vs-td class="text-left">
-              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id,tr.status)">
-               <span slot="on"></span>
-               <span slot="off"></span>
-             </vs-switch>
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id, tr.status)">
+                <span slot="on"></span>
+                <span slot="off"></span>
+              </vs-switch>
             </vs-td>
-            <vs-td v-if="checkPermissionSlug(['users_edit','users_delete'])">
+            <vs-td v-if="checkPermissionSlug(['users_edit', 'users_delete'])">
               <div class="inline-flex">
                 <vx-tooltip text="Edit User" v-if="checkPermissionSlug(['users_edit'])">
                   <feather-icon @click="toggleEditUserModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
-                <vx-tooltip text="Delete User"  v-if="checkPermissionSlug(['users_delete'])">
+                <vx-tooltip text="Delete User" v-if="checkPermissionSlug(['users_delete'])">
                   <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
@@ -209,7 +203,7 @@ export default {
         const response = await this.$store.dispatch('common/getRoles', {
           page: 1,
           limit: 1000,
-          type: "dropdown"
+          type: 'dropdown'
         })
         this.rollOption = response.data
       } catch (error) {

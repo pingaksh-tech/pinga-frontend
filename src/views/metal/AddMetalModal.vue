@@ -7,45 +7,84 @@
           <div class="vx-col w-full px-8">
             <!-- Metal name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" placeholder="Enter metal name " class="w-full" v-validate="'required|min:4'"
-                v-model="form.name" label="Metal Name *" name="Metal Name" id="Metal Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name')
-                }}</span>
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                placeholder="Enter metal name "
+                class="w-full"
+                v-validate="'required|min:4'"
+                v-model="form.name"
+                label="Metal Name *"
+                name="Metal Name"
+                id="Metal Name"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Name')">{{ errors.first('Metal Name') }}</span>
             </div>
             <!-- Short Name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather"  class="w-full" v-validate="'required|min:2'" placeholder="Enter short name"
-                v-model="form.sort_name" label="Short Name *" name="Short Name" id="Short Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Short Name')">{{ errors.first('Short Name')
-                }}</span>
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:2'"
+                placeholder="Enter short name"
+                v-model="form.sort_name"
+                label="Short Name *"
+                name="Short Name"
+                id="Short Name"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Short Name')">{{ errors.first('Short Name') }}</span>
             </div>
 
             <!-- Price Per Gram -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather"  class="w-full" type="number"
-                v-validate="'required|decimal|min_value:1'" min="1" v-model="form.price_per_gram" placeholder="Enter price per gram in ₹"
-                label="Price Per Gram *" name="Price Per Gram" id="Price Per Gram" />
-              <span class="text-danger text-sm" v-show="errors.has('Price Per Gram')">{{
-                errors.first('Price Per Gram') }}</span>
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                class="w-full"
+                type="number"
+                v-validate="'required|decimal|min_value:1'"
+                min="1"
+                v-model="form.price_per_gram"
+                placeholder="Enter price per gram in ₹"
+                label="Price Per Gram *"
+                name="Price Per Gram"
+                id="Price Per Gram"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Price Per Gram')">{{ errors.first('Price Per Gram') }}</span>
             </div>
 
             <!-- Metal Carat -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Metal Carat *</label>
-              <select-2 class="w-full" name="Metal Carat" placeholder="Select Metal Carat" :value="form.metal_carat"
-                @input="(item) => (form.metal_carat = item && item.value)" autocomplete :ssr="true"
-                v-validate="'required'" :options="MetalCaratOptions" />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Carat')">{{ errors.first('Metal Carat')
-                }}</span>
+              <select-2
+                class="w-full"
+                name="Metal Carat"
+                placeholder="Select Metal Carat"
+                :value="form.metal_carat"
+                @input="(item) => (form.metal_carat = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                :options="MetalCaratOptions"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Carat')">{{ errors.first('Metal Carat') }}</span>
             </div>
             <!-- Metal Color -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Metal Color *</label>
-              <select-2 class="w-full" name="Metal Color" placeholder="Select Metal Color" :value="form.metal_color"
-                @input="(item) => (form.metal_color = item && item.value)" autocomplete :ssr="true"
-                v-validate="'required'" :options="MetalColorOptions" />
-              <span class="text-danger text-sm" v-show="errors.has('Metal Color')">{{ errors.first('Metal Color')
-                }}</span>
+              <select-2
+                class="w-full"
+                name="Metal Color"
+                placeholder="Select Metal Color"
+                :value="form.metal_color"
+                @input="(item) => (form.metal_color = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                :options="MetalColorOptions"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Metal Color')">{{ errors.first('Metal Color') }}</span>
             </div>
           </div>
         </div>
@@ -54,8 +93,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-metal" @click="save_changes"
-                :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-metal" @click="save_changes" :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -92,13 +130,13 @@ export default {
         metal_carat: '',
         metal_color: '',
         sort_name: '',
-        price_per_gram: '',
+        price_per_gram: ''
       },
       zIndex: 0
     }
   },
   /** Mounted */
-  mounted() { },
+  mounted() {},
 
   /** computed */
   computed: {
@@ -127,7 +165,7 @@ export default {
       }
       try {
         const { message } = await this.createMetal(this.form)
-        console.log(message, 'message API in VUE');
+        console.log(message, 'message API in VUE')
         // this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',

@@ -161,8 +161,8 @@ export default {
     async save_changes() {
       try {
         const { message } = await this.udateRolePermission({
-         data: {
-           role: this.$route.params.id,
+          data: {
+            role: this.$route.params.id,
             ...this.form
           }
         })

@@ -7,26 +7,29 @@
           <div class="vx-col w-full px-8">
             <!-- Category name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
-                v-model="form.name" label="Category Name *" name="Category Name" id="Category Name" />
-              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name')
-                }}</span>
+              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'" v-model="form.name" label="Category Name *" name="Category Name" id="Category Name" />
+              <span class="text-danger text-sm" v-show="errors.has('Category Name')">{{ errors.first('Category Name') }}</span>
             </div>
           </div>
           <div class="vx-col w-full cursor-pointer">
             <label class="vs-input--label block">Image (Recommended banner size: 16:7) *</label>
-            <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
-              accept=".jpg, .png , .jpeg" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
-              v-validate="'required'" />
-            <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image')
-              }}</span>
+            <input
+              type="file"
+              class="border p-2 rounded w-full"
+              name="Image"
+              ref="files"
+              accept=".jpg, .png , .jpeg"
+              @change="handleFileUpload"
+              style="border: 1px solid rgba(0, 0, 0, 0.2)"
+              v-validate="'required'"
+            />
+            <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image') }}</span>
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
                 <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
                   <img height="200px" width="250px" :src="preview_image" alt="Image Preview" class="object-fit" />
                 </div>
-                <div style="left:214px;" class="absolute top-0 left-[214px]  bg-danger w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
-                  @click="deleteImage()">
+                <div style="left: 214px" class="absolute top-0 left-[214px] bg-danger w-8 h-8 flex items-center justify-center rounded-full cursor-pointer" @click="deleteImage()">
                   <feather-icon icon="Trash2Icon" svgClasses="h-5 w-5 text-white" />
                 </div>
               </div>
@@ -38,8 +41,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes"
-                :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -73,14 +75,14 @@ export default {
     return {
       form: {
         name: '',
-        category_image: null,
+        category_image: null
       },
       preview_image: null,
       zIndex: 0
     }
   },
   /** Mounted */
-  mounted() { },
+  mounted() {},
 
   /** computed */
   computed: {
@@ -153,8 +155,8 @@ export default {
       }
       try {
         const data = new FormData()
-        data.append("name", this.form.name)
-        data.append("category_image", this.form.category_image)
+        data.append('name', this.form.name)
+        data.append('category_image', this.form.category_image)
         const { message } = await this.createCategory(data)
         this.$emit('update-data', true)
         this.$vs.notify({

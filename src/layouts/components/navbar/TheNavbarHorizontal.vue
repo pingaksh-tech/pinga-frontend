@@ -8,7 +8,6 @@
   Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
-
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper navbar-full p-0">
@@ -94,4 +93,3 @@ export default {
   }
 }
 </script>
-

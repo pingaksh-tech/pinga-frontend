@@ -13,5 +13,5 @@ export default {
   diamondConstantList: [],
   DiamondList: [],
   RoleList: [],
-  DiamondClarityList: [],
+  DiamondClarityList: []
 }

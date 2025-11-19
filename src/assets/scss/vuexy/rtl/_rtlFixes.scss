@@ -10,7 +10,6 @@
 /*! rtl:begin:ignore */
 
 .vuesax-app-is-rtl {
-
   /////////////////////////////////////////////////////////
   // EXTENSION - PERFECT SCROLLBAR
   /////////////////////////////////////////////////////////
@@ -24,7 +23,6 @@
   .ag-pinned-left-cols-container {
     margin-right: 5px;
   }
-
 
   /////////////////////////////////////////////////////////
   // VUESAX FRAMEWORK
@@ -43,13 +41,11 @@
     }
   }
 
-
   .con-vs-dropdown--menu {
     transform: translateX(-100%);
   }
 
   .vx-navbar-dropdown {
-
     &.dropdownx-enter,
     &.dropdownx-leave-to {
       transform: translateY(8px) !important;
@@ -63,12 +59,11 @@
 
         &.dropdownx-enter,
         &.dropdownx-leave-to {
-          transform: translate(100%,8px) !important;
+          transform: translate(100%, 8px) !important;
         }
       }
     }
   }
-
 
   /////////////////////////////////////////////////////////
   // EXTENSTION - DATETIME PICKER
@@ -79,7 +74,6 @@
     transform: rotateY(180deg);
   }
 
-
   /////////////////////////////////////////////////////////
   // EXTENSTION - CAROUSEL
   /////////////////////////////////////////////////////////
@@ -89,7 +83,6 @@
       transform-origin: 100% 0 !important;
     }
   }
-
 
   /////////////////////////////////////////////////////////
   // COMPONENT

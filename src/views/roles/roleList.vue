@@ -1,19 +1,9 @@
 <template>
   <div id="role-loading" class="vs-con-loading__container" style="overflow: unset">
-   <div class="vx-card p-6">
+    <div class="vx-card p-6">
       <div>
-        <vs-table
-          class="text-center"
-          stripe
-          :sst="true"
-          maxHeight="800px"
-          @search="updateSearchQuery"
-          @change-page="handleChangePage"
-          :max-items="length"
-          search
-          :data="records"
-        >
-        <!-- :total="FilteredCount" -->
+        <vs-table class="text-center" stripe :sst="true" maxHeight="800px" @search="updateSearchQuery" @change-page="handleChangePage" :max-items="length" search :data="records">
+          <!-- :total="FilteredCount" -->
 
           <template slot="thead">
             <vs-th> <p class="w-full text-center">Sr#</p></vs-th>
@@ -25,7 +15,7 @@
             <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
               <vs-td>{{ page * length - (length - i - 1) }}</vs-td>
               <vs-td class="text-left">
-                <span class="cursor-pointer" >{{ tr.name || '-' }}</span>
+                <span class="cursor-pointer">{{ tr.name || '-' }}</span>
               </vs-td>
               <vs-td v-if="checkPermissionSlug(['roles_edit'])">
                 <div class="inline-flex">

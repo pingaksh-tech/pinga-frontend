@@ -6,11 +6,17 @@
         <div class="vx-row">
           <div class="vx-col w-full cursor-pointer">
             <label class="vs-input--label block">Image * (Recommended banner size: 16:7)</label>
-            <input type="file" class="border p-2 rounded w-full" name="Image" ref="files"
-              accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
-              v-validate="'required'" />
-            <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image')
-              }}</span>
+            <input
+              type="file"
+              class="border p-2 rounded w-full"
+              name="Image"
+              ref="files"
+              accept=".jpg, .png , .jpeg,.pdf"
+              @change="handleFileUpload"
+              style="border: 1px solid rgba(0, 0, 0, 0.2)"
+              v-validate="'required'"
+            />
+            <span class="text-danger text-sm" v-show="errors.has('Image')">{{ errors.first('Image') }}</span>
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
                 <div class="aspect-[16/7] w-full mt-5 rounded-lg overflow-hidden bg-gray-100">
@@ -29,8 +35,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes"
-                :disabled="!validateForm">Add</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-category" @click="save_changes" :disabled="!validateForm">Add</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -63,14 +68,14 @@ export default {
   data() {
     return {
       form: {
-        banner_image: '',
+        banner_image: ''
       },
       preview_image: null,
       zIndex: 0
     }
   },
   /** Mounted */
-  mounted() { },
+  mounted() {},
 
   /** computed */
   computed: {
@@ -118,12 +123,11 @@ export default {
 
       // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
       if (this.form.banner_image.src) {
-        URL.revokeObjectURL(this.form.banner_image.src);
+        URL.revokeObjectURL(this.form.banner_image.src)
       }
       // 2. Create the image link to the file to optimize performance:
-      this.preview_image = URL.createObjectURL(file);
+      this.preview_image = URL.createObjectURL(file)
       this.form.banner_image = file
-
     },
 
     async save_changes() {
@@ -131,11 +135,11 @@ export default {
         return false
       }
       try {
-        const data = new FormData();
-        data.append("banner_image", this.form.banner_image);
+        const data = new FormData()
+        data.append('banner_image', this.form.banner_image)
 
         const { message } = await this.createBanner(data)
-        console.log(message, 'message Add Category Success');
+        console.log(message, 'message Add Category Success')
         this.$emit('update-data', true)
         this.$vs.notify({
           title: 'Success',
@@ -148,7 +152,7 @@ export default {
         })
         this.isActive = false
       } catch ({ message }) {
-        console.log(message, 'message catch error Category');
+        console.log(message, 'message catch error Category')
         this.$vs.notify({
           title: 'Error',
           text: message,

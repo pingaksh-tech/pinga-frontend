@@ -28,24 +28,14 @@
                       label="New Password *"
                       name="password"
                     />
-                    <span 
-                      style="top:20px"
-                      class="absolute right-0  mt-3 mr-3 cursor-pointer"
-                      @click="showPassword = !showPassword"
-                    >
-                      <feather-icon 
-                        :icon="showPassword ? 'EyeOffIcon' : 'EyeIcon'" 
-                        class="cursor-pointer"
-                        svgClasses="w-5 h-5"
-                      />
+                    <span style="top: 20px" class="absolute right-0 mt-3 mr-3 cursor-pointer" @click="showPassword = !showPassword">
+                      <feather-icon :icon="showPassword ? 'EyeOffIcon' : 'EyeIcon'" class="cursor-pointer" svgClasses="w-5 h-5" />
                     </span>
                   </div>
                   <span class="text-danger text-sm" v-show="errors.has('password')">
                     {{ errors.first('password') }}
                   </span>
-                  <p class="text-xs mt-1" v-if="!errors.has('password')">
-                    Password must be at least 8 characters
-                  </p>
+                  <p class="text-xs mt-1" v-if="!errors.has('password')">Password must be at least 8 characters</p>
                 </div>
 
                 <!-- Confirm Password Field with Toggle -->
@@ -63,16 +53,8 @@
                       label="Confirm Password *"
                       name="confirm_password"
                     />
-                    <span 
-                      style="top:20px"
-                      class="absolute right-0  mt-3 mr-3 cursor-pointer"
-                      @click="showConfirmPassword = !showConfirmPassword"
-                    >
-                      <feather-icon 
-                        :icon="showConfirmPassword ? 'EyeOffIcon' : 'EyeIcon'" 
-                        class="cursor-pointer"
-                        svgClasses="w-5 h-5"
-                      />
+                    <span style="top: 20px" class="absolute right-0 mt-3 mr-3 cursor-pointer" @click="showConfirmPassword = !showConfirmPassword">
+                      <feather-icon :icon="showConfirmPassword ? 'EyeOffIcon' : 'EyeIcon'" class="cursor-pointer" svgClasses="w-5 h-5" />
                     </span>
                   </div>
                   <span class="text-danger text-sm" v-show="errors.has('confirm_password')">
@@ -87,7 +69,8 @@
                   v-on:keyup.enter="save_changes"
                   :disabled="!validateForm"
                   class="float-right vs-con-loading__container px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0"
-                >Reset Password</vs-button>
+                  >Reset Password</vs-button
+                >
               </div>
             </div>
           </div>
@@ -111,7 +94,6 @@ export default {
       showConfirmPassword: false
     }
   },
- 
 
   computed: {
     ...mapState('common', ['loading']),
@@ -119,17 +101,17 @@ export default {
       return !this.errors.any() && this.password && this.confirmPassword && this.password === this.confirmPassword
     }
   },
-  
+
   methods: {
     ...mapActions('common', { resetPassword: 'resetPassword' }),
 
     async save_changes() {
-        console.log(this.$route.params.token,"prams........");
+      console.log(this.$route.params.token, 'prams........')
       if (!(await this.$validator.validate())) {
         return false
       }
       try {
-        const { message } = await this.resetPassword( {password:this.password,token:this.$route.params.token})
+        const { message } = await this.resetPassword({ password: this.password, token: this.$route.params.token })
         this.$vs.notify({
           title: 'Success',
           text: message,

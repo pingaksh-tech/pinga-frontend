@@ -5,30 +5,30 @@
       <div class="retailer details">
         <h5>Retailer Details</h5>
         <div class="details-grid">
-           <div class="detail-item">
+          <div class="detail-item">
             <label>Business Name</label>
             <p>{{ data.order.retailer_id.business_name }}</p>
           </div>
 
-           <div class="detail-item">
+          <div class="detail-item">
             <label>Retailer Name</label>
-            <p>{{data.order.retailer_id.first_name}} {{data.order.retailer_id.last_name}}</p>
+            <p>{{ data.order.retailer_id.first_name }} {{ data.order.retailer_id.last_name }}</p>
           </div>
 
-         <div class="detail-item">
+          <div class="detail-item">
             <label>Email</label>
-            <p>{{data.order.retailer_id.email}}</p>
+            <p>{{ data.order.retailer_id.email }}</p>
           </div>
 
-           <div class="detail-item">
+          <div class="detail-item">
             <label>Phone</label>
-            <p>{{data.order.retailer_id.phone}}</p>
+            <p>{{ data.order.retailer_id.phone }}</p>
           </div>
 
           <div class="detail-item address-item">
             <label>Address</label>
-            <p>{{ data.order.retailer_id.phone}}</p>
-          </div> 
+            <p>{{ data.order.retailer_id.phone }}</p>
+          </div>
         </div>
       </div>
     </vs-popup>
@@ -48,16 +48,16 @@ export default {
   props: {
     showModal: Boolean,
     module_name: String,
-    data: Object,
+    data: Object
   },
   mounted() {
-    console.log(this.data, "data");
+    console.log(this.data, 'data')
   },
   data() {
     return {
       dropDownManagers: []
     }
-  },
+  }
 }
 </script>
 
@@ -107,4 +107,3 @@ export default {
   grid-column: span 2;
 }
 </style>
-

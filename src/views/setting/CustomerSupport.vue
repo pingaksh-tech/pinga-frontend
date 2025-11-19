@@ -5,17 +5,25 @@
       <!-- email -->
       <div class="vx-col w-full px-8">
         <div class="vx-row mb-2">
-          <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4|email'"
-            v-model="form.email" label="Email *" name="email" id="email" data-vv-as="Email" />
+          <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4|email'" v-model="form.email" label="Email *" name="email" id="email" data-vv-as="Email" />
           <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
         </div>
       </div>
       <!-- phone -->
       <div class="vx-col w-full px-8">
         <div class="vx-row mb-2">
-          <vs-input type="number" icon="icon icon-package" icon-pack="feather" class="w-full"
-            v-validate="'required|numeric'" v-model="form.phone" label="Phone *" name="phone" id="phone"
-            data-vv-as="Phone" />
+          <vs-input
+            type="number"
+            icon="icon icon-package"
+            icon-pack="feather"
+            class="w-full"
+            v-validate="'required|numeric'"
+            v-model="form.phone"
+            label="Phone *"
+            name="phone"
+            id="phone"
+            data-vv-as="Phone"
+          />
           <span class="text-danger text-sm" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
         </div>
       </div>
@@ -23,14 +31,12 @@
       <div class="vx-row pt-5 px-5 text-center">
         <div class="vx-col w-full">
           <div class="items-center">
-            <vs-button class="mr-2 vs-con-loading__container" id="create-customer-support" @click="save_changes"
-              :disabled="!validateForm">Save</vs-button>
+            <vs-button class="mr-2 vs-con-loading__container" id="create-customer-support" @click="save_changes" :disabled="!validateForm">Save</vs-button>
           </div>
         </div>
       </div>
     </form>
   </div>
-
 </template>
 
 <script>
@@ -45,7 +51,7 @@ export default {
     return {
       form: {
         email: null,
-        phone: null,
+        phone: null
       },
       type: 'Customer Care'
     }
@@ -56,7 +62,7 @@ export default {
     try {
       await this.getSetting({
         setting_name: this.type
-      });
+      })
     } catch ({ message }) {
       this.$vs.notify({
         title: 'Error',
@@ -81,7 +87,7 @@ export default {
     ...mapState('setting', ['settingRecord']),
     validateForm() {
       return !this.errors.any()
-    },
+    }
   },
 
   /** methods */
@@ -117,7 +123,7 @@ export default {
           color: 'primary'
         })
       }
-    },
-  },
+    }
+  }
 }
 </script>

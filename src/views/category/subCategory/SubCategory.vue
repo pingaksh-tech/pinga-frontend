@@ -2,16 +2,26 @@
   <div>
     <!-- Sub Category list -->
     <div class="vx-card p-6">
-      <vs-table id="sub_category_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="subFilteredCount"
-        :max-items="length" search :data="subCategoryRecords">
+      <vs-table
+        id="sub_category_list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="subFilteredCount"
+        :max-items="length"
+        search
+        :data="subCategoryRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (subFilteredCount && 1)) }}
                       -
@@ -37,9 +47,11 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div @click="toggleAddSubCategoryModal"
-             v-if="checkPermissionSlug(['subcategories_create'])"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
+            <div
+              @click="toggleAddSubCategoryModal"
+              v-if="checkPermissionSlug(['subcategories_create'])"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
@@ -51,7 +63,7 @@
           <vs-th sort-key="category.name">Category Name</vs-th>
           <vs-th sort-key="category.name">Index</vs-th>
           <vs-th sort-key="category.status">Status</vs-th>
-          <vs-th v-if="checkPermissionSlug(['subcategories_edit','subcategories_delete'])">Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['subcategories_edit', 'subcategories_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -61,30 +73,21 @@
             </vs-td>
             <vs-td class="text-left">{{ tr.name || '-' }} </vs-td>
             <vs-td class="text-left w-1/6">
-             <vs-input
-               v-model="tr.index"
-               v-validate="'required'"
-               type="number"
-               class="w-1/2"
-               @click.stop
-               @keydown.enter="updateIndexPosition(tr._id, tr.index)"
-             />
-           </vs-td>
+              <vs-input v-model="tr.index" v-validate="'required'" type="number" class="w-1/2" @click.stop @keydown.enter="updateIndexPosition(tr._id, tr.index)" />
+            </vs-td>
             <vs-td>
-             <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id)">
-               <span slot="on"></span>
-               <span slot="off"></span>
-             </vs-switch>
-           </vs-td>
-            <vs-td v-if="checkPermissionSlug(['subcategories_edit','subcategories_delete'])">
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id)">
+                <span slot="on"></span>
+                <span slot="off"></span>
+              </vs-switch>
+            </vs-td>
+            <vs-td v-if="checkPermissionSlug(['subcategories_edit', 'subcategories_delete'])">
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['subcategories_edit'])">
-                  <feather-icon @click.stop="toggleEditSubCategoryModal(tr)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click.stop="toggleEditSubCategoryModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['subcategories_delete'])">
-                  <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -116,17 +119,14 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8" @onchange="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="subFilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add category modal -->
-    <add-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isAddSubCategoryModalMounted"
-      :showModal.sync="isAddSubCategoryModalShow" />
+    <add-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isAddSubCategoryModalMounted" :showModal.sync="isAddSubCategoryModalShow" />
 
     <!-- Edit category modal -->
-    <Edit-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isEditSubCategoryModalMounted"
-      :data="selectedRecord" :showModal.sync="isEditSubCategoryModalShow" />
+    <Edit-sub-category-modal :module_name="module_name" @update-data="getData" v-if="isEditSubCategoryModalMounted" :data="selectedRecord" :showModal.sync="isEditSubCategoryModalShow" />
   </div>
 </template>
 
@@ -182,7 +182,7 @@ export default {
     updateIndexPosition(id, index) {
       if (index > 0) {
         this.$store
-          .dispatch('category/manageIndexNumber', { type:'sub-category',id, index })
+          .dispatch('category/manageIndexNumber', { type: 'sub-category', id, index })
           .then((Success) => {
             const { message } = Success
             this.getData()
@@ -218,12 +218,11 @@ export default {
       this.getData()
     },
 
-
     /** updateStatus API */
     updateStatus(id) {
       this.$store
         .dispatch('category/updateStatus', {
-         type:'sub-category',
+          type: 'sub-category',
           id
         })
         .then((Success) => {

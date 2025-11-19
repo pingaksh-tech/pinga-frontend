@@ -8,7 +8,6 @@
 ==========================================================================================*/
 
 .main-horizontal {
-
   // Navbar
   .vx-navbar-wrapper {
     &.nav-menu-wrapper {
@@ -66,14 +65,13 @@
   &.navbar-static {
     .vs-navbar {
       &.vx-navbar {
-        box-shadow: 0px 10px 8px rgba(0,0,0,0.03);
+        box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.03);
       }
     }
   }
 
   &.navbar-static {
     .router-content {
-
       @media (min-width: 1200px) {
         margin-top: 1rem;
       }
@@ -121,7 +119,6 @@
         margin-top: 4.5rem;
       }
     }
-
   }
 
   &:not(.navbar-static) {
@@ -132,7 +129,7 @@
     }
   }
 
-  @media(min-width: 1200px) {
+  @media (min-width: 1200px) {
     // Content Alignment
     &.navbar-floating {
       .router-content {

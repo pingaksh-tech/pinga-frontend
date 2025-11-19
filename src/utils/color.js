@@ -1,34 +1,33 @@
 export default {
   darken(color, percent) {
-    let f = color.split(','), t = percent<0 ? 0 : 255, p = percent<0 ? percent * -1 : percent, R = parseInt(f[0].slice(4)), G = parseInt(f[1]), B = parseInt(f[2])
-    return `rgb(${Math.round((t - R) * p) + R  },${  Math.round((t - G) * p) + G  },${  Math.round((t - B) * p) + B  })`
+    let f = color.split(','),
+      t = percent < 0 ? 0 : 255,
+      p = percent < 0 ? percent * -1 : percent,
+      R = parseInt(f[0].slice(4)),
+      G = parseInt(f[1]),
+      B = parseInt(f[2])
+    return `rgb(${Math.round((t - R) * p) + R},${Math.round((t - G) * p) + G},${Math.round((t - B) * p) + B})`
   },
   getColor(colorx, alphax = 1, defaultx = true) {
     // change color hex to RGB
     if (/^[#]/.test(colorx)) {
       const c = this.hexToRgb(colorx)
-  
+
       if (alphax == 1) {
         colorx = `rgb(${c.r},${c.g},${c.b})`
-  
       } else {
         colorx = `rgba(${c.r},${c.g},${c.b},${alphax})`
-  
       }
     } else if (/^rgba/.test(colorx)) {
-  
       if (colorx.search(/.([0-9]\))$/) == -1 && !defaultx) {
         colorx = colorx.replace(/.?([0-9]\))$/, `${alphax})`)
       }
-  
-  
     } else if (/^(rgb)/.test(colorx)) {
       // change rgb and rgba
       if (alphax != 1) {
         colorx = colorx.replace(/^(rgb)/, 'rgba')
         colorx = colorx.replace(/\)$/, `,${alphax})`)
       }
-  
     }
     return colorx
   },
@@ -57,7 +56,7 @@ export default {
       }
       colorx = colorSplit
     }
-  
+
     const vscolors = ['primary', 'success', 'danger', 'warning', 'dark']
     if (colorx) {
       if (/[#()]/.test(colorx)) {
@@ -77,8 +76,12 @@ export default {
       const rgbx = this.hexToRgb(elementx)
       c = `rgb(${rgbx.r},${rgbx.g},${rgbx.b})`
     }
-    const rgb = c.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',')
-    const yiq = ((rgb[0] * 299) + (rgb[1] * 587) + (rgb[2] * 114)) / 1000
+    const rgb = c
+      .replace(/^(rgb|rgba)\(/, '')
+      .replace(/\)$/, '')
+      .replace(/\s/g, '')
+      .split(',')
+    const yiq = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000
     if (yiq >= 128) {
       return true
     } else {
@@ -93,16 +96,18 @@ export default {
   hexToRgb(hex) {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
-    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
       return r + r + g + g + b + b
     })
-  
+
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        }
+      : null
   },
   getVariable(styles, propertyName) {
     return String(styles.getPropertyValue(propertyName)).trim()
@@ -110,10 +115,10 @@ export default {
   changeColor(colorInicial) {
     const colores = ['primary', 'success', 'danger', 'warning', 'dark']
     let colorx
-  
+
     if (colores.includes(colorInicial)) {
       const style = getComputedStyle(document.documentElement)
-      colorx = this.getVariable(style, `--vs-${  colorInicial}`)
+      colorx = this.getVariable(style, `--vs-${colorInicial}`)
     } else if (/[rgb()]/g.test(colorInicial)) {
       colorx = colorInicial.replace(/[rgb()]/g, '')
     } else if (/[#]/g.test(colorInicial)) {

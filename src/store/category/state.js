@@ -21,5 +21,5 @@ export default {
   /* -------------------------------------------------------------------------- */
   subCategoryRecords: [],
   subtotal: 0,
-  subFilteredCount: 0,
+  subFilteredCount: 0
 }

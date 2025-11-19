@@ -98,7 +98,7 @@ const router = new Router({
         ...LabourPriceRoute,
         // Role route
         ...roleRoute,
-        ...DiamondClarityRoute,
+        ...DiamondClarityRoute
       ]
     },
 

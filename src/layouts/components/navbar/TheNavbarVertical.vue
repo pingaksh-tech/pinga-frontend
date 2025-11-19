@@ -8,14 +8,13 @@
   Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
-
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper" :class="classObj">
       <vs-navbar class="vx-navbar navbar-custom navbar-skelton" :color="navbarColorLocal" :class="textColor">
-       <div v-if="$route.meta.breadcrumb || $route.meta.pageTitle" class="flex items-center">
+        <div v-if="$route.meta.breadcrumb || $route.meta.pageTitle" class="flex items-center">
           <h2>{{ routeTitle }}</h2>
-       </div>
+        </div>
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar" />
 
@@ -33,7 +32,6 @@
   </div>
 </template>
 
-
 <script>
 import Bookmarks from './components/Bookmarks.vue'
 import SearchBar from './components/SearchBar.vue'
@@ -41,7 +39,7 @@ import NotificationDropDown from './components/NotificationDropDown.vue'
 import ProfileDropDown from './components/ProfileDropDown.vue'
 
 export default {
- data() {
+  data() {
     return {
       routeTitle: this.$route.meta.pageTitle
     }
@@ -89,8 +87,7 @@ export default {
   watch: {
     $route() {
       this.routeTitle = this.$route.meta.pageTitle
-    },
-   }
+    }
+  }
 }
 </script>
-

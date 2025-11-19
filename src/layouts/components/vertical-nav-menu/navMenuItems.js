@@ -199,5 +199,12 @@ export default [
     slug: 'RolesList',
     icon: 'UserCheckIcon',
     permissions: ['roles_list']
+  },
+  {
+    url: '/last-login-list',
+    name: 'Last Login',
+    slug: 'LastLoginList',
+    icon: 'UserCheckIcon',
+    permissions: ['last_login_list']
   }
 ]

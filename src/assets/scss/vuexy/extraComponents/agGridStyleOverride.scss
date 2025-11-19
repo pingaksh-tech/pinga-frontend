@@ -6,7 +6,7 @@
     Author: Pingaksh
     Author URL: http://www.themeforest.net/user/Pingaksh
 ==========================================================================================*/
-$icons-path: "~ag-grid-community/src/styles/ag-theme-material/icons/" !default;
+$icons-path: '~ag-grid-community/src/styles/ag-theme-material/icons/' !default;
 
 // $ag-icon-checkbox-unchecked: url('../../../images/ag-grid/checkbox-unchecked.svg');
 // $ag-icon-checkbox-checked: url('../../../images/ag-grid/checkbox-checked.svg');
@@ -22,15 +22,14 @@ $font-weight: inherit;
 $secondary-font-family: inherit;
 $secondary-font-size: inherit;
 $secondary-font-weight: 600;
-$primary-color: #7367F0;
+$primary-color: #7367f0;
 
-@import "~ag-grid-community/src/styles/ag-grid.scss";
-@import "~ag-grid-community/src/styles/ag-theme-material/sass/ag-theme-material.scss";
+@import '~ag-grid-community/src/styles/ag-grid.scss';
+@import '~ag-grid-community/src/styles/ag-theme-material/sass/ag-theme-material.scss';
 
-@import "../_variables.scss";
+@import '../_variables.scss';
 
 .ag-grid-table {
-
   color: inherit !important;
 
   height: calc(var(--vh, 1vh) * 100 - 30rem);
@@ -51,7 +50,7 @@ $primary-color: #7367F0;
     padding: 0.3rem;
     background: transparent;
     border-radius: 5px;
-    border: 1px solid rgba(0, 0, 0, .2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   // style input of column header filter input
@@ -101,14 +100,15 @@ $primary-color: #7367F0;
   }
 
   // remove horizontal scroolbar from pinned columns
-  .ag-horizontal-left-spacer, .ag-horizontal-right-spacer {
+  .ag-horizontal-left-spacer,
+  .ag-horizontal-right-spacer {
     overflow-x: auto;
   }
 
   .ag-icon-checkbox-checked,
   .ag-icon-checkbox-indeterminate {
     font-size: 22px;
-    color: rgba(var(--vs-primary),1) !important;
+    color: rgba(var(--vs-primary), 1) !important;
   }
 
   .ag-icon-checkbox-unchecked {
@@ -116,20 +116,20 @@ $primary-color: #7367F0;
     font-size: 22px;
   }
 
-    ::-webkit-scrollbar {
-     width: 10px;
-     height: 10px;
-    }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
 
-    ::-webkit-scrollbar-thumb {
-     background: $grey-light;
-     border-radius: 20px;
-    }
+  ::-webkit-scrollbar-thumb {
+    background: $grey-light;
+    border-radius: 20px;
+  }
 
-    ::-webkit-scrollbar-track {
-     background: $theme-background;
-     border-radius: 20px;
-    }
+  ::-webkit-scrollbar-track {
+    background: $theme-background;
+    border-radius: 20px;
+  }
 }
 
 // Can not use vuexy admin variables
@@ -196,18 +196,18 @@ $primary-color: #7367F0;
     }
 
     ::-webkit-scrollbar {
-     width: 10px;
-     height: 10px;
+      width: 10px;
+      height: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-     background: $primary;
-     border-radius: 20px;
+      background: $primary;
+      border-radius: 20px;
     }
 
     ::-webkit-scrollbar-track {
-     background: $theme-light-dark-bg;
-     border-radius: 20px;
+      background: $theme-light-dark-bg;
+      border-radius: 20px;
     }
   }
 }

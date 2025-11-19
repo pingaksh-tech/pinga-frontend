@@ -1,4 +1,4 @@
-import { getMessageFromError } from "../utils/functions"
+import { getMessageFromError } from '../utils/functions'
 
 export default {
   /* -------------------------------------------------------------------------- */
@@ -136,7 +136,7 @@ export default {
   /* -------------------------------------------------------------------------- */
   /*                             Update Retailer Record                            */
   /* -------------------------------------------------------------------------- */
-  async updateRetailerRecord({ commit }, {RetailerId, data} ) {
+  async updateRetailerRecord({ commit }, { RetailerId, data }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true

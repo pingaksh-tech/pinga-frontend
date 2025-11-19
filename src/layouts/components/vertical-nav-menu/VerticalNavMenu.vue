@@ -8,7 +8,6 @@
   Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
-
 <template>
   <div class="parentx">
     <vs-sidebar
@@ -101,7 +100,6 @@
     <!-- /Swipe Gesture -->
   </div>
 </template>
-
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
@@ -363,7 +361,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss">
 @import '@/assets/scss/vuexy/components/verticalNavMenu.scss';

@@ -69,7 +69,7 @@
           <vs-th sort-key="category.price_per_gram">Price Per Gram</vs-th>
           <vs-th sort-key="category.name">Metal Carat</vs-th>
           <vs-th sort-key="category.name">Metal Color</vs-th>
-          <vs-th v-if="checkPermissionSlug(['metals_edit','metals_delete'])">Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['metals_edit', 'metals_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -87,7 +87,7 @@
                 <p class="fn12 p-2 font-semibold capitalize">{{ tr.metal_color }}</p>
               </vs-chip>
             </vs-td>
-            <vs-td v-if="checkPermissionSlug(['metals_edit','metals_delete'])">
+            <vs-td v-if="checkPermissionSlug(['metals_edit', 'metals_delete'])">
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['metals_edit'])">
                   <feather-icon @click="toggleEditMetalModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />

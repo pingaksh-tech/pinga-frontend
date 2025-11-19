@@ -62,17 +62,15 @@
                         <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
                       </div>
                     </div>
-                    <div class="flex justify-between items-center gap-2 w-full" >
-                      <vs-button class="mt-3 items-center vs-con-loading__container" id="login-user" @click="save_changes" v-on:keyup.enter="save_changes" :disabled="!validateForm"
-                        >Login</vs-button
-                      >
+                    <div class="flex justify-between items-center gap-2 w-full">
+                      <vs-button class="mt-3 items-center vs-con-loading__container" id="login-user" @click="save_changes" v-on:keyup.enter="save_changes" :disabled="!validateForm">Login</vs-button>
                       <router-link to="/forget-password">Forgot Password?</router-link>
                     </div>
                   </div>
                 </form>
                 <div v-else>
-                 <otp-verify :email="email" :otpPage="otpPage" @back-to-login="otpPage = false" />
-               </div>
+                  <otp-verify :email="email" :otpPage="otpPage" @back-to-login="otpPage = false" />
+                </div>
               </div>
             </div>
           </div>
@@ -87,7 +85,7 @@ import { mapActions } from 'vuex'
 import OtpVerify from './OtpVerify.vue' // Adjust path as needed
 
 export default {
- components: {
+  components: {
     OtpVerify
   },
 
@@ -422,7 +420,7 @@ export default {
         //   name: 'home'
         // })
         // if (success) {
-          this.otpPage = true // Show OTP verification component
+        this.otpPage = true // Show OTP verification component
         // } else {
         //   this.$router.push({ name: 'home' })
         // }
@@ -456,7 +454,8 @@ export default {
   },
 
   mounted() {
-    var random = this.motivationNotes.sort(func)
+    // eslint-disable-next-line no-use-before-define
+    const random = this.motivationNotes.sort(func)
     this.today_note = random[0].text
     this.author = random[0].author
     function func(a, b) {

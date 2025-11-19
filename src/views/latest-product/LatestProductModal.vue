@@ -1,30 +1,44 @@
 <template>
   <div>
     <!-- latest product popup -->
-    <vs-popup :title="`${action_name} ${module_name}`" button-accept="false" button-cancel="false"
-      :active.sync="isActive">
+    <vs-popup :title="`${action_name} ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
           <div class="vx-col w-full px-8">
             <!-- Product name -->
             <div class="vx-row mb-2">
-              <vs-input icon="icon icon-package" icon-pack="feather" class="w-full" v-validate="'required|min:4'"
-                v-model="form.product_name" label="Product Name *" name="product_name" data-vv-as="Product Name"
-                id="Product Name" />
-              <span class="text-danger text-sm" v-show="errors.has('product_name')">{{ errors.first('product_name')
-                }}</span>
+              <vs-input
+                icon="icon icon-package"
+                icon-pack="feather"
+                class="w-full"
+                v-validate="'required|min:4'"
+                v-model="form.product_name"
+                label="Product Name *"
+                name="product_name"
+                data-vv-as="Product Name"
+                id="Product Name"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('product_name')">{{ errors.first('product_name') }}</span>
             </div>
             <!-- Category -->
             <div class="vx-row mb-2">
               <label class="vs-input--label">Category *</label>
-              <select-2 class="w-full category-input" name="Category"  placeholder="Select Category"
-                :value="form.categoryId" @input="(item) => (form.categoryId = item && item.value)" autocomplete
-                :ssr="true" v-validate="'required'" action="common/getCategories" />
+              <select-2
+                class="w-full category-input"
+                name="Category"
+                placeholder="Select Category"
+                :value="form.categoryId"
+                @input="(item) => (form.categoryId = item && item.value)"
+                autocomplete
+                :ssr="true"
+                v-validate="'required'"
+                action="common/getCategories"
+              />
               <span class="text-danger text-sm" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
             </div>
             <!-- Product Tag -->
 
-           <div class="vx-row mb-2">
+            <div class="vx-row mb-2">
               <label class="vs-input--label">Inventory *</label>
               <custom-inventory-select-2
                 class="w-full category-input"
@@ -46,11 +60,18 @@
           </div>
           <div class="vx-col w-full cursor-pointer">
             <label class="vs-input--label block">Product Image *</label>
-            <input type="file" class="border p-2 rounded w-full" name="product_image" ref="files"
-              accept=".jpg, .png , .jpeg,.pdf" @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);"
-              v-validate="productImagevalidationRule" data-vv-as="Product Image" />
-            <span class="text-danger text-sm" v-show="errors.has('product_image')">{{ errors.first('product_image')
-              }}</span>
+            <input
+              type="file"
+              class="border p-2 rounded w-full"
+              name="product_image"
+              ref="files"
+              accept=".jpg, .png , .jpeg,.pdf"
+              @change="handleFileUpload"
+              style="border: 1px solid rgba(0, 0, 0, 0.2)"
+              v-validate="productImagevalidationRule"
+              data-vv-as="Product Image"
+            />
+            <span class="text-danger text-sm" v-show="errors.has('product_image')">{{ errors.first('product_image') }}</span>
             <div class="mt-5">
               <div class="relative" v-if="preview_image">
                 <div class="h-64 w-64 mt-5 rounded-lg overflow-hidden">
@@ -65,8 +86,7 @@
         <div class="vx-row pt-5 px-5 text-center">
           <div class="vx-col w-full">
             <div class="items-center">
-              <vs-button class="mr-2 vs-con-loading__container" id="create-latest-product" @click="save_changes"
-                :disabled="!validateForm">{{ action_name }}</vs-button>
+              <vs-button class="mr-2 vs-con-loading__container" id="create-latest-product" @click="save_changes" :disabled="!validateForm">{{ action_name }}</vs-button>
               <vs-button color="danger" class="text-left" @click="isActive = false">Cancel</vs-button>
             </div>
           </div>
@@ -115,10 +135,10 @@ export default {
   /** Mounted */
   mounted() {
     if (this.data) {
-      this.form.categoryId = this.data.category ? this.data.category._id : null;
-      this.form.product_name = this.data.product_name ? this.data.product_name : null;
-      this.form.inventory_ids = this.data.inventory_ids ? (Array.isArray(this.data.inventory_ids) ? this.data.inventory_ids : [this.data.inventory_ids]) : [];
-      this.preview_image = this.data.product_image ? this.data.product_image : null;
+      this.form.categoryId = this.data.category ? this.data.category._id : null
+      this.form.product_name = this.data.product_name ? this.data.product_name : null
+      this.form.inventory_ids = this.data.inventory_ids ? (Array.isArray(this.data.inventory_ids) ? this.data.inventory_ids : [this.data.inventory_ids]) : []
+      this.preview_image = this.data.product_image ? this.data.product_image : null
     }
   },
 
@@ -137,7 +157,7 @@ export default {
       }
     },
     productImagevalidationRule() {
-      return !this.data ? 'required' : '';
+      return !this.data ? 'required' : ''
     }
   },
 
@@ -152,27 +172,25 @@ export default {
         return false
       }
       try {
-        const data = new FormData();
+        const data = new FormData()
         if (this.form.product_image) {
-          data.append("product_image", this.form.product_image);
+          data.append('product_image', this.form.product_image)
         }
-        data.append("category_id", this.form.categoryId);
-        data.append("product_name", this.form.product_name);
-        const inventoryIds = Array.isArray(this.form.inventory_ids) ? 
-      this.form.inventory_ids : 
-      [this.form.inventory_ids];
-    
-    inventoryIds.forEach((value) => {
-      data.append("inventory_ids[]", value);
-    });
-        let result;
+        data.append('category_id', this.form.categoryId)
+        data.append('product_name', this.form.product_name)
+        const inventoryIds = Array.isArray(this.form.inventory_ids) ? this.form.inventory_ids : [this.form.inventory_ids]
+
+        inventoryIds.forEach((value) => {
+          data.append('inventory_ids[]', value)
+        })
+        let result
         if (!this.data) {
           result = await this.createLatestProduct(data)
         } else {
           result = await this.updateLatestProduct({
             latestProductId: this.data._id,
             data: data
-          });
+          })
         }
         const message = result.message
         this.$emit('update-data', true)
@@ -219,13 +237,12 @@ export default {
 
       // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
       if (this.form.product_image && this.form.product_image.src) {
-        URL.revokeObjectURL(this.form.product_image.src);
+        URL.revokeObjectURL(this.form.product_image.src)
       }
       // 2. Create the image link to the file to optimize performance:
-      this.preview_image = URL.createObjectURL(file);
+      this.preview_image = URL.createObjectURL(file)
       this.form.product_image = file
-
-    },
+    }
   },
 
   /** watch */

@@ -6,17 +6,23 @@
         <div class="flex gap-2">
           <label class="vs-input--label block">Banner Image (Recommended banner size: 16:7)</label>
         </div>
-        <input type="file" class="border p-2 rounded w-full" name="Image" ref="files" accept=".jpg, .png , .jpeg"
-          @change="handleFileUpload" style="border: 1px solid rgba(0, 0, 0, 0.2);" v-validate="'required'" />
-        <span class="text-danger text-sm" v-show="errors.has('profile_banner')">{{ errors.first('profile_banner')
-          }}</span>
+        <input
+          type="file"
+          class="border p-2 rounded w-full"
+          name="Image"
+          ref="files"
+          accept=".jpg, .png , .jpeg"
+          @change="handleFileUpload"
+          style="border: 1px solid rgba(0, 0, 0, 0.2)"
+          v-validate="'required'"
+        />
+        <span class="text-danger text-sm" v-show="errors.has('profile_banner')">{{ errors.first('profile_banner') }}</span>
         <div v-if="preview_image">
           <div class="aspect-[16/7] w-full mt-5 rounded-lg overflow-hidden bg-gray-100">
             <img :src="s3Path + preview_image" alt="Image Preview" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
-
     </form>
   </div>
 </template>
@@ -38,7 +44,7 @@ export default {
 
   /** computed */
   computed: {
-    ...mapState('setting', ['s3Path']),
+    ...mapState('setting', ['s3Path'])
   },
 
   /** Mounted */
@@ -46,7 +52,7 @@ export default {
     try {
       const data = await this.getSetting({
         setting_name: this.type
-      });
+      })
       this.preview_image = data.data.setting_value
     } catch ({ message }) {
       this.$vs.notify({
@@ -64,9 +70,8 @@ export default {
   methods: {
     ...mapActions('setting', {
       updateProfileBanner: 'updateProfileBanner',
-      getSetting: 'getSetting',
+      getSetting: 'getSetting'
     }),
-
 
     /** file upload  */
     async handleFileUpload(e) {
@@ -86,12 +91,11 @@ export default {
         return
       }
 
-
       try {
-        const formData = new FormData();
-        formData.append("profile_banner", file);
+        const formData = new FormData()
+        formData.append('profile_banner', file)
 
-        const { data, message } = await this.updateProfileBanner(formData);
+        const { data, message } = await this.updateProfileBanner(formData)
 
         this.preview_image = data.setting_value
 
@@ -104,7 +108,6 @@ export default {
           time: 5000,
           color: 'success'
         })
-
       } catch ({ message }) {
         this.$vs.notify({
           title: 'Error',
@@ -116,10 +119,7 @@ export default {
           color: 'primary'
         })
       }
-
-    },
-
-  },
-
+    }
+  }
 }
 </script>

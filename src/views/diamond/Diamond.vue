@@ -2,16 +2,26 @@
   <div>
     <!-- Daimond list -->
     <div class="vx-card p-6">
-      <vs-table id="diamond-list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="DiamondRecords">
+      <vs-table
+        id="diamond-list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="DiamondRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) || 0 }}
                       -
@@ -37,8 +47,10 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div @click="toggleAddDiamondModal"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
+            <div
+              @click="toggleAddDiamondModal"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
@@ -78,12 +90,10 @@
             <vs-td>
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`">
-                  <feather-icon @click="toggleEditDiamondModal(tr)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="toggleEditDiamondModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`">
-                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -91,17 +101,14 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8" @onchange="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add Diamond modal -->
-    <add-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isAddDiamondModalMounted"
-      :showModal.sync="isAddDiamondModalShow" />
+    <add-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isAddDiamondModalMounted" :showModal.sync="isAddDiamondModalShow" />
 
     <!-- Edit Diamond modal -->
-    <Edit-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isEditDiamondModalMounted"
-      :data="selectedRecord" :showModal.sync="isEditDiamondModalShow" />
+    <Edit-Diamond-modal :module_name="module_name" @update-data="getData" v-if="isEditDiamondModalMounted" :data="selectedRecord" :showModal.sync="isEditDiamondModalShow" />
   </div>
 </template>
 

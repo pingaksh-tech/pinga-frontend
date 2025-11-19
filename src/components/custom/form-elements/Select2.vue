@@ -17,7 +17,7 @@
       @search-input="handleSearchInput"
     >
       <vs-select-item v-if="newLabel" :label="newLabel" :text="newLabel" value="newItemAddEvent" class="select-head-btn" />
-      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label" :value="item[val] || item['value']"  :label="item[label] || item.label"/>
+      <vs-select-item :key="i" v-for="(item, i) in vOptions" :text="item[label] || item.label" :value="item[val] || item['value']" :label="item[label] || item.label" />
     </VsSelect>
   </div>
 </template>

@@ -1,4 +1,4 @@
-import { MetalCaratOptions, MetalColorOptions } from "../../utils/predefineTypes.js/constant";
+import { MetalCaratOptions, MetalColorOptions } from '../../utils/predefineTypes.js/constant'
 
 export default {
   /* -------------------------------------------------------------------------- */

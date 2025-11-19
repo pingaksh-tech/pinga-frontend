@@ -24,28 +24,11 @@
         :disabled="loader || disabled"
       />
       <div v-if="loader" class="absolute rounded-full input-loader"></div>
-      <vs-icon
-        v-if="value && !disabled && clearable"
-        :icon-pack="iconPack"
-        :icon="iconClear"
-        class="clear_icon vs-select--icon cursor-pointer pointer-events-auto"
-        @click="clearValue"
-      ></vs-icon>
-      <vs-icon
-        v-if="!activeBtnClear"
-        :icon-pack="iconPack"
-        :icon="icon"
-        class="icon-select vs-select--icon"
-      ></vs-icon>
+      <vs-icon v-if="value && !disabled && clearable" :icon-pack="iconPack" :icon="iconClear" class="clear_icon vs-select--icon cursor-pointer pointer-events-auto" @click="clearValue"></vs-icon>
+      <vs-icon v-if="!activeBtnClear" :icon-pack="iconPack" :icon="icon" class="icon-select vs-select--icon"></vs-icon>
       <transition name="fadeselect">
-        <div
-          v-show="active"
-          ref="vsSelectOptions"
-          :style="cords"
-          :class="[`vs-select-${color}`, { scrollx: scrollx }]"
-          class="vs-select--options"
-        >
-          <div v-if="typeable" class="search-container" style="padding: 8px;">
+        <div v-show="active" ref="vsSelectOptions" :style="cords" :class="[`vs-select-${color}`, { scrollx: scrollx }]" class="vs-select--options">
+          <div v-if="typeable" class="search-container" style="padding: 8px">
             <input
               ref="searchInput"
               type="text"
@@ -53,7 +36,7 @@
               placeholder="Search..."
               v-model="searchValue"
               @keyup="handleSearchInput"
-              style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+              style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px"
             />
           </div>
           <ul ref="ulx" id="optionContainer">

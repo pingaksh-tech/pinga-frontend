@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import axios from '@/axios'
 import router from '../../router'
 
@@ -21,7 +22,7 @@ export const getMessageFromError = (err) => {
         const data = response.data.data
 
         if (response.status === 200) {
-          console.log(response.status,'Token Refresh and set completed response.status');
+          console.log(response.status, 'Token Refresh and set completed response.status')
           // Update tokens
           localStorage.setItem('accessToken', data.access_token)
           localStorage.setItem('refreshToken', data.refresh_token)
@@ -43,12 +44,10 @@ export const getMessageFromError = (err) => {
         localStorage.removeItem('refreshToken')
         router.push('/pages/login')
       })
-  } else {
-    if (err && err.response && err.response.data && err.response.data.status === 401) {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      router.push('/pages/login')
-    }
+  } else if (err && err.response && err.response.data && err.response.data.status === 401) {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    router.push('/pages/login')
   }
 
   // Determine error message to return

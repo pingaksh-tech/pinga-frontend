@@ -118,13 +118,13 @@ export default {
       })
     }
   },
-  async updateDiamondClarityStatus({ commit }, { id}) {
+  async updateDiamondClarityStatus({ commit }, { id }) {
     commit('SET_STATE', {
       action: 'loading',
       data: true
     })
     try {
-      const res = await this.$http.put(`/diamond-clarity/${id}/status`,)
+      const res = await this.$http.put(`/diamond-clarity/${id}/status`)
       commit('SET_STATE', {
         action: 'loading',
         data: false

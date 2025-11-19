@@ -13,27 +13,27 @@
 
 /*! rtl:begin:ignore */
 .v-step {
-  &[x-placement^=bottom] {
+  &[x-placement^='bottom'] {
     .v-step__arrow {
       border-left-color: transparent !important;
       border-right-color: transparent !important;
     }
   }
-  &[x-placement^=left] {
+  &[x-placement^='left'] {
     .v-step__arrow {
       border-bottom-color: transparent !important;
       border-right-color: transparent !important;
       border-top-color: transparent !important;
     }
   }
-  &[x-placement^=top] {
+  &[x-placement^='top'] {
     .v-step__arrow {
       border-bottom-color: transparent !important;
       border-right-color: transparent !important;
       border-left-color: transparent !important;
     }
   }
-  &[x-placement^=right] {
+  &[x-placement^='right'] {
     .v-step__arrow {
       border-bottom-color: transparent !important;
       border-top-color: transparent !important;
@@ -42,12 +42,9 @@
   }
 }
 
-
-
 // //////////////////////////////////////////
 // Carousel
 // //////////////////////////////////////////
-
 
 .swiper-container-rtl {
   .swiper-button-prev {
@@ -59,8 +56,6 @@
     right: auto !important;
   }
 }
-
-
 
 // //////////////////////////////////////////
 // video.js

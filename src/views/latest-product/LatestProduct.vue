@@ -2,16 +2,26 @@
   <div>
     <!-- Latest Product list -->
     <div class="vx-card p-6">
-      <vs-table id="product_list" class="vs-con-loading__container" stripe :sst="true" maxHeight="800px"
-        @search="updateSearchQuery" @change-page="handleChangePage" @sort="handleSort" :total="FilteredCount"
-        :max-items="length" search :data="LatestProductRecords">
+      <vs-table
+        id="product_list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="LatestProductRecords"
+      >
         <template slot="header">
           <div class="mb-2 flex items-center">
             <div class="flex flex-wrap justify-between items-center">
               <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
                 <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
-                  <div
-                    class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
                     <span class="mr-2">
                       {{ page * length - (length - (FilteredCount && 1)) }}
                       -
@@ -37,9 +47,11 @@
                 </vs-dropdown>
               </div>
             </div>
-            <div @click="toggleAddLatestProductModal"
+            <div
+              @click="toggleAddLatestProductModal"
               v-if="checkPermissionSlug(['latest_Products_create'])"
-              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary">
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
               <span class="ml-2 text-base text-primary">Add {{ module_name }}</span>
             </div>
@@ -51,7 +63,7 @@
           <vs-th>Product Image</vs-th>
           <vs-th sort-key="product_name">Product Name</vs-th>
           <vs-th sort-key="category.name">Category Name</vs-th>
-          <vs-th v-if="checkPermissionSlug(['latest_Products_edit','latest_Products_delete'])">Action</vs-th>
+          <vs-th v-if="checkPermissionSlug(['latest_Products_edit', 'latest_Products_delete'])">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }" ref="tableBody">
@@ -60,19 +72,17 @@
               {{ page * length - (length - i - 1) }}
             </vs-td>
             <vs-td>
-              <img :src="tr.product_image" height="140" width="160" alt="" srcset="">
+              <img :src="tr.product_image" height="140" width="160" alt="" srcset="" />
             </vs-td>
             <vs-td class="text-left">{{ tr.product_name || '-' }} </vs-td>
-            <vs-td class="text-left">{{ tr.category && tr.category.name || '-' }} </vs-td>
-            <vs-td v-if="checkPermissionSlug(['latest_Products_edit','latest_Products_delete'])">
+            <vs-td class="text-left">{{ (tr.category && tr.category.name) || '-' }} </vs-td>
+            <vs-td v-if="checkPermissionSlug(['latest_Products_edit', 'latest_Products_delete'])">
               <div class="inline-flex">
                 <vx-tooltip :text="`Edit ${module_name}`" v-if="checkPermissionSlug(['latest_Products_edit'])">
-                  <feather-icon @click.stop="toggleEditLatestProductModal(tr)" icon="EditIcon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click.stop="toggleEditLatestProductModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
                 <vx-tooltip :text="`Delete ${module_name}`" v-if="checkPermissionSlug(['latest_Products_delete'])">
-                  <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon"
-                    svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                  <feather-icon @click.stop="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
                 </vx-tooltip>
               </div>
             </vs-td>
@@ -80,17 +90,21 @@
         </template>
       </vs-table>
       <!-- Custom Pagination -->
-      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5"
-        class="mt-8" @onchange="handleChangePage"></vs-pagination>
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
     </div>
 
     <!-- Add Latest Product modal -->
-    <latest-product-modal :module_name="module_name" @update-data="getData" v-if="isAddLatestProductModalMounted"
-      :showModal.sync="isAddLatestProductModalShow" :action_name="'Add'" />
+    <latest-product-modal :module_name="module_name" @update-data="getData" v-if="isAddLatestProductModalMounted" :showModal.sync="isAddLatestProductModalShow" :action_name="'Add'" />
 
     <!-- Edit Latest Product modal -->
-    <latest-product-modal :module_name="module_name" @update-data="getData" v-if="isEditLatestProductModalMounted"
-      :showModal.sync="isEditLatestProductModalShow" :data="selectedRecord" :action_name="'Update'" />
+    <latest-product-modal
+      :module_name="module_name"
+      @update-data="getData"
+      v-if="isEditLatestProductModalMounted"
+      :showModal.sync="isEditLatestProductModalShow"
+      :data="selectedRecord"
+      :action_name="'Update'"
+    />
   </div>
 </template>
 
@@ -103,7 +117,7 @@ export default {
 
   /** Components */
   components: {
-    LatestProductModal,
+    LatestProductModal
   },
 
   /** Data */

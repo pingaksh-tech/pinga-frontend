@@ -7,7 +7,6 @@
     Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
-
 <template>
   <div class="layout--main" :class="[layoutTypeClass, navbarClasses, footerClasses, { 'no-scroll': isAppPage }]">
     <v-nav-menu :navMenuItems="navMenuItems" title="Vuexy" parent=".layout--main" />
@@ -59,7 +58,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import BackToTop from 'vue-backtotop'
@@ -174,4 +172,3 @@ export default {
   }
 }
 </script>
-

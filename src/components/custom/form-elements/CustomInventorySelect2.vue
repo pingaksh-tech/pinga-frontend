@@ -15,13 +15,7 @@
       :multiple="multiple"
       :module_type="'inventory'"
     >
-      <vs-select-item
-        v-if="newLabel"
-        :label="newLabel"
-        :text="newLabel"
-        value="newItemAddEvent"
-        class="select-head-btn"
-      />
+      <vs-select-item v-if="newLabel" :label="newLabel" :text="newLabel" value="newItemAddEvent" class="select-head-btn" />
       <vs-select-item
         v-for="(item, i) in vOptions"
         :key="i"
@@ -30,9 +24,7 @@
         :value="item[val] || item['value']"
         class="select-item-with-avatar"
       />
-      <div v-if="nodata && vOptions.length === 0" class="no-data-message" style="padding: 10px; text-align: center; color: #666;">
-        No results found
-      </div>
+      <div v-if="nodata && vOptions.length === 0" class="no-data-message" style="padding: 10px; text-align: center; color: #666">No results found</div>
     </VsSelect>
   </div>
 </template>
@@ -86,9 +78,7 @@ export default {
     inputVal: {
       get() {
         if (this.multiple) {
-          return this.vOptions
-            .filter((value) => (this.value || []).includes(value[this.val] || value['value']))
-            .map((item) => item[this.val] || item['value'])
+          return this.vOptions.filter((value) => (this.value || []).includes(value[this.val] || value['value'])).map((item) => item[this.val] || item['value'])
         } else {
           const option = this.vOptions.find((item) => (item[this.val] || item['value']) === this.value)
           return option ? `${option.label} - ${option.category || ''}` : ''
@@ -108,9 +98,7 @@ export default {
     vOptions() {
       let options = [...this.extra, ...this.options, ...this.sso]
       if (this.autocomplete && this.searchFromStart && this.search) {
-        options = options.filter((e) =>
-          (e.label || '').toLowerCase().startsWith(this.search.toLowerCase())
-        )
+        options = options.filter((e) => (e.label || '').toLowerCase().startsWith(this.search.toLowerCase()))
       }
       if (this.value) {
         const tIndex = options.findIndex((x) => (x[this.val] || x['value']) === this.value)
@@ -247,19 +235,29 @@ export default {
 </script>
 
 <style lang="scss">
-.custom__select { position: relative; }
+.custom__select {
+  position: relative;
+}
 .select-item-with-avatar {
   padding: 10px 15px;
   transition: background-color 0.2s ease;
-  &:hover { background-color: #f8f9fa; }
-  .vs-select--item { border: none !important; padding: 0 !important; }
+  &:hover {
+    background-color: #f8f9fa;
+  }
+  .vs-select--item {
+    border: none !important;
+    padding: 0 !important;
+  }
 }
 .select-head-btn {
   border-radius: 0.3rem;
   background-color: #0096dc;
   button {
     padding-left: 0.6rem;
-    &:hover { border-radius: 0.3rem; background-color: #0096dc; }
+    &:hover {
+      border-radius: 0.3rem;
+      background-color: #0096dc;
+    }
     &::before {
       content: '+';
       color: #fff;
@@ -267,7 +265,9 @@ export default {
       line-height: 0.8;
       margin-right: 0.4rem;
     }
-    span { color: #fff; }
+    span {
+      color: #fff;
+    }
   }
 }
 .spinner_circle {
@@ -278,8 +278,14 @@ export default {
   animation: animate 1s infinite;
   transition: 0.5s;
   @keyframes animate {
-    0% { opacity: 0.1; transform: scale(0.2); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+      opacity: 0.1;
+      transform: scale(0.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
 .no-data-message {

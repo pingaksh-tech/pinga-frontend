@@ -1,4 +1,4 @@
-import { create } from "core-js/core/object";
+import { create } from 'core-js/core/object'
 
 export default {
   /* -------------------------------------------------------------------------- */
@@ -10,5 +10,5 @@ export default {
   total: 0,
   FilteredCount: 0,
   createLoading: false,
-  updateLoading: false,
+  updateLoading: false
 }

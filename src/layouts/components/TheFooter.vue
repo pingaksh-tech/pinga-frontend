@@ -8,16 +8,15 @@
     Author URL: http://www.themeforest.net/user/Pingaksh
 ========================================================================================== -->
 
-
 <template functional>
-    <footer class="the-footer flex-wrap justify-between" :class="classes">
-        <p>
-          <span>COPYRIGHT &copy;</span>
-          <span>{{ new Date().getFullYear() }} </span>
-          <a rel="nofollow">Pingaksh</a>
-          <span class="hidden sm:inline-block">, All rights Reserved</span>
-        </p>
-    </footer>
+  <footer class="the-footer flex-wrap justify-between" :class="classes">
+    <p>
+      <span>COPYRIGHT &copy;</span>
+      <span>{{ new Date().getFullYear() }} </span>
+      <a rel="nofollow">Pingaksh</a>
+      <span class="hidden sm:inline-block">, All rights Reserved</span>
+    </p>
+  </footer>
 </template>
 
 <script>

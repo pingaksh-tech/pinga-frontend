@@ -23,12 +23,17 @@
                   <p>Please enter your email address and we'll send you instructions on how to reset your password.</p>
                 </div>
 
-                <div class="mb-8" >
+                <div class="mb-8">
                   <vs-input v-validate="'required|email'" name="email" type="email" label-placeholder="Email" v-model="email" class="w-full" />
                   <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
                 </div>
                 <vs-button type="border" to="/pages/login" class="px-4 w-full md:w-auto">Back To Login</vs-button>
-                <vs-button id="forget-password" @click="save_changes" v-on:keyup.enter="save_changes" :disabled="!validateForm" class="float-right vs-con-loading__container px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0"
+                <vs-button
+                  id="forget-password"
+                  @click="save_changes"
+                  v-on:keyup.enter="save_changes"
+                  :disabled="!validateForm"
+                  class="float-right vs-con-loading__container px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0"
                   >Recover Password</vs-button
                 >
               </div>
@@ -65,7 +70,7 @@ export default {
         return false
       }
       try {
-        const { message } = await this.forgetPassword({email: this.email})
+        const { message } = await this.forgetPassword({ email: this.email })
         this.$vs.notify({
           title: 'Success',
           text: message,
@@ -90,8 +95,8 @@ export default {
     }
   },
 
-   /** watch */
-   watch: {
+  /** watch */
+  watch: {
     loading() {
       if (this.loading) {
         this.$vs.loading({

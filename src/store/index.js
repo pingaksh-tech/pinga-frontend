@@ -39,7 +39,7 @@ import order from './order'
 /** pdf-upload API Store */
 import pdfUpload from './pdf-upload'
 /** user API Store */
-// diamond clarity api store 
+// diamond clarity api store
 import diamondClarity from './diamond-clarity'
 import user from './user'
 import role from '@/store/role'
