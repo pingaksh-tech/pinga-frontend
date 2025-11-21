@@ -4,6 +4,63 @@
     <vs-popup :title="`Add ${module_name}`" button-accept="false" button-cancel="false" :active.sync="isActive">
       <form method="POST" @submit.prevent="save_changes">
         <div class="vx-row">
+          <!-- Role -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Role *</label>
+              <select-2
+                class="w-full role-input"
+                name="Role"
+                placeholder="Select Role"
+                :value="form.role_id"
+                @input="handleRoleChange"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                action="common/getRoles"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
+            </div>
+          </div>
+          <!-- Retailer (shown only when role is Retailer) -->
+          <div class="vx-col w-1/2 px-8" v-if="isRetailerRole">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Retailer *</label>
+              <select-2
+                class="w-full category-input"
+                name="Retailer"
+                placeholder="Select Retailer"
+                :value="form.retailer"
+                @input="(item) => (form.retailer = item && item.value ? item.value : [])"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                v-validate="'required'"
+                action="common/getRetailer"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
+            </div>
+          </div>
+          <!-- Manager -->
+          <div class="vx-col w-1/2 px-8">
+            <div class="vx-row mb-2">
+              <label class="vs-input--label">Manager *</label>
+              <select-2
+                class="w-full role-input"
+                name="Manager"
+                placeholder="Select Manager"
+                :value="form.manager"
+                @input="(item) => (form.manager = item && item.value)"
+                autocomplete
+                :ssr="true"
+                :multiple="false"
+                :options="this.dropDownManagers"
+                v-validate="'required'"
+              />
+              <span class="text-danger text-sm" v-show="errors.has('Manager')">{{ errors.first('Manager') }}</span>
+            </div>
+          </div>
           <!-- first_name -->
           <div class="vx-col w-1/2 px-8">
             <div class="vx-row mb-2">
@@ -105,61 +162,7 @@
               <span class="text-danger text-sm" v-show="errors.has('Phone')">{{ errors.first('Phone') }}</span>
             </div>
           </div>
-          <!-- Role -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <label class="vs-input--label">Role *</label>
-              <select-2
-                class="w-full role-input"
-                name="Role"
-                placeholder="Select Role"
-                :value="form.role_id"
-                @input="handleRoleChange"
-                autocomplete
-                :ssr="true"
-                :multiple="false"
-                v-validate="'required'"
-                action="common/getRoles"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
-            </div>
-          </div>
-          <!-- Retailer (shown only when role is Retailer) -->
-          <div class="vx-col w-1/2 px-8" v-if="isRetailerRole">
-            <div class="vx-row mb-2">
-              <label class="vs-input--label">Retailer *</label>
-              <select-2
-                class="w-full category-input"
-                name="Retailer"
-                placeholder="Select Retailer"
-                :value="form.retailer"
-                @input="(item) => (form.retailer = item && item.value ? item.value : [])"
-                autocomplete
-                :ssr="true"
-                :multiple="false"
-                v-validate="'required'"
-                action="common/getRetailer"
-              />
-              <span class="text-danger text-sm" v-show="errors.has('Retailer')">{{ errors.first('Retailer') }}</span>
-            </div>
-          </div>
-          <!-- Manager -->
-          <div class="vx-col w-1/2 px-8">
-            <div class="vx-row mb-2">
-              <label class="vs-input--label">Manager</label>
-              <select-2
-                class="w-full role-input"
-                name="Manager"
-                placeholder="Select Manager"
-                :value="form.manager"
-                @input="(item) => (form.manager = item && item.value)"
-                autocomplete
-                :ssr="true"
-                :multiple="false"
-                :options="this.dropDownManagers"
-              />
-            </div>
-          </div>
+          
 
           <!-- Pan Number -->
           <div class="vx-col w-1/2 px-8">

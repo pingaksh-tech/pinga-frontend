@@ -4,6 +4,7 @@ import * as roles from '@/utils/roles'
 const { ADMIN } = roles
 
 const ALLPERMISSIONS = [...Object.values(permissions)]
+
 const ALLROLES = [...Object.values(roles)]
 
 export default [
@@ -201,10 +202,10 @@ export default [
     permissions: ['roles_list']
   },
   {
-    url: '/last-login-list',
+    url: '/last-login/list',
     name: 'Last Login',
     slug: 'LastLoginList',
     icon: 'UserCheckIcon',
-    permissions: ['last_login_list']
+    permissions: ['last_login_view']
   }
 ]

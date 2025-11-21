@@ -43,6 +43,10 @@ import roleRoute from '@/views/roles/routes'
 import orderRoute from '@/views/order/routes'
 // diamond clarity
 import DiamondClarityRoute from '@/views/diamond-clarity/routes'
+// End diamond clarity
+// Uset Last Login Module
+import LastLoginRoute from '@/views/last-login/routes'
+// End Uset Last Login Module
 Vue.use(Router)
 
 const router = new Router({
@@ -98,7 +102,9 @@ const router = new Router({
         ...LabourPriceRoute,
         // Role route
         ...roleRoute,
-        ...DiamondClarityRoute
+        ...DiamondClarityRoute,
+        // Last Login route
+        ...LastLoginRoute
       ]
     },
 

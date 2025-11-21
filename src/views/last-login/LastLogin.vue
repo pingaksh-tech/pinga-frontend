@@ -1,0 +1,478 @@
+<template>
+  <div>
+    <!-- User list -->
+    <div class="vx-card p-6">
+      <vs-table
+        id="User_list"
+        class="vs-con-loading__container"
+        stripe
+        :sst="true"
+        maxHeight="800px"
+        @search="updateSearchQuery"
+        @change-page="handleChangePage"
+        @sort="handleSort"
+        :total="FilteredCount"
+        :max-items="length"
+        search
+        :data="LastLoginRecords"
+      >
+        <template slot="header">
+          <div class="mb-2 flex items-center">
+            <div class="flex flex-wrap justify-between items-center">
+              <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
+                <vs-dropdown vs-trigger-click class="cursor-pointer filter-font">
+                  <div class="p-4 border border-solid d-theme-border-grey-light rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+                    <span class="mr-2">
+                      {{ page * length - (length - (FilteredCount && 1)) || 0 }}
+                      -
+                      {{ FilteredCount - page * length > 0 ? page * length : FilteredCount }}
+                      of {{ total || 0 }}
+                    </span>
+                    <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+                  </div>
+                  <vs-dropdown-menu>
+                    <vs-dropdown-item @click="handleChangeLength(10)">
+                      <span>10</span>
+                    </vs-dropdown-item>
+                    <vs-dropdown-item @click="handleChangeLength(20)">
+                      <span>20</span>
+                    </vs-dropdown-item>
+                    <vs-dropdown-item @click="handleChangeLength(50)">
+                      <span>50</span>
+                    </vs-dropdown-item>
+                    <vs-dropdown-item @click="handleChangeLength(100)">
+                      <span>100</span>
+                    </vs-dropdown-item>
+                  </vs-dropdown-menu>
+                </vs-dropdown>
+              </div>
+            </div>
+            <div
+              @click="deleteAllRecord"
+              v-if="checkPermissionSlug(['last_login_delete_all'])"
+              class="btn-add-new p-2 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-primary border border-solid border-primary"
+            >
+              <!-- <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" /> -->
+              <span class="ml-2 text-base text-primary">Log Out All</span>
+            </div>
+          </div>
+        </template>
+
+        <template slot="thead">
+          <vs-th>Sr#</vs-th>
+          <vs-th sort-key="user.name">First Name</vs-th>
+          <vs-th sort-key="user.name">Last Name</vs-th>
+          <vs-th sort-key="user.name">Email</vs-th>
+          <vs-th sort-key="user.name">Phone</vs-th>
+          <vs-th sort-key="user.name" class="relative">
+            <div class="flex items-start cursor-pointer" @click.stop="toggleRoleFilter">
+              <span>Role</span>
+              <feather-icon icon="FilterIcon" svgClasses="h-4 w-4 ml-1" />
+              <vs-dropdown vs-custom-content class="filter-dropdown" :class="{ active: showRoleFilter }" v-model="showRoleFilter">
+                <div style="padding: 0.5rem; width: 200px">
+                  <div class="flex flex-col" @click.stop>
+                    <vs-radio v-for="(option, index) in rollOption" :key="index" v-model="selectedRole" :vs-value="option.value" class="mb-1 flex items-start">
+                      {{ option.label }}
+                    </vs-radio>
+                    <div class="flex justify-between mt-2">
+                      <vs-button size="small" @click="applyRoleFilter">Apply</vs-button>
+                      <vs-button size="small" type="flat" @click="clearRoleFilter">Clear</vs-button>
+                    </div>
+                  </div>
+                </div>
+              </vs-dropdown>
+            </div>
+          </vs-th>
+          <vs-th sort-key="user.name">Last Login Location</vs-th>
+          <vs-th sort-key="user.name">Login Date Time</vs-th>
+          <!-- <vs-th sort-key="user.name">Status</vs-th> -->
+          <vs-th v-if="checkPermissionSlug(['last_login_delete'])">Action</vs-th>
+        </template>
+
+        <template slot-scope="{ data }" ref="tableBody">
+          
+          <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
+            <vs-td>
+              {{ page * length - (length - i - 1) }}
+            </vs-td>
+            <vs-td class="text-left">{{ tr.user && tr.user.first_name || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.user && tr.user.last_name || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.user && tr.user.email || '-' }} </vs-td>
+            <vs-td class="text-left">{{ tr.user && tr.user.phone || '-' }} </vs-td>
+            <vs-td class="text-left">{{ (tr.user && tr.user.role && tr.user.role.name) || '-' }} </vs-td>
+            <!-- <vs-td class="text-left">
+              <vs-switch icon-pack="feather" vs-icon-on="icon-check-circle" vs-icon-off="icon-slash" color="primary" :value="tr.status" @click.stop="updateStatus(tr._id, tr.status)">
+                <span slot="on"></span>
+                <span slot="off"></span>
+              </vs-switch>
+            </vs-td> -->
+            <vs-td class="text-left">{{ tr.phone || '-' }} </vs-td>
+            <vs-td class="text-left">{{ formatDateTime(tr.createdAt) || '-' }} </vs-td>
+
+            <vs-td v-if="checkPermissionSlug(['users_edit', 'users_delete'])">
+              <div class="inline-flex">
+                <!-- <vx-tooltip text="Edit User" v-if="checkPermissionSlug(['users_edit'])">
+                  <feather-icon @click="toggleEditUserModal(tr)" icon="EditIcon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                </vx-tooltip> -->
+                <vx-tooltip text="Delete User" v-if="checkPermissionSlug(['last_login_delete'])">
+                  <feather-icon @click="deleteRecord(tr._id)" icon="Trash2Icon" svgClasses="h-5 w-5 mr-4 hover:text-primary cursor-pointer" />
+                </vx-tooltip>
+              </div>
+            </vs-td>
+          </vs-tr>
+          
+        </template>
+      </vs-table>
+      <!-- Custom Pagination -->
+      <vs-pagination v-if="FilteredCount" v-model="page" :total="totalPages" :max="totalPages / length > 7 ? 7 : 5" class="mt-8" @onchange="handleChangePage"></vs-pagination>
+    </div>
+
+   
+  </div>
+</template>
+
+<script>
+import { mapActions, mapState, mapGetters } from 'vuex'
+import AddUserModal from '@/views/users/AddUserModal'
+import EditUserModal from '@/views/users/EditUserModal'
+import Select2 from '@/components/custom/form-elements/Select2.vue'
+
+export default {
+  name: 'LastLoginList',
+
+  components: {
+    AddUserModal,
+    EditUserModal,
+    Select2
+  },
+
+  data: () => ({
+    selectedRole: null,
+    order: [],
+    records: [1, 2, 3],
+    length: 10,
+    page: 1,
+    search: '',
+    module_name: 'User',
+    showRoleFilter: false,
+
+    // add User modal
+    isAddUserModalMounted: false,
+    isAddUserModalShow: false,
+
+    // Edit User modal
+    isEditUserModalMounted: false,
+    isEditUserModalShow: false,
+    selectedRecord: null,
+    rollOption: []
+  }),
+
+  computed: {
+    ...mapState('lastLogin', ['LastLoginRecords', 'total', 'FilteredCount', 'listLoading']),
+    ...mapGetters('auth', ['checkPermissionSlug']),
+    totalPages() {
+      return Math.ceil(this.FilteredCount / this.length)
+    }
+  },
+
+  methods: {
+    ...mapActions('lastLogin', {
+      getLastLoginList: 'getLastLoginList',
+      deleteLastLoginRecord: 'deleteLastLoginRecord',
+      deleteLastLoginAllRecord: 'deleteLastLoginAllRecord'
+    }),
+
+    toggleRoleFilter() {
+      this.showRoleFilter = !this.showRoleFilter
+      if (this.showRoleFilter && this.rollOption.length === 0) {
+        this.fetchRoles()
+      }
+    },
+
+    applyRoleFilter() {
+      this.showRoleFilter = false
+      this.page = 1
+      this.getData()
+    },
+
+    clearRoleFilter() {
+      this.selectedRole = null
+      this.showRoleFilter = false
+      this.page = 1
+      this.getData()
+    },
+
+    async fetchRoles() {
+      try {
+        const response = await this.$store.dispatch('common/getRoles', {
+          page: 1,
+          limit: 1000,
+          type: 'dropdown'
+        })
+        this.rollOption = response.data
+      } catch (error) {
+        console.error('Error fetching roles:', error)
+      }
+    },
+
+    handleChangeLength(length) {
+      this.page = 1
+      this.length = length
+      this.getData()
+    },
+
+    handleChangePage(page) {
+      this.page = page
+      this.getData()
+    },
+
+    handleSort(key, active) {
+      if (!key) return
+      this.page = 1
+      this.order = [key, active === 'desc' ? 'DESC' : 'ASC']
+      this.getData()
+    },
+
+    updateSearchQuery(val) {
+      this.page = 1
+      this.search = val
+      this.getData()
+    },
+
+    getData() {
+      this.getLastLoginList({
+        limit: this.length,
+        page: this.page,
+        search: this.search,
+        role_id: this.selectedRole || null
+      })
+    },
+
+    deleteAllRecord() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'primary',
+        title: `Confirm Delete`,
+        text: `Are you sure you want to delete All record?`,
+        accept: () => this.deleteLastLoginAllRecords(),
+        acceptText: 'Delete'
+      })
+    },
+
+    deleteLastLoginAllRecords() {
+      this.deleteLastLoginAllRecord()
+        .then((Success) => {
+          this.getData()
+          const { message } = Success
+          this.$vs.notify({
+            title: 'Success',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'success'
+          })
+        })
+        .catch((err) => {
+          const { message } = err
+          this.$vs.notify({
+            title: 'Error',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        })
+    },
+
+    toggleEditUserModal(data) {
+      this.isEditUserModalMounted = true
+      this.isEditUserModalShow = true
+      this.selectedRecord = data
+    },
+
+    deleteRecord(id) {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'primary',
+        title: `Confirm Delete`,
+        text: `Are you sure you want to delete this record?`,
+        accept: () => this.deleteSingleRecord(id),
+        acceptText: 'Delete'
+      })
+    },
+
+    async deleteSingleRecord(id) {
+      try {
+        const { message } = await this.deleteLastLoginRecord(id)
+        this.$vs.notify({
+          title: 'Success',
+          text: message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          position: 'top-center',
+          time: 5000,
+          color: 'success'
+        })
+        this.getData()
+      } catch ({ message }) {
+        this.$vs.notify({
+          title: 'Error',
+          text: message,
+          iconPack: 'feather',
+          position: 'top-center',
+          time: 5000,
+          icon: 'icon-alert-circle',
+          color: 'primary'
+        })
+      }
+    },
+
+    updateStatus(id, status) {
+      this.$store
+        .dispatch('user/updateUserStatus', {
+          type: 'users',
+          id,
+          status: !status
+        })
+        .then((Success) => {
+          this.getData()
+          const { message } = Success
+          this.$vs.notify({
+            title: 'Success',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'success'
+          })
+        })
+        .catch((err) => {
+          const { message } = err
+          this.$vs.notify({
+            title: 'Error',
+            text: message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            position: 'top-center',
+            time: 5000,
+            color: 'primary'
+          })
+        })
+    },
+
+    formatDateTime(dateString) {
+      const date = new Date(dateString);
+
+      // Format date (DD-MM-YYYY)
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+
+      const formattedDate = `${day}-${month}-${year}`;
+
+      // Format time with AM/PM
+      const formattedTime = date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      return `${formattedDate} ${formattedTime}`;
+    }
+
+  },
+
+  watch: {
+    listLoading() {
+      if (this.listLoading) {
+        this.$vs.loading({
+          container: '#User_list',
+          scale: 0.45
+        })
+      } else {
+        this.$vs.loading.close('#User_list > .con-vs-loading')
+      }
+    },
+
+    isAddUserModalShow: {
+      immediate: true,
+      handler(newVal) {
+        if (!newVal) {
+          setTimeout(() => {
+            this.isAddUserModalMounted = false
+          }, 0)
+        }
+      }
+    },
+
+    isEditUserModalShow: {
+      immediate: true,
+      handler(newVal) {
+        if (!newVal) {
+          setTimeout(() => {
+            this.isEditUserModalMounted = false
+          }, 300)
+        }
+      }
+    },
+    page() {
+      this.getData()
+    }
+  },
+
+  mounted() {
+    this.getData()
+  }
+}
+</script>
+
+<style scoped>
+.vs-th {
+  position: relative;
+}
+
+.filter-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 100;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.filter-dropdown.active {
+  display: block;
+}
+
+.vs-radio {
+  justify-content: flex-start !important;
+  padding: 4px 0;
+}
+
+.filter-dropdown >>> * {
+  pointer-events: auto;
+}
+
+/* Button styling */
+.filter-dropdown .flex.justify-between {
+  margin-top: 10px;
+}
+
+.filter-dropdown .vs-button {
+  margin: 0 2px;
+  padding: 0.3rem 0.6rem;
+}
+
+.filter-dropdown .vs-button--flat {
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+</style>

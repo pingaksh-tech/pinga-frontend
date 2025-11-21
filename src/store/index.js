@@ -41,6 +41,10 @@ import pdfUpload from './pdf-upload'
 /** user API Store */
 // diamond clarity api store
 import diamondClarity from './diamond-clarity'
+// end diamond clarity api store
+// last login api store
+import lastLogin from './last-login'
+// end last login api store
 import user from './user'
 import role from '@/store/role'
 
@@ -71,6 +75,7 @@ export default new Vuex.Store({
     labourPrice,
     role,
     order,
-    diamondClarity
+    diamondClarity,
+    lastLogin
   }
 })
